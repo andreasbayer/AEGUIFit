@@ -1,0 +1,13 @@
+SCAN started at: 2019-02-12 10:49:14 by Rebecca
+DAC Delay Time: 0
+----------------------------------------
+Measurement type: Mass_Scan with runs: 5
+Scan parameters (Start, Stop, Step, GateTime): 10;120;0.1;0.5
+Resolution set to 30
+Electron Energy set to 70
+Temperature set manually
+Pressure set manually
+----------------------------------------
+Lakeshore is not connected
+XGS1 is not connected
+XGS2 is connected

@@ -1,0 +1,13 @@
+SCAN started at: 2019-02-14 08:41:30 by Rebecca
+DAC Delay Time: 0
+----------------------------------------
+Measurement type: Elen_Scan with runs: 30
+Mass set to 20.3
+Resolution set to 30
+Scan parameters (Start, Stop, Step, GateTime): 19;22;0.01;0.5
+Temperature set manually
+Pressure set manually
+----------------------------------------
+Lakeshore is not connected
+XGS1 is not connected
+XGS2 is connected
