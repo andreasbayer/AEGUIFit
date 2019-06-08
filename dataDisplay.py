@@ -8,12 +8,10 @@ class DataDisplay(FigureCanvas):
     statusbar_update = pyqtSignal(str)
     
     def __init__(self, parent=None):
-        self.__fig, self.__ax = plt.subplots(1, 1, constrained_layout=True, figsize=(6, 8))
+        self.__fig, self.__ax = plt.subplots(1, 1, constrained_layout=True)
         
         FigureCanvas.__init__(self, self.__fig)
-        
-#        self.draw_event.connect(self.on_draw)
-        
+
         if self.hasMouseTracking():
             self.setMouseTracking(True)
 
@@ -45,20 +43,27 @@ class DataDisplay(FigureCanvas):
         self.__font = {#'family': 'serif',
                        'color':  'black',
                        #'weight': 'normal',
-                       'size': 16}
+                       'size': 14}
 
         self.__ax.clear()
-        
+
     def draw_event(self, renderer):
         #super.draw_event(renderer)
         
         self.__inv = self.__ax.transData.inverted()
-        
+
+    def set_fig_size(self, figsize):
+        self.__fig.figsize = figsize
+
+    def increase_fig_size(self, new_fig_size):
+
+        if new_fig_size[0] > 0 and new_fig_size[1] > 0:
+            self.__fig.set_size_inches(new_fig_size, forward=True)
+
     def isLoaded(self):
         return self.__data is not None
     
     def mousePressEvent(self, event):
-        
         if self.isLoaded():
             
             #super.mousePressEvent(event)
@@ -66,9 +71,9 @@ class DataDisplay(FigureCanvas):
             if event.button() == Qt.LeftButton:
                 if self.__inv is not None:
                     values = (float(event.x()), float(event.y()))
-                    
+
                     tr_point = self.__inv.transform(values)
-        
+
                     self.statusbar_update.emit(str(round(tr_point[0], 4)) + " eV")#, round(tr_point[1], 4))
                     # self.statusbar_update.emit(round(tr_point[0], 4), round(tr_point[1], 4))
                     
@@ -76,7 +81,7 @@ class DataDisplay(FigureCanvas):
                     
                     self.refresh()
                 else:
-                    tr_point = (0.,0.)
+                    tr_point = (0., 0.)
             elif event.button() == Qt.RightButton:
                 self.statusbar_update.emit("")
                 
@@ -119,7 +124,7 @@ class DataDisplay(FigureCanvas):
                     print("e")
             
             if self.__clickmark is not None:
-                self.__ax.plot([self.__clickmark],[0],'g^')
+                self.__ax.plot([self.__clickmark], [0], 'g^')
             
             self.draw()
     
@@ -127,7 +132,7 @@ class DataDisplay(FigureCanvas):
         return self.__fdiFits[self.__fitIndex]
     
     def show_all_fits(self):
-        return (self.__fitIndex == -1)
+        return self.__fitIndex == -1
     
     def getCurrentData(self):
         return self.__data
@@ -135,11 +140,11 @@ class DataDisplay(FigureCanvas):
     def getCurrentFitData(self):
         if self.show_all_fits():
             if self.__combined_fit_exists():
-                return self.__combined_fit_data[self.__lowerZoom:self.__upperZoom,]
+                return self.__combined_fit_data[self.__lowerZoom:self.__upperZoom, ]
             else:
                 return None
         else:
-            if self.current_fdi().isFitted() and self.current_fdi().isDisabled() != True:
+            if self.current_fdi().isFitted() and self.current_fdi().isDisabled() is False:
                 return self.current_fdi().getFitData()
             else:
                 return None
@@ -194,7 +199,8 @@ class DataDisplay(FigureCanvas):
         pass
 
     def font_change(self, change):
-        self.__font["size"] += change
+        if self.__font["size"] + change > 0:
+            self.__font["size"] += change
 
     def setData(self, data):
         self.__data = data
@@ -253,7 +259,7 @@ class DataDisplay(FigureCanvas):
                     self.__mark_ae_data_in_plot(fdiCurrent)
     
     def __combined_fit_exists(self):
-        return (self.__combined_fit_data is not None and len(self.__combined_fit_data) > 0)
+        return self.__combined_fit_data is not None and len(self.__combined_fit_data) > 0
     
     def __mark_ae_data_in_plot(self, fdiCurrent: fdi.fitDataInfo):
         

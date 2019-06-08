@@ -1,4 +1,4 @@
-import sys
+from sys import float_info as fli
 from fitDataInfo import fitDataInfo
 import fitHelper as fh
 
@@ -10,14 +10,14 @@ class AEFitDataInfo(fitDataInfo):
         
         self._minspan = 3.0
         self._AEFrom = 0.0
-        self._AETo = sys.float_info.max
+        self._AETo = fli.max
         self._p = [] * 4
         self._fitRelBounds = [0.0] * 2
         self._fittedFWHM = 0
         self._FWHM = 0
     
     def is_initialized(self):
-        return (self._AETo == sys.float_info.max)
+        return (self._AETo == fli.max)
     
     # get-set-block
     def getFWHM(self):

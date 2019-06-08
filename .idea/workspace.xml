@@ -18,7 +18,7 @@
     <session id="2111659519">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="3" />
+          <entry key="project.closed" value="4" />
           <entry key="project.open.time.3" value="1" />
           <entry key="project.open.time.4" value="5" />
           <entry key="project.opened" value="6" />
@@ -26,53 +26,35 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="3455" />
+          <entry key="py" value="5364" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="3455" />
+          <entry key="Python" value="5364" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="py" value="18" />
+          <entry key="py" value="23" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Python" value="18" />
+          <entry key="Python" value="23" />
         </counts>
       </usages-collector>
     </session>
   </component>
+  <component name="FavoritesManager">
+    <favorites_list name="AEGUIFit" />
+  </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/fitInfoWidgetContainer.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1088">
-              <caret line="70" selection-start-line="70" selection-end-line="70" />
-              <folding>
-                <element signature="e#0#87#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/fitDataInfo.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="442">
-              <caret line="26" column="11" selection-start-line="26" selection-start-column="8" selection-end-line="26" selection-end-column="11" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fitInfoWidget.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1207">
+            <state relative-caret-position="649">
               <caret line="73" selection-start-line="73" selection-end-line="73" />
             </state>
           </provider>
@@ -81,14 +63,23 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/AEFitDataInfo.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1955">
-              <caret line="117" column="35" selection-start-line="117" selection-start-column="35" selection-end-line="117" selection-end-column="35" />
+            <state relative-caret-position="255">
+              <caret line="15" column="28" lean-forward="true" selection-start-line="15" selection-start-column="28" selection-end-line="15" selection-end-column="28" />
               <folding>
-                <element signature="e#0#10#0" expanded="true" />
-                <marker date="1559596125250" expanded="true" signature="2495:2501" ph="..." />
-                <marker date="1559596125250" expanded="true" signature="2558:2563" ph="..." />
-                <marker date="1559596125250" expanded="true" signature="2584:2593" ph="..." />
+                <element signature="e#0#33#0" expanded="true" />
+                <marker date="1559999323897" expanded="true" signature="2496:2502" ph="..." />
+                <marker date="1559999323897" expanded="true" signature="2559:2564" ph="..." />
+                <marker date="1559999323897" expanded="true" signature="2585:2594" ph="..." />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/helplib.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="85">
+              <caret line="5" column="7" selection-start-line="5" selection-start-column="7" selection-end-line="5" selection-end-column="7" />
             </state>
           </provider>
         </entry>
@@ -96,8 +87,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/AEFitInfoWidget.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="20" column="4" selection-start-line="20" selection-start-column="4" selection-end-line="20" selection-end-column="4" />
+            <state relative-caret-position="214">
+              <caret line="255" column="25" selection-start-line="255" selection-start-column="10" selection-end-line="255" selection-end-column="25" />
               <folding>
                 <element signature="e#0#98#0" expanded="true" />
               </folding>
@@ -106,41 +97,68 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/zoomButtonWidget.py">
+        <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="714">
-              <caret line="46" selection-start-line="46" selection-end-line="46" />
+            <state relative-caret-position="231">
+              <caret line="202" selection-start-line="202" selection-end-line="202" />
               <folding>
-                <element signature="e#0#93#0" expanded="true" />
-                <marker date="1559599426046" expanded="true" signature="2524:2533" ph="..." />
-                <marker date="1559599426046" expanded="true" signature="3077:3117" ph="..." />
+                <element signature="e#0#10#0" expanded="true" />
+                <marker date="1560001692972" expanded="true" signature="7657:7874" ph="..." />
+                <marker date="1560001692972" expanded="true" signature="7774:7874" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/main.py">
+        <entry file="file://$USER_HOME$/AppData/Local/Continuum/anaconda3/Lib/site-packages/numpy/linalg/linalg.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2074">
-              <caret line="133" column="26" selection-start-line="133" selection-start-column="26" selection-end-line="133" selection-end-column="26" />
-              <folding>
-                <element signature="e#0#10#0" expanded="true" />
-                <marker date="1559598601259" expanded="true" signature="7596:7676" ph="..." />
-              </folding>
+            <state relative-caret-position="248">
+              <caret line="88" selection-start-line="88" selection-end-line="88" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/zoomButtonWidget.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="835">
+              <caret line="133" column="25" lean-forward="true" selection-start-line="133" selection-start-column="25" selection-end-line="133" selection-end-column="25" />
+              <folding>
+                <element signature="e#0#114#0" expanded="true" />
+                <marker date="1560001755344" expanded="true" signature="3566:3575" ph="..." />
+                <marker date="1560001755344" expanded="true" signature="4119:4539" ph="..." />
+                <marker date="1560001755344" expanded="true" signature="4439:4539" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/dataControlWidget.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="450">
+              <caret line="109" column="8" lean-forward="true" selection-start-line="109" selection-start-column="8" selection-end-line="109" selection-end-column="8" />
+              <folding>
+                <element signature="e#0#83#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dataDisplay.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="533">
-              <caret line="171" column="48" selection-start-line="171" selection-start-column="48" selection-end-line="171" selection-end-column="48" />
+            <state relative-caret-position="224">
+              <caret line="60" selection-start-line="60" selection-end-line="60" />
               <folding>
                 <element signature="e#0#80#0" expanded="true" />
-                <marker date="1559600064566" expanded="true" signature="1444:1453" ph="..." />
-                <marker date="1559600064566" expanded="true" signature="6573:6617" ph="..." />
+                <marker date="1560001658937" expanded="true" signature="1356:1365" ph="..." />
+                <marker date="1560001658937" expanded="true" signature="1578:1706" ph="..." />
+                <marker date="1560001658937" expanded="true" signature="1807:1808" ph="..." />
+                <marker date="1560001658937" expanded="true" signature="4239:4248" ph="..." />
+                <marker date="1560001658937" expanded="true" signature="6690:6783" ph="..." />
+                <marker date="1560001658937" expanded="true" signature="8894:8912" ph="..." />
               </folding>
             </state>
           </provider>
@@ -166,16 +184,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>setda</find>
-      <find>setData</find>
-      <find>on_set</find>
-      <find>fwhm</find>
-      <find>isf</find>
-      <find>initia</find>
-      <find>is_initialized</find>
-      <find>isfitted</find>
-      <find>self._to</find>
-      <find>layout</find>
       <find>function</find>
       <find>__lblFoundAe</find>
       <find>__lblfound</find>
@@ -191,11 +199,21 @@
       <find>zoomtofit</find>
       <find>stddev</find>
       <find>refresh</find>
-      <find>font_change</find>
       <find>font_siz</find>
       <find>self.__ax</find>
       <find>font_size</find>
       <find>font</find>
+      <find>__combined_fit_data</find>
+      <find>fig</find>
+      <find>figsize</find>
+      <find>dsb</find>
+      <find>font_change</find>
+      <find>font_chang</find>
+      <find>sys</find>
+      <find>connect</find>
+      <find>dsbFwhm_changed</find>
+      <find>changed</find>
+      <find>fig_size</find>
     </findStrings>
     <replaceStrings>
       <replace>mbt</replace>
@@ -217,6 +235,7 @@
     </dirStrings>
   </component>
   <component name="Git.Settings">
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="IdeDocumentHistory">
@@ -231,7 +250,6 @@
         <option value="$PROJECT_DIR$/multiDataDisplay.py" />
         <option value="$PROJECT_DIR$/tabFits.py" />
         <option value="$PROJECT_DIR$/helplib.py" />
-        <option value="$PROJECT_DIR$/dataControlWidget.py" />
         <option value="$PROJECT_DIR$/flSaveFileDialog.py" />
         <option value="$PROJECT_DIR$/dist/customFitInfoWidget.py" />
         <option value="$PROJECT_DIR$/customFitDataInfo.py" />
@@ -242,19 +260,19 @@
         <option value="$PROJECT_DIR$/fitInfoWidget.py" />
         <option value="$PROJECT_DIR$/polyFitInfoWidget.py" />
         <option value="$PROJECT_DIR$/fitHelper.py" />
-        <option value="$PROJECT_DIR$/AEFitDataInfo.py" />
         <option value="$PROJECT_DIR$/AEFitInfoWidget.py" />
+        <option value="$PROJECT_DIR$/dataControlWidget.py" />
+        <option value="$PROJECT_DIR$/AEFitDataInfo.py" />
+        <option value="$PROJECT_DIR$/dataDisplay.py" />
         <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/zoomButtonWidget.py" />
-        <option value="$PROJECT_DIR$/dataDisplay.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
-    <option name="width" value="1040" />
-    <option name="height" value="754" />
+    <option name="x" value="-7" />
+    <option name="width" value="1181" />
+    <option name="height" value="1167" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -304,6 +322,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="last_opened_file_path" value="$USER_HOME$/AppData/Local/GitHubDesktop/GitHubDesktop.exe" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
   </component>
@@ -405,22 +424,23 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1186" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1176" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.21970496" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49852508" visible="true" weight="0.16069546" />
+      <window_info id="Structure" order="1" sideWeight="0.5014749" side_tool="true" weight="0.3648294" />
+      <window_info id="Favorites" order="2" sideWeight="0.5014749" side_tool="true" weight="0.3648294" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.3287827" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.24118316" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.29465303" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49868765" weight="0.32871288" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4943132" weight="0.24533857" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.7069116" weight="0.2914622" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info active="true" anchor="bottom" id="Event Log" order="7" side_tool="true" visible="true" weight="0.32944608" />
-      <window_info anchor="bottom" id="Version Control" order="8" weight="0.0" />
-      <window_info anchor="bottom" id="Python Console" order="9" />
-      <window_info anchor="bottom" id="Terminal" order="10" weight="0.32555556" />
+      <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.49956256" weight="0.32970297" />
+      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.29308838" side_tool="true" weight="0.2940594" />
+      <window_info anchor="bottom" id="Version Control" order="8" show_stripe_button="false" weight="0.0" />
+      <window_info anchor="bottom" id="Python Console" order="9" sideWeight="0.8433946" weight="0.32970297" />
+      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.49956256" weight="0.32475248" />
       <window_info anchor="bottom" id="Educational.CheckDetails" order="11" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -432,7 +452,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <ignored-roots>
-      <path value="$PROJECT_DIR$" />
       <path value="$PROJECT_DIR$/AEGUIFit" />
     </ignored-roots>
   </component>
@@ -467,12 +486,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/dataDisplay.py</url>
-          <line>242</line>
+          <line>248</line>
           <option name="timeStamp" value="398" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/dataDisplay.py</url>
-          <line>237</line>
+          <line>243</line>
           <option name="timeStamp" value="403" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -492,7 +511,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/dataDisplay.py</url>
-          <line>234</line>
+          <line>240</line>
           <option name="timeStamp" value="430" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -517,7 +536,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>227</line>
+          <line>232</line>
           <option name="timeStamp" value="456" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -551,13 +570,45 @@
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
-        <watch expression="self.layout()" language="Python" />
-        <watch expression="*args" language="Python" />
+        <watch expression="increment[0]" language="Python" />
+        <watch expression="fig_size" language="Python" />
+        <watch expression="increment" language="Python" />
+        <watch expression="fig_size" language="Python" />
       </configuration>
     </watches-manager>
   </component>
   <component name="debuggerHistoryManager">
     <expressions id="watch">
+      <expression>
+        <expression-string>fig_size</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>increment</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>increment[0]</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>lange &lt;= 1</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>len(self.__data)</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>self.__data</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
       <expression>
         <expression-string>*args</expression-string>
         <language-id>Python</language-id>
@@ -573,41 +624,6 @@
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
-      <expression>
-        <expression-string>PyQt5</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>self.layout().widgets</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>&quot;abc&quot;.startswith(&quot;ab&quot;)</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>line_data</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>name</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>initialize</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>__py_debug_temp_var_1296822543.__widgets</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
     </expressions>
     <expressions id="setValue">
       <expression>
@@ -617,6 +633,16 @@
       </expression>
     </expressions>
     <expressions id="evaluateExpression">
+      <expression>
+        <expression-string>len(__py_debug_temp_var_752015422)</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>__py_debug_temp_var_752015422</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
       <expression>
         <expression-string>self</expression-string>
         <language-id>Python</language-id>
@@ -671,20 +697,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/multiDataDisplay.py" />
     <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36-32/Lib/codecs.py" />
-    <entry file="file://$PROJECT_DIR$/dataControlWidget.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1700">
-          <caret line="104" selection-start-line="104" selection-end-line="104" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/helplib.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1802">
-          <caret line="170" selection-start-line="170" selection-end-line="170" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/flSaveFileDialog.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="272">
@@ -720,6 +732,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
           <caret line="20" column="12" selection-start-line="20" selection-start-column="12" selection-end-line="20" selection-end-column="12" />
+          <folding>
+            <marker date="1555427161548" expanded="true" signature="825:839" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -737,12 +752,21 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="797">
           <caret line="119" column="47" selection-start-line="119" selection-start-column="47" selection-end-line="119" selection-end-column="47" />
+          <folding>
+            <element signature="e#0#98#0" expanded="true" />
+            <element signature="e#713#758#0" />
+            <marker date="1555429022631" expanded="true" signature="1291:1292" ph="..." />
+            <marker date="1555429022631" expanded="true" signature="1885:1923" ph="..." />
+            <marker date="1555429022631" expanded="true" signature="1950:1964" ph="..." />
+            <marker date="1555429022631" expanded="true" signature="2580:2585" ph="..." />
+            <marker date="1555429022631" expanded="true" signature="3830:3835" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/fitInfoWidgetContainer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1088">
+        <state>
           <caret line="70" selection-start-line="70" selection-end-line="70" />
           <folding>
             <element signature="e#0#87#0" expanded="true" />
@@ -757,59 +781,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fitInfoWidget.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1207">
-          <caret line="73" selection-start-line="73" selection-end-line="73" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/AEFitDataInfo.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1955">
-          <caret line="117" column="35" selection-start-line="117" selection-start-column="35" selection-end-line="117" selection-end-column="35" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-            <marker date="1559596125250" expanded="true" signature="2495:2501" ph="..." />
-            <marker date="1559596125250" expanded="true" signature="2558:2563" ph="..." />
-            <marker date="1559596125250" expanded="true" signature="2584:2593" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/AEFitInfoWidget.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="20" column="4" selection-start-line="20" selection-start-column="4" selection-end-line="20" selection-end-column="4" />
-          <folding>
-            <element signature="e#0#98#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/zoomButtonWidget.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="714">
-          <caret line="46" selection-start-line="46" selection-end-line="46" />
-          <folding>
-            <element signature="e#0#93#0" expanded="true" />
-            <marker date="1559599426046" expanded="true" signature="2524:2533" ph="..." />
-            <marker date="1559599426046" expanded="true" signature="3077:3117" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2074">
-          <caret line="133" column="26" selection-start-line="133" selection-start-column="26" selection-end-line="133" selection-end-column="26" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-            <marker date="1559598601259" expanded="true" signature="7596:7676" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/fitHelper.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="612">
@@ -817,14 +788,97 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/fitInfoWidget.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="649">
+          <caret line="73" selection-start-line="73" selection-end-line="73" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AEFitDataInfo.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="15" column="28" lean-forward="true" selection-start-line="15" selection-start-column="28" selection-end-line="15" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#33#0" expanded="true" />
+            <marker date="1559999323897" expanded="true" signature="2496:2502" ph="..." />
+            <marker date="1559999323897" expanded="true" signature="2559:2564" ph="..." />
+            <marker date="1559999323897" expanded="true" signature="2585:2594" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/helplib.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="7" selection-start-line="5" selection-start-column="7" selection-end-line="5" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AEFitInfoWidget.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="214">
+          <caret line="255" column="25" selection-start-line="255" selection-start-column="10" selection-end-line="255" selection-end-column="25" />
+          <folding>
+            <element signature="e#0#98#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dataControlWidget.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="109" column="8" lean-forward="true" selection-start-line="109" selection-start-column="8" selection-end-line="109" selection-end-column="8" />
+          <folding>
+            <element signature="e#0#83#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Continuum/anaconda3/Lib/site-packages/numpy/linalg/linalg.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="248">
+          <caret line="88" selection-start-line="88" selection-end-line="88" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="231">
+          <caret line="202" selection-start-line="202" selection-end-line="202" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+            <marker date="1560001692972" expanded="true" signature="7657:7874" ph="..." />
+            <marker date="1560001692972" expanded="true" signature="7774:7874" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/dataDisplay.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="533">
-          <caret line="171" column="48" selection-start-line="171" selection-start-column="48" selection-end-line="171" selection-end-column="48" />
+        <state relative-caret-position="224">
+          <caret line="60" selection-start-line="60" selection-end-line="60" />
           <folding>
             <element signature="e#0#80#0" expanded="true" />
-            <marker date="1559600064566" expanded="true" signature="1444:1453" ph="..." />
-            <marker date="1559600064566" expanded="true" signature="6573:6617" ph="..." />
+            <marker date="1560001658937" expanded="true" signature="1356:1365" ph="..." />
+            <marker date="1560001658937" expanded="true" signature="1578:1706" ph="..." />
+            <marker date="1560001658937" expanded="true" signature="1807:1808" ph="..." />
+            <marker date="1560001658937" expanded="true" signature="4239:4248" ph="..." />
+            <marker date="1560001658937" expanded="true" signature="6690:6783" ph="..." />
+            <marker date="1560001658937" expanded="true" signature="8894:8912" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/zoomButtonWidget.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="835">
+          <caret line="133" column="25" lean-forward="true" selection-start-line="133" selection-start-column="25" selection-end-line="133" selection-end-column="25" />
+          <folding>
+            <element signature="e#0#114#0" expanded="true" />
+            <marker date="1560001755344" expanded="true" signature="3566:3575" ph="..." />
+            <marker date="1560001755344" expanded="true" signature="4119:4539" ph="..." />
+            <marker date="1560001755344" expanded="true" signature="4439:4539" ph="..." />
           </folding>
         </state>
       </provider>

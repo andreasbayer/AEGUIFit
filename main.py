@@ -132,7 +132,8 @@ class App(QMainWindow):
         self.zbwMain.zoom_by_increment.connect(self.zoom_by_increment)
         self.zbwMain.show_all.connect(self.zoom_show_all)
         self.zbwMain.font_change.connect(self.font_change)
-        
+        self.zbwMain.fig_size_changed.connect(self.fig_size_changed)
+
         self.tabFits = tft.tabFits()
         self.ficFits.fit_added.connect(self.tabFits.addFit)
         self.ficFits.fit_added.connect(self.ddMain.addFit)
@@ -197,7 +198,11 @@ class App(QMainWindow):
     def font_change(self, change):
         self.ddMain.font_change(change)
         self.ddMain.refresh()
-    
+
+    def fig_size_changed(self, new_fig_size):
+        self.ddMain.increase_fig_size(new_fig_size)
+        self.ddMain.refresh() #necessary?
+
     def saveFig(self):
         name, ext = QFileDialog.getSaveFileName(self, "Save Figure", "", "*.pdf;; *.png;; *.svg;; *.eps")
         
@@ -269,7 +274,6 @@ class App(QMainWindow):
                 self.reset(False)
                 QMessageBox.critical(self, "Open file failed!", "Error while opening " + fileName, QMessageBox.Ok, QMessageBox.Ok)
                 self.setWindowTitle(TITLE)
-                
         #load fits
                 
     def saveFile(self):
