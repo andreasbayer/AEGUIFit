@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QLabel, QWidget, QPushButton, QHBoxLayout, QGroupBox, QSpacerItem,\
-    QDoubleSpinBox
+    QDoubleSpinBox, QPlainTextEdit
 from PyQt5.QtCore import pyqtSignal
 from sys import float_info as fli
 import helplib as hl
@@ -12,6 +12,7 @@ class ZoomButtonWidget(QGroupBox):
     zoom_by_increment = pyqtSignal(str, int)
     font_change = pyqtSignal(int)
     fig_size_changed = pyqtSignal(tuple)
+    annotation_changed = pyqtSignal(str)
     
     def __init__(self):
         QWidget.__init__(self)
@@ -40,6 +41,13 @@ class ZoomButtonWidget(QGroupBox):
         self.__dsbFigWidth.setRange(2, fli.max)
         self.__dsbFigWidth.setValue(12)
         self.__dsbFigWidth.setSingleStep(0.1)
+
+        self.__lblAnnotation = QLabel("Annotation:")
+        self.__edtAnnotation = QPlainTextEdit("")
+        self.__edtAnnotation.setFixedHeight(100)
+
+        self.setFixedHeight(135)
+
 
         repeat_delay = 0
         
@@ -74,10 +82,13 @@ class ZoomButtonWidget(QGroupBox):
 
         hbox.addSpacerItem(QSpacerItem(10, 10))#, QSizePolicy.Expanding, QSizePolicy.Expanding))
 
-        hbox.addWidget(self.__lblFigWidth)
-        hbox.addWidget(self.__dsbFigWidth)
-        hbox.addWidget(self.__lblFigHeight)
-        hbox.addWidget(self.__dsbFigHeight)
+        #hbox.addWidget(self.__lblFigWidth)
+        #hbox.addWidget(self.__dsbFigWidth)
+        #hbox.addWidget(self.__lblFigHeight)
+        #hbox.addWidget(self.__dsbFigHeight)
+
+        hbox.addWidget(self.__lblAnnotation)
+        hbox.addWidget(self.__edtAnnotation)
         
         self.setLayout(hbox)
         self.setTitle("View")
@@ -93,6 +104,8 @@ class ZoomButtonWidget(QGroupBox):
 
         self.__dsbFigWidth.valueChanged.connect(self.on_dsbFigWidth_changed)
         self.__dsbFigHeight.valueChanged.connect(self.on_dsbFigHeight_changed)
+
+        self.__edtAnnotation.textChanged.connect(self.on_annotation_changed)
 
         self.setEnabled(False)
     
@@ -128,6 +141,9 @@ class ZoomButtonWidget(QGroupBox):
     def on_dsbFigHeight_changed(self):
         # self.fig_size_changed.emit((self.__dsbFigWidth.value(), self.__dsbFigHeight.value()))
         pass
+
+    def on_annotation_changed(self):
+        self.annotation_changed.emit(self.__edtAnnotation.toPlainText())
 
     # def connect_and_emit_trigger(self):
     #     # Connect the trigger signal to a slot.

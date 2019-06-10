@@ -1,15 +1,18 @@
 from PyQt5.QtWidgets import QGroupBox, QPushButton, QComboBox, QVBoxLayout, QHBoxLayout
-from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtCore import pyqtSignal, Qt
+#from PyQt5.Qt import ali
 import AEFitInfoWidget as afw
 import polyFitInfoWidget as pfw
 import customFitInfoWidget as cfw
 import fitDataInfo as fid
 from numpy import ndarray, empty
 
+
+
 class fitInfoWidgetContainer(QGroupBox):
     AE = "ae"
     progressUpdate = pyqtSignal(float, list)
-    
+
     Post_Fit = pyqtSignal(str, fid.fitDataInfo, ndarray)
     Combined_Fit_Data_Updated = pyqtSignal(ndarray)
     zoom_to_fit = pyqtSignal(int, int, int)
@@ -45,11 +48,13 @@ class fitInfoWidgetContainer(QGroupBox):
         self.__cmdAddFit.clicked.connect(self.__cmdAddFitClicked)
         self.shift_data.connect(self.__shift_combined_fit_data)
         
-        self.__hbox = QHBoxLayout()
-        self.__hbox.addWidget(self.__cbxFits)
-        self.__hbox.addWidget(self.__cmdAddFit)
-        
-        self.__mainLayout.addItem(self.__hbox)
+        self.__hbMenu = QHBoxLayout()
+        self.__hbMenu.addWidget(self.__cbxFits)
+        self.__hbMenu.addWidget(self.__cmdAddFit)
+        #self.__hbMenu.setSizeConstraint(QHBoxLayout.SetMinimumSize)
+        #self.__hbMenu.minimumSize()
+        self.__mainLayout.setAlignment(Qt.AlignTop)
+        self.__mainLayout.addItem(self.__hbMenu)
         
         #self.__mainLayout.addWidget(self.__cbxFits)
         #self.__mainLayout.addWidget(self.__cmdAddFit)

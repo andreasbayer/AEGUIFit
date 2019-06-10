@@ -1,8 +1,5 @@
 from PyQt5.QtWidgets import QWidget, QTabWidget
 from PyQt5.QtCore import pyqtSignal
-import helplib as hl
-import fitDataInfo as fdi
-import numpy as np
 
 
 class tabFits(QTabWidget):
@@ -11,17 +8,15 @@ class tabFits(QTabWidget):
     
     def __init__(self):
         QTabWidget.__init__(self)
-        
         self.reset()
     
     def reset(self):
         self.clear()
         self.addTab(QWidget(), "General")
-        
+        self.setFixedHeight(20)
         self.currentChanged.connect(self.current_changed)
         
     def addFit(self, p_fitDataInfo):
-
         #if fiw.get_fit_index() == -1:
         #    fiw.get_fit_index() = self.count()
         
@@ -30,8 +25,8 @@ class tabFits(QTabWidget):
         
         self.addTab(QWidget(), p_fitDataInfo.getName())
         
-    def removeFit(self, p_fitDataInfo):
-        self.removeTab(p_fitDataInfo.get_fit_index()+1)
+    def removeFit(self, p_fit_data_info):
+        self.removeTab(p_fit_data_info.get_fit_index()+1)
     
         
     def current_changed(self, p_int):

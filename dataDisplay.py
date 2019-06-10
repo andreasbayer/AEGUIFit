@@ -6,10 +6,11 @@ import fitDataInfo as fdi
 
 class DataDisplay(FigureCanvas):
     statusbar_update = pyqtSignal(str)
-    
+
+    mark_default_text = 'Click on figure to show energy value.'
+
     def __init__(self, parent=None):
         self.__fig, self.__ax = plt.subplots(1, 1, constrained_layout=True)
-        self.__fig.tight_layout()
         FigureCanvas.__init__(self, self.__fig)
 
         if self.hasMouseTracking():
@@ -20,7 +21,6 @@ class DataDisplay(FigureCanvas):
             self.__inv = None
         
         self.setParent(parent)
-        
         self.reset()
     
     def reset(self):
@@ -36,6 +36,7 @@ class DataDisplay(FigureCanvas):
         self.__stdErrors = None
         self.__clickmark = None
         self.__showErrorBars = False
+        self.__annotation = None
         
         self.__upperZoom = 0
         self.__lowerZoom = 0
@@ -84,7 +85,7 @@ class DataDisplay(FigureCanvas):
                 else:
                     tr_point = (0., 0.)
             elif event.button() == Qt.RightButton:
-                self.statusbar_update.emit("")
+                self.statusbar_update.emit(DataDisplay.mark_default_text)
                 
                 self.__clickmark = None
                 self.refresh()
@@ -109,7 +110,7 @@ class DataDisplay(FigureCanvas):
                 stdErrors = None
                 
             self.__ax.clear()
-            
+
             #plot data only here:
             
             if self.show_all_fits():
@@ -126,9 +127,12 @@ class DataDisplay(FigureCanvas):
             
             if self.__clickmark is not None:
                 self.__ax.plot([self.__clickmark], [0], 'g^')
-            
+
+            if self.__annotation is not None:
+                self.__ax.annotate(self.__annotation, xy=(self.getCurrentData()[0][0], self.getCurrentData()[-1][1]), horizontalalignment='left', verticalalignment='top', fontsize=self.__font["size"]+2)
+
             self.draw()
-    
+
     def current_fdi(self):
         return self.__fdiFits[self.__fitIndex]
     
@@ -137,6 +141,9 @@ class DataDisplay(FigureCanvas):
     
     def getCurrentData(self):
         return self.__data
+
+    def set_annotation(self, annotation):
+        self.__annotation = annotation
     
     def getCurrentFitData(self):
         if self.show_all_fits():
