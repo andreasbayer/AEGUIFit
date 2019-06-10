@@ -9,7 +9,7 @@ class DataDisplay(FigureCanvas):
     
     def __init__(self, parent=None):
         self.__fig, self.__ax = plt.subplots(1, 1, constrained_layout=True)
-        
+        self.__fig.tight_layout()
         FigureCanvas.__init__(self, self.__fig)
 
         if self.hasMouseTracking():
@@ -58,7 +58,8 @@ class DataDisplay(FigureCanvas):
     def increase_fig_size(self, new_fig_size):
 
         if new_fig_size[0] > 0 and new_fig_size[1] > 0:
-            self.__fig.set_size_inches(new_fig_size, forward=True)
+            # self.__fig.set_size_inches(new_fig_size, forward=True)
+            pass
 
     def isLoaded(self):
         return self.__data is not None

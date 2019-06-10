@@ -5,6 +5,7 @@ class fitDataInfo():
         self._fitData = None
         self._data = None
         self._stdDev = 1
+        self._stdErr = None
         self._fitFunction = None
         self._msg = ""
         self._passProgressUpdate = None
@@ -44,6 +45,9 @@ class fitDataInfo():
     
     def setData(self, data):
         self._data = data
+        
+    def setStdErr(self, std_err):
+        self._stdErr = std_err
     
     def emitProgressUpdate(self, relation):
         self.progressUpdate.emit(relation)
@@ -51,6 +55,7 @@ class fitDataInfo():
     def reset(self):
         self._fitData = None
         self._data = None
+        self._stdErr = None
         
     def _getFitData(self):
         return self._fitData
@@ -66,6 +71,9 @@ class fitDataInfo():
     
     def get_data(self):
         return self._data
+    
+    def get_std_err(self):
+        return self._stdErr
     
     def fitToFunction(self):
         pass

@@ -20,6 +20,7 @@ class fitInfoWidget(QGroupBox):
         self.__initLayout()
         
         self.__data = None
+        self.__std_err = None
         
         #self.__index = index
         
@@ -34,9 +35,7 @@ class fitInfoWidget(QGroupBox):
         return " "
     
     def reset(self, enable):
-        
         self.setEnabled(enable)
-        
         self.__cmdZoomToFitArea.setEnabled(False)
     
     def __connectSignals(self):
@@ -69,11 +68,12 @@ class fitInfoWidget(QGroupBox):
     def is_initialized(self):
         return (self.__data is None)
     
-    def setData(self, data):
-        self._on_set_data(data)
+    def setData(self, data, std_err):
+        self._on_set_data(data, std_err)
         self.__data = data
+        self.__std_err = std_err
     
-    def _on_set_data(self, data):
+    def _on_set_data(self, data, std_err):
         pass
     
     def getName(self):

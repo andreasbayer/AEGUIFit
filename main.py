@@ -180,8 +180,9 @@ class App(QMainWindow):
         self.ddMain.setData(data)
         self.ddMain.setStdErrors(self.dcwData.getStdErrors())
         self.ddMain.refresh()
-        # has to be generalized for multiple fiw
+        
         self.ficFits.setData(data)
+        self.ficFits.setStdErr(self.dcwData.getStdErrors())
     
     def zoom_by_increment(self, bound, increment):
         self.ddMain.ZoomByIncrement(bound, increment)

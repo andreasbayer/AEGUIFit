@@ -3,9 +3,10 @@ from scipy.special import *
 
 from scipy import optimize
 
-
 from math import sqrt
 from math import log
+
+import numpy as np
 
 
 def find_ev_position(data, ev, lb=0, ub=-1):
@@ -26,8 +27,7 @@ def find_ev_position(data, ev, lb=0, ub=-1):
     
     return e_pos
 
-
-def fit_function_to_data(data, p, fwhm, lb, ub):
+def fit_function_to_data(data, std_errs, p, fwhm, lb, ub):
     # tighten sigma on the go (lasso sigma)
     
     base_func = eval_fit_function(fwhm)
@@ -36,14 +36,14 @@ def fit_function_to_data(data, p, fwhm, lb, ub):
                              data[:, 0],
                              data[:, 1],
                              p[:],
+                             #sigma=std_errs,
                              method='trf',
-                             absolute_sigma=False,
-                             bounds=([0, lb, -np.inf, -np.inf], [0.1, ub, np.inf, np.inf]), # upperbound for constant backroung is arbitrary//!!
+                             absolute_sigma=True,
+                             bounds=([0, lb, -np.inf, -np.inf], [0.1, ub, np.inf, np.inf]), # upperbound for constant backround is arbitrary//!!
                              check_finite=True)
     
     # return initial_parameters and stddev for the parameters
     return res[0], np.sqrt(np.diag(res[1])), base_func
-
 
 def find_fwhm(starting_fwhm, ending_fwhm, iteration, n):
     a = starting_fwhm
@@ -70,7 +70,6 @@ def find_fwhm(starting_fwhm, ending_fwhm, iteration, n):
         #e = 1/0
         
         return ending_fwhm
-
 
 def find_cut_numbers(data_length, data_length_ev, minspan):
     n = 1
@@ -108,8 +107,28 @@ def find_cut_numbers(data_length, data_length_ev, minspan):
     
     return n, cutpercent
 
+def min_above_x(np_array, x):
+    min = np.inf
+    
+    for value in np_array:
+        if x < value < min:
+            min = value
+    
+    return min
 
-def find_best_fit(data, ip, fwhm, minspan, fit_bounds, update_function=None):
+def fix_std_errs(std_errs):
+    min_err = min_above_x(std_errs, 0)
+    fit_std_errs = np.array([])
+    
+    for std_err in std_errs:
+        if std_err == 0:
+            fit_std_errs = np.append(fit_std_errs, min_err)
+        else:
+            fit_std_errs = np.append(fit_std_errs, std_err)
+    
+    return fit_std_errs
+
+def find_best_fit(data, std_errs, ip, fwhm, minspan, fit_bounds, update_function=None):
     # data has to be a numpy array
     # fits the function to data[:,0] (as x) and data[:,1] (as y) using the initial_parameters
     # returns an array of parameters of the same size as initial_parameters in case of success
@@ -119,6 +138,8 @@ def find_best_fit(data, ip, fwhm, minspan, fit_bounds, update_function=None):
     c_p = np.array(ip)
     c_stddev = -1
     c_fit_function = None
+
+    fit_weights = fix_std_errs(std_errs)
     
     # find number of iterations to take place where the data is cut down by x %
     n, cutpercent = find_cut_numbers(len(data), data[len(data) - 1][0] - data[0][0], minspan)
@@ -145,7 +166,7 @@ def find_best_fit(data, ip, fwhm, minspan, fit_bounds, update_function=None):
         # try to fit
         try:
             # c_p, c_stddev,  c_fit_function = fit_function_to_data(cutdata, c_p, fwhm, cutdata[0][0], cutdata[len(cutdata)-1, 0])
-            c_p, c_stddev, c_fit_function = fit_function_to_data(cutdata, c_p, fwhm, fit_bounds[0], fit_bounds[1])
+            c_p, c_stddev, c_fit_function = fit_function_to_data(cutdata, fit_weights, c_p, fwhm, fit_bounds[0], fit_bounds[1])
             message = 'fit succeeded.'
         except Exception as error:
             if type(error) is ValueError:
@@ -199,7 +220,6 @@ def find_best_fit(data, ip, fwhm, minspan, fit_bounds, update_function=None):
     
     return p, stddev, cutdata[0][0], cutdata[len(cutdata) - 1][0], r_fwhm, fit_function
 
-
 def cut_relatively_equal(cutdata, ae_pos, cutpercent):
     # cuts data down to cutpercent*100 % of its size, with EA in the middle
     # if however there are not enough data points on one of the sides to guarantee cutpercent*100 % of the data
@@ -234,21 +254,16 @@ def cut_relatively_equal(cutdata, ae_pos, cutpercent):
     
     return np.array(buff_cutdata)
 
-
 def pbdv_fa(x, y):
     # we need this, because b is the derivative of a, which is not needed in fits and annoying when defining fit functions
     a, b = pbdv(x, y)
     
     return a
 
-
 def difference_data_fit(data, fit_func, p, fwhm, nonnegative = False):
     fit_data = data_from_fit_and_parameters(data, fit_func, p, fwhm, True)
     
     return difference_data_from_fit_data(data, fit_data, p, fwhm, nonnegative)
-    
-    
-
 
 def difference_data_from_fit_data(data, fit_data, p, fwhm, nonnegative):
     newdata = []
@@ -264,7 +279,6 @@ def difference_data_from_fit_data(data, fit_data, p, fwhm, nonnegative):
         i += 1
     
     return np.array(newdata)
-
 
 def data_from_fit_and_parameters(data, fit_func, p, fwhm, continuation=False):
     minimumpoints = 20
@@ -296,17 +310,14 @@ def data_from_fit_and_parameters(data, fit_func, p, fwhm, continuation=False):
             point[1] = 0
     return a
 
-
 def cutarray(data, lowerlim=None, upperlim=None):
     a, b = cutarray2(data, lowerlim, upperlim)
     
     return a
 
-
 def fwhm_to_sigma(fwhm):
     sigma = fwhm / (2 * sqrt(2 * np.log(2)))
     return sigma
-
 
 def eval_fit_function(fwhm):
     # p[0] = y shift
@@ -329,8 +340,6 @@ def str_fit_func(p, fwhm):
         base_func = base_func.replace('p'+str(i), str(p[i]))
         
     return base_func
-
-
 
 def fit_continuation(data, p, fwhm):
     b = empty_like(data, dtype=float)
@@ -358,7 +367,6 @@ def fit_continuation(data, p, fwhm):
             break
     
     return data
-
 
 def cutarray2(data, lowerlim=None, upperlim=None, data2=None):
     # this function cuts an array and returns it

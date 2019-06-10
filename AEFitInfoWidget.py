@@ -207,16 +207,15 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         return self.__AEFitDataInfo
 
     def __chkDisableFit_stateChanged(self, state):
-        
         self.getFitDataInfo().setDisabled(state == Qt.Checked)
-        
         self.disable_fit.emit(self.getFitDataInfo(), (state == Qt.Checked))
         
     def __cmdRemoveFit_clicked(self):
         self.remove_fit.emit(self.getFitDataInfo())
         
-    def _on_set_data(self, data):
+    def _on_set_data(self, data, std_err):
         self.__AEFitDataInfo.setData(data)
+        self.__AEFitDataInfo.setStdErr(std_err)
         
         if self.__AEFitDataInfo.is_initialized():
             self.setAEFrom(data[0][0])

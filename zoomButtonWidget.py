@@ -33,12 +33,12 @@ class ZoomButtonWidget(QGroupBox):
         self.__dsbFigHeight = QDoubleSpinBox()
         self.__dsbFigWidth = QDoubleSpinBox()
 
-        self.__dsbFigHeight.setRange(10, fli.max)
-        self.__dsbFigHeight.setValue(10)
+        self.__dsbFigHeight.setRange(2, fli.max)
+        self.__dsbFigHeight.setValue(6)
         self.__dsbFigHeight.setSingleStep(0.1)
 
-        self.__dsbFigWidth.setRange(10, fli.max)
-        self.__dsbFigWidth.setValue(10)
+        self.__dsbFigWidth.setRange(2, fli.max)
+        self.__dsbFigWidth.setValue(12)
         self.__dsbFigWidth.setSingleStep(0.1)
 
         repeat_delay = 0
@@ -122,10 +122,12 @@ class ZoomButtonWidget(QGroupBox):
         self.__dsbFigHeight = size[1]
 
     def on_dsbFigWidth_changed(self):
-        self.fig_size_changed.emit((self.__dsbFigWidth.value(), self.__dsbFigHeight.value()))
+        # self.fig_size_changed.emit((self.__dsbFigWidth.value(), self.__dsbFigHeight.value()))
+        pass
 
     def on_dsbFigHeight_changed(self):
-        self.fig_size_changed.emit((self.__dsbFigWidth.value(), self.__dsbFigHeight.value()))
+        # self.fig_size_changed.emit((self.__dsbFigWidth.value(), self.__dsbFigHeight.value()))
+        pass
 
     # def connect_and_emit_trigger(self):
     #     # Connect the trigger signal to a slot.

@@ -138,7 +138,7 @@ class AEFitDataInfo(fitDataInfo):
         try:
             self._p, self._stdDev, self._fitRelBounds[0], self._fitRelBounds[
                 1], self._fittedFWHM, self._fitFunction \
-                = fh.find_best_fit(self._data, self._p, self._FWHM, self._minspan, [self._AEFrom, self._AETo],
+                = fh.find_best_fit(self._data, self._stdErr, self._p, self._FWHM, self._minspan, [self._AEFrom, self._AETo],
                      self.progressUpdate)
             
             self._setFitData(fh.data_from_fit_and_parameters(self._data, self._fitFunction, self._p, self._FWHM,

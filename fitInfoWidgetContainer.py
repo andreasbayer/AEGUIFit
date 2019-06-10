@@ -20,6 +20,7 @@ class fitInfoWidgetContainer(QGroupBox):
     
     def __init__(self):
         self.__data = None
+        self.__std_err = None
         self.__combined_fit_data = empty(0)
         self.__fitInfoWidgets = []
         
@@ -175,7 +176,7 @@ class fitInfoWidgetContainer(QGroupBox):
             if fiw_i.get_fit_index() >= i_starting-1:
                 
                 if fiw_i.get_fit_index() >= i_starting:
-                    fiw_i.setData(diff_data.copy())
+                    fiw_i.setData(diff_data.copy(), self.__std_err)
                 
                 if fiw_i.isFitted() and fiw_i.isDisabled() != True and fiw_i.get_fit_index() < len(self.__fitInfoWidgets)-1:
                     
@@ -208,3 +209,6 @@ class fitInfoWidgetContainer(QGroupBox):
     
     def setData(self, data):
         self.__data = data
+    
+    def setStdErr(self, std_err):
+        self.__std_err = std_err
