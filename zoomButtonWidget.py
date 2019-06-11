@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QLabel, QWidget, QPushButton, QHBoxLayout, QGroupBox, QSpacerItem,\
+from PyQt5.QtWidgets import QLabel, QWidget, QPushButton, QHBoxLayout, QVBoxLayout, QGroupBox, QSpacerItem,\
     QDoubleSpinBox, QPlainTextEdit
 from PyQt5.QtCore import pyqtSignal
 from sys import float_info as fli
@@ -10,14 +10,17 @@ import numpy as np
 class ZoomButtonWidget(QGroupBox):
     show_all = pyqtSignal()
     zoom_by_increment = pyqtSignal(str, int)
-    font_change = pyqtSignal(int)
+    font_size_changed = pyqtSignal(float)
     fig_size_changed = pyqtSignal(tuple)
     annotation_changed = pyqtSignal(str)
     
     def __init__(self):
         QWidget.__init__(self)
         
-        hbox = QHBoxLayout()
+        hbox_main = QHBoxLayout()
+        hbox_zoom = QHBoxLayout()
+        hbox_fig_sizes = QHBoxLayout()
+        hbox_annotation = QHBoxLayout()
         
         self.__cmdLDZoom = QPushButton("<-L")
         self.__cmdLUZoom = QPushButton("L->")
@@ -25,8 +28,11 @@ class ZoomButtonWidget(QGroupBox):
         self.__cmdUUZoom = QPushButton("U->")
         self.__cmdShowAll = QPushButton("Show All")
 
-        self.__cmdFontPlus = QPushButton("Font+")
-        self.__cmdFontMinus = QPushButton("Font-")
+        self.__lblFontSize = QLabel("Font size:")
+        self.__dsbFontSize = QDoubleSpinBox()
+        self.__dsbFontSize.setRange(1, fli.max)
+        self.__dsbFontSize.setValue(12)
+        self.__dsbFontSize.setSingleStep(0.5)
 
         self.__lblFigHeight = QLabel("Height: ")
         self.__lblFigWidth = QLabel("Width: ")
@@ -51,7 +57,7 @@ class ZoomButtonWidget(QGroupBox):
 
         repeat_delay = 0
         
-        self._increment_by = 5
+        self._increment_by = 1
         
         self.__cmdLUZoom.setAutoRepeat(True)
         self.__cmdLUZoom.setAutoRepeatDelay(repeat_delay)
@@ -69,29 +75,32 @@ class ZoomButtonWidget(QGroupBox):
         self.__cmdUUZoom.setAutoRepeatDelay(repeat_delay)
         self.__cmdLUZoom.setAutoRepeatInterval(repeat_delay)
 
-        hbox.addWidget(self.__cmdLDZoom)
-        hbox.addWidget(self.__cmdLUZoom)
-        hbox.addWidget(self.__cmdShowAll)
-        hbox.addWidget(self.__cmdUDZoom)
-        hbox.addWidget(self.__cmdUUZoom)
+        hbox_zoom.addWidget(self.__cmdLDZoom)
+        hbox_zoom.addWidget(self.__cmdLUZoom)
+        hbox_zoom.addWidget(self.__cmdShowAll)
+        hbox_zoom.addWidget(self.__cmdUDZoom)
+        hbox_zoom.addWidget(self.__cmdUUZoom)
 
-        hbox.addSpacerItem(QSpacerItem(10, 10))#, QSizePolicy.Expanding, QSizePolicy.Expanding))
+        hbox_fig_sizes.addWidget(self.__lblFontSize)
+        hbox_fig_sizes.addWidget(self.__dsbFontSize)
 
-        hbox.addWidget(self.__cmdFontMinus)
-        hbox.addWidget(self.__cmdFontPlus)
+        hbox_fig_sizes.addWidget(self.__lblFigWidth)
+        hbox_fig_sizes.addWidget(self.__dsbFigWidth)
+        hbox_fig_sizes.addWidget(self.__lblFigHeight)
+        hbox_fig_sizes.addWidget(self.__dsbFigHeight)
 
-        hbox.addSpacerItem(QSpacerItem(10, 10))#, QSizePolicy.Expanding, QSizePolicy.Expanding))
+        hbox_annotation.addWidget(self.__lblAnnotation)
+        hbox_annotation.addWidget(self.__edtAnnotation)
 
-        #hbox.addWidget(self.__lblFigWidth)
-        #hbox.addWidget(self.__dsbFigWidth)
-        #hbox.addWidget(self.__lblFigHeight)
-        #hbox.addWidget(self.__dsbFigHeight)
+        v_box = QVBoxLayout()
+        v_box.addLayout(hbox_fig_sizes)
+        v_box.addLayout(hbox_zoom)
 
-        hbox.addWidget(self.__lblAnnotation)
-        hbox.addWidget(self.__edtAnnotation)
-        
-        self.setLayout(hbox)
-        self.setTitle("View")
+        hbox_main.addLayout(v_box)
+        hbox_main.addLayout(hbox_annotation)
+
+        self.setLayout(hbox_main)
+        self.setTitle("Figure")
         
         self.__cmdLUZoom.pressed.connect(self.on_cmdLUZoom_pressed)
         self.__cmdLDZoom.pressed.connect(self.on_cmdLDZoom_pressed)
@@ -99,8 +108,7 @@ class ZoomButtonWidget(QGroupBox):
         self.__cmdUDZoom.pressed.connect(self.on_cmdUDZoom_pressed)
         self.__cmdShowAll.pressed.connect(self.on_cmdShowAll_pressed)
 
-        self.__cmdFontPlus.pressed.connect(self.on_cmdFontPlus_pressed)
-        self.__cmdFontMinus.pressed.connect(self.on_cmdFontMinus_pressed)
+        self.__dsbFontSize.valueChanged.connect(self.on_dsb_font_size_changed)
 
         self.__dsbFigWidth.valueChanged.connect(self.on_dsbFigWidth_changed)
         self.__dsbFigHeight.valueChanged.connect(self.on_dsbFigHeight_changed)
@@ -124,23 +132,18 @@ class ZoomButtonWidget(QGroupBox):
     def on_cmdShowAll_pressed(self):
         self.show_all.emit()
 
-    def on_cmdFontPlus_pressed(self):
-        self.font_change.emit(+1)
-
-    def on_cmdFontMinus_pressed(self):
-        self.font_change.emit(-1)
+    def on_dsb_font_size_changed(self):
+        self.font_size_changed.emit(self.__dsbFontSize.value())
 
     def change_fig_size(self, size):
         self.__dsbFigWidth = size[0]
         self.__dsbFigHeight = size[1]
 
     def on_dsbFigWidth_changed(self):
-        # self.fig_size_changed.emit((self.__dsbFigWidth.value(), self.__dsbFigHeight.value()))
-        pass
+        self.fig_size_changed.emit((self.__dsbFigWidth.value(), self.__dsbFigHeight.value()))
 
     def on_dsbFigHeight_changed(self):
-        # self.fig_size_changed.emit((self.__dsbFigWidth.value(), self.__dsbFigHeight.value()))
-        pass
+        self.fig_size_changed.emit((self.__dsbFigWidth.value(), self.__dsbFigHeight.value()))
 
     def on_annotation_changed(self):
         self.annotation_changed.emit(self.__edtAnnotation.toPlainText())

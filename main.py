@@ -111,7 +111,7 @@ class App(QMainWindow):
         self.horizontalGroupBox = QGroupBox("Grid")
         layout = QGridLayout()
         # layout.setRowStretch(0, 50)
-        layout.setColumnStretch(0, 80)
+        #layout.setColumnStretch(0, 80)
         # layout.setRowStretch(1, 50)
 
         self.ficFits = fic.fitInfoWidgetContainer()
@@ -137,7 +137,7 @@ class App(QMainWindow):
         # self.zbwMain.lower_down.connect(self.)
         self.zbwMain.zoom_by_increment.connect(self.zoom_by_increment)
         self.zbwMain.show_all.connect(self.zoom_show_all)
-        self.zbwMain.font_change.connect(self.font_change)
+        self.zbwMain.font_size_changed.connect(self.font_size_changed)
         self.zbwMain.fig_size_changed.connect(self.fig_size_changed)
         self.zbwMain.annotation_changed.connect(self.annotation_changed)
 
@@ -148,14 +148,24 @@ class App(QMainWindow):
 
         # change fit index after remove_fit, when and where and whos responsible for that anyway
 
-        self.ddVbox = QVBoxLayout()
-        self.ddVbox.addWidget(self.tabFits)
-        self.ddVbox.addWidget(self.ddMain)
+        #self.ddVbox = QVBoxLayout()
+        #self.ddVbox.addWidget(self.tabFits)
+        #self.ddVbox.addWidget(self.ddMain)
 
-        layout.addItem(self.ddVbox, 0, 0)
+        #layout.addItem(self.ddVbox, 0, 0)
+
+        self.ddGbox = QGridLayout()
+        self.ddGbox.addWidget(self.tabFits)
+        self.ddGbox.addWidget(self.ddMain)
+
+        layout.addItem(self.ddGbox, 0, 0)
+
+
         layout.addWidget(self.ficFits, 0, 1)
         layout.addWidget(self.zbwMain, 1, 0)
         layout.addWidget(self.dcwData, 1, 1)
+
+
 
         self.horizontalGroupBox.setLayout(layout)
 
@@ -212,9 +222,9 @@ class App(QMainWindow):
         except:
             self.set_display_msg('Zoom to fit failed.')
 
-    def font_change(self, change):
+    def font_size_changed(self, value):
         try:
-            self.ddMain.font_change(change)
+            self.ddMain.font_size_changed(value)
             self.ddMain.refresh()
         except:
             self.set_display_msg('Chainging font failed.')
@@ -245,6 +255,7 @@ class App(QMainWindow):
             try:
                 ext = ext.split('.')[-1]
                 fig = self.ddMain.getFigure()
+                #fig.set_size_inches(31, 13.8)
                 fig.savefig(name, format=ext)
             except:
                 QMessageBox.critical(self, "Saving figure failed!", "Error while saving figure", QMessageBox.Ok,

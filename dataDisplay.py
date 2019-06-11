@@ -10,7 +10,7 @@ class DataDisplay(FigureCanvas):
     mark_default_text = 'Click on figure to show energy value.'
 
     def __init__(self, parent=None):
-        self.__fig, self.__ax = plt.subplots(1, 1, constrained_layout=True)
+        self.__fig, self.__ax = plt.subplots(1, 1, tight_layout=True)
         FigureCanvas.__init__(self, self.__fig)
 
         if self.hasMouseTracking():
@@ -19,10 +19,10 @@ class DataDisplay(FigureCanvas):
             self.__inv = self.__ax.transData.inverted()
         else:
             self.__inv = None
-        
+
         self.setParent(parent)
         self.reset()
-    
+
     def reset(self):
         self.__dc = 'black'
         self.__fc = 'orange'
@@ -57,10 +57,8 @@ class DataDisplay(FigureCanvas):
         self.__fig.figsize = figsize
 
     def increase_fig_size(self, new_fig_size):
-
         if new_fig_size[0] > 0 and new_fig_size[1] > 0:
-            # self.__fig.set_size_inches(new_fig_size, forward=True)
-            pass
+            self.__fig.set_size_inches(new_fig_size, forward=True)
 
     def isLoaded(self):
         return self.__data is not None
@@ -137,7 +135,8 @@ class DataDisplay(FigureCanvas):
                 
                 self.__ax.annotate(self.__annotation,
                                    xy=(xpos, ypos),
-                                   horizontalalignment='left', verticalalignment='top', fontsize=self.__font["size"]+2)
+                                   horizontalalignment='left', verticalalignment='top',
+                                   fontsize=self.__font["size"]*1.2+1)
             self.draw()
 
     def current_fdi(self):
@@ -213,9 +212,9 @@ class DataDisplay(FigureCanvas):
         #do a drag and drop zoom, because those increments stink
         pass
 
-    def font_change(self, change):
-        if self.__font["size"] + change > 0:
-            self.__font["size"] += change
+    def font_size_changed(self, value):
+        if value > 0:
+            self.__font["size"] = value
 
     def setData(self, data):
         self.__data = data

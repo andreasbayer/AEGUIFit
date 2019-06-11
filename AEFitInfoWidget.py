@@ -9,7 +9,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
     AEFOUNDAT = "Found AE at {:.2f} eV"
     STDDEVAT = "with a stdDev of {:.2f} eV"
 
-    VALSTRING = r'{:.2f} ' + u'\u00B1' + r' {:.2f}'
+    VALSTRING = r'{:.3f} ' + u'\u00B1' + r' {:.3f}'
     AEUNIT = "eV"
     
     AEFrom_changed = pyqtSignal()
@@ -48,10 +48,11 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
             print(str)
             
     def get_fit_string(self):
-        return str(round(self.getAEFrom(),2))+ "p" +\
-               str(round(self.getAETo(),2))+ "p" +\
-               str(round(self.getFWHM(),2)) + "p" +\
-               str(round(self.getMinSpan(),2))
+
+        return str(round(self.getAEFrom(), 3)) + "p" +\
+               str(round(self.getAETo(), 3)) + "p" +\
+               str(round(self.getFWHM(), 3)) + "p" +\
+               str(round(self.getMinSpan(), 3))
     
     
     def reset(self, enable):
