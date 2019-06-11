@@ -129,8 +129,15 @@ class DataDisplay(FigureCanvas):
                 self.__ax.plot([self.__clickmark], [0], 'g^')
 
             if self.__annotation is not None:
-                self.__ax.annotate(self.__annotation, xy=(self.getCurrentData()[0][0], self.getCurrentData()[-1][1]), horizontalalignment='left', verticalalignment='top', fontsize=self.__font["size"]+2)
-
+                (xmin, xmax) = self.__ax.get_xlim()
+                (ymin, ymax) = self.__ax.get_ylim()
+                
+                xpos = xmin + 0.1 * (xmax - xmin)
+                ypos = ymax - 0.1 * (ymax - ymin)
+                
+                self.__ax.annotate(self.__annotation,
+                                   xy=(xpos, ypos),
+                                   horizontalalignment='left', verticalalignment='top', fontsize=self.__font["size"]+2)
             self.draw()
 
     def current_fdi(self):

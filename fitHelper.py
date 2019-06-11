@@ -27,7 +27,7 @@ def find_ev_position(data, ev, lb=0, ub=-1):
     
     return e_pos
 
-def fit_function_to_data(data, std_errs, p, fwhm, lb, ub):
+def fit_function_to_data(data, p, fwhm, lb, ub, std_errs = None):
     # tighten sigma on the go (lasso sigma)
     
     base_func = eval_fit_function(fwhm)
@@ -36,11 +36,12 @@ def fit_function_to_data(data, std_errs, p, fwhm, lb, ub):
                              data[:, 0],
                              data[:, 1],
                              p[:],
-                             #sigma=std_errs,
+                             sigma=std_errs,
                              method='trf',
                              absolute_sigma=True,
-                             bounds=([0, lb, -np.inf, -np.inf], [0.1, ub, np.inf, np.inf]), # upperbound for constant backround is arbitrary//!!
-                             check_finite=True)
+                             bounds=([0, lb, -np.inf, -np.inf], [0.1, ub, np.inf, np.inf]),
+                             # upperbound for constant backround is arbitrary//!!
+                                 check_finite=True)
     
     # return initial_parameters and stddev for the parameters
     return res[0], np.sqrt(np.diag(res[1])), base_func
@@ -117,7 +118,7 @@ def min_above_x(np_array, x):
     return min
 
 def fix_std_errs(std_errs):
-    min_err = min_above_x(std_errs, 0)
+    min_err = 10**(-5) #min_above_x(std_errs, 0)
     fit_std_errs = np.array([])
     
     for std_err in std_errs:
@@ -138,13 +139,14 @@ def find_best_fit(data, std_errs, ip, fwhm, minspan, fit_bounds, update_function
     c_p = np.array(ip)
     c_stddev = -1
     c_fit_function = None
-
     fit_weights = fix_std_errs(std_errs)
-    
+
     # find number of iterations to take place where the data is cut down by x %
     n, cutpercent = find_cut_numbers(len(data), data[len(data) - 1][0] - data[0][0], minspan)
     
     cutdata = data
+    cutweights = fit_weights
+    
     
     starting_fwhm = fwhm * 3
     ending_fwhm = fwhm
@@ -166,7 +168,7 @@ def find_best_fit(data, std_errs, ip, fwhm, minspan, fit_bounds, update_function
         # try to fit
         try:
             # c_p, c_stddev,  c_fit_function = fit_function_to_data(cutdata, c_p, fwhm, cutdata[0][0], cutdata[len(cutdata)-1, 0])
-            c_p, c_stddev, c_fit_function = fit_function_to_data(cutdata, fit_weights, c_p, fwhm, fit_bounds[0], fit_bounds[1])
+            c_p, c_stddev, c_fit_function = fit_function_to_data(cutdata, c_p, fwhm, fit_bounds[0], fit_bounds[1], cutweights)
             message = 'fit succeeded.'
         except Exception as error:
             if type(error) is ValueError:
@@ -207,16 +209,11 @@ def find_best_fit(data, std_errs, ip, fwhm, minspan, fit_bounds, update_function
         if iteration < n - 1:
             # use that position, to cut the data down to cutpercent*100% of its size
             cutdata = cut_relatively_equal(data, ae_pos, cutpercent ** (iteration + 1))
+            cutweights = cut_relatively_equal_1D(fit_weights, ae_pos, cutpercent ** (iteration + 1))
         iteration += 1
         
         if update_function is not None:
             update_function(float((iteration) / n), p)
-    
-    # bad luck, didn't converge
-    #    if ier not in [1, 2, 3, 4]:
-    #        return errmsg, None
-    #    else:
-    # return message, p, stddev, cutdata[0][0], cutdata[len(cutdata) - 1][0], fwhm, iteration
     
     return p, stddev, cutdata[0][0], cutdata[len(cutdata) - 1][0], r_fwhm, fit_function
 
@@ -248,6 +245,41 @@ def cut_relatively_equal(cutdata, ae_pos, cutpercent):
         
         if current_pos < cdl:
             buff_cutdata.append(cutdata[current_pos, :])
+            rc += 1
+        
+        deviation += 1
+    
+    return np.array(buff_cutdata)
+
+
+def cut_relatively_equal_1D(cutdata, ae_pos, cutpercent):
+    # cuts data down to cutpercent*100 % of its size, with EA in the middle
+    # if however there are not enough data points on one of the sides to guarantee cutpercent*100 % of the data
+    # more of the other side will be added.
+    
+    cdl = len(cutdata)
+    buff_cutdata = []
+    
+    buff_cutdata.append(cutdata[ae_pos])
+    
+    # deviation from ae
+    deviation = 1
+    
+    lc = 0
+    rc = 0
+    
+    while len(buff_cutdata) / cdl <= cutpercent:
+        
+        current_pos = ae_pos - deviation
+        
+        if current_pos >= 0:
+            buff_cutdata.insert(0, cutdata[current_pos])
+            lc += 1
+        
+        current_pos = ae_pos + deviation
+        
+        if current_pos < cdl:
+            buff_cutdata.append(cutdata[current_pos])
             rc += 1
         
         deviation += 1
