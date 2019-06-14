@@ -40,8 +40,8 @@ def fit_function_to_data(data, p, fwhm, lb, ub, std_errs = None):
                              method='trf',
                              absolute_sigma=True,
                              bounds=([0, lb, -np.inf, -np.inf], [0.1, ub, np.inf, np.inf]),
-                             # upperbound for constant backround is arbitrary//!!
-                                 check_finite=True)
+                             # todo upperbound for constant background is arbitrary
+                             check_finite=True)
     
     # return initial_parameters and stddev for the parameters
     return res[0], np.sqrt(np.diag(res[1])), base_func

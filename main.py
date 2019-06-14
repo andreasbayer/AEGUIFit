@@ -310,7 +310,7 @@ class App(QMainWindow):
         options |= QFileDialog.DontUseNativeDialog
         fileName, _ = QFileDialog.getOpenFileName(self, "Open file", "", "Text Files (*.txt);;All Files (*)",
                                                   options=options)
-        if fileName is not '':  # //!! check file validity
+        if fileName is not '':  # todo check file validity
             try:
                 self.reset(True)
                 self.loadData(fileName)

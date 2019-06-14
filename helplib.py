@@ -72,7 +72,8 @@ def readFileForFitsDataAndStdError(filename, tolerate_spaces=False, x_y_data_onl
     # create empty list
     a = []
     fit_p_strings = list()
-    ignored_columns = list()
+    view_p_strings = list()
+    ignored_columns = list()  # test data?
     
     try:
         f = openfile(filename)
@@ -109,10 +110,14 @@ def readFileForFitsDataAndStdError(filename, tolerate_spaces=False, x_y_data_onl
             # metadata
             line_data = line.lstrip("#").strip('\r\n').split('\t')
             
-            for i in range(0,len(line_data)):
+            for i in range(0, len(line_data)):
                 if line_data[i].startswith("fl"):
                     fit_p_strings.append(line_data[i].lstrip("fl"))
                     ignored_columns.append(i)
+                elif line_data[i].startswith("fig"):
+                    view_p_strings.apend(line_data[i].lstrip("fig"))
+                    ignored_columns.append(i)
+
     
     # convert list a to float array
     data = array(a, dtype=float)
@@ -124,7 +129,7 @@ def readFileForFitsDataAndStdError(filename, tolerate_spaces=False, x_y_data_onl
     # close file
     f.close()
     
-    return data[:, [0, 1]], calc_std_errors(data), fit_p_strings
+    return data[:, [0, 1]], calc_std_errors(data), fit_p_strings, view_p_strings
 
 
 def readFileForDataAndStdError(filename, tolerate_spaces=False):
