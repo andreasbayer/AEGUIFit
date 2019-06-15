@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QGroupBox, QPushButton, QComboBox, QVBoxLayout, QHBoxLayout
+from PyQt5.QtWidgets import QGroupBox, QPushButton, QComboBox, QVBoxLayout, QHBoxLayout, QScrollArea
 from PyQt5.QtCore import pyqtSignal, Qt
 #from PyQt5.Qt import ali
 import AEFitInfoWidget as afw
@@ -8,9 +8,8 @@ import fitDataInfo as fid
 from numpy import ndarray, empty
 
 
-
 class fitInfoWidgetContainer(QGroupBox):
-    AE = "ae"
+
     progressUpdate = pyqtSignal(float, list)
 
     Post_Fit = pyqtSignal(str, fid.fitDataInfo, ndarray)
@@ -35,6 +34,7 @@ class fitInfoWidgetContainer(QGroupBox):
         #self.scroll = QScrollArea()
         
         self.__mainLayout = QVBoxLayout()
+        self.__scrollArea = QScrollArea()
     
         self.__cbxFits = QComboBox()
         self.__cbxFits.addItem("Onset Fit")
@@ -51,27 +51,43 @@ class fitInfoWidgetContainer(QGroupBox):
         self.__hbMenu = QHBoxLayout()
         self.__hbMenu.addWidget(self.__cbxFits)
         self.__hbMenu.addWidget(self.__cmdAddFit)
-        #self.__hbMenu.setSizeConstraint(QHBoxLayout.SetMinimumSize)
-        #self.__hbMenu.minimumSize()
         self.__mainLayout.setAlignment(Qt.AlignTop)
-        self.__mainLayout.addItem(self.__hbMenu)
+        self.__mainLayout.addLayout(self.__hbMenu)
+        self.__mainLayout.addWidget(self.__scrollArea)
+        
+        self.__vbFitInfoWidgets = QVBoxLayout()
+        self.__scrollArea.setWidgetResizable(True)
+        self.__scrollArea.setLayout(self.__vbFitInfoWidgets)
+        
         
         #self.__mainLayout.addWidget(self.__cbxFits)
         #self.__mainLayout.addWidget(self.__cmdAddFit)
 
         self.setLayout(self.__mainLayout)
+        
 
         self.reset(False)
         
     def load_fits(self, fit_strings):
         
         for fit_string in fit_strings:
-            if fit_string.startswith(self.AE):
+            item = fit_string.split('=')
+            if item[0] == afw.FITINITIALS:
                 
-                new_fit = afw.AEFitInfoWidget(len(self.__fitInfoWidgets), self.shift_data, fit_string.lstrip(self.AE))
+                new_fit = afw.AEFitInfoWidget(len(self.__fitInfoWidgets), self.shift_data, item[1])
                 
                 self.__add_fiw(new_fit)
                 new_fit.fitToFunction()
+                
+    def get_fit_strings(self):
+        
+        fit_strings = list()
+        
+        for fiw_i in self.__fitInfoWidgets:
+            fit_strings.append(fiw_i.get_fit_string())
+            
+        return fit_strings
+        
 
     def __cmdAddFitClicked(self, checked):
         self.__add_fit(self.__cbxFits.currentIndex())
@@ -98,7 +114,9 @@ class fitInfoWidgetContainer(QGroupBox):
 
     
     def __add_fiw(self, fiw):
-        self.__mainLayout.addWidget(fiw)
+        #self.__mainLayout.addWidget(fiw)
+
+        self.__vbFitInfoWidgets.addWidget(fiw)
         self.__fitInfoWidgets.append(fiw)
         
         self.__update_diff_data(fiw.get_fit_index())

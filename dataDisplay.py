@@ -22,7 +22,7 @@ class DataDisplay(FigureCanvas):
 
         self.setParent(parent)
         self.reset()
-
+        
     def reset(self):
         self.__dc = 'black'
         self.__fc = 'orange'
@@ -41,10 +41,9 @@ class DataDisplay(FigureCanvas):
         self.__upperZoom = 0
         self.__lowerZoom = 0
 
-        self.__font = {#'family': 'serif',
-                       'color':  'black',
-                       #'weight': 'normal',
-                       'size': 14}
+        self.__label_font = {'size':14}
+        self.__scale_font = {'size':14}
+        self.__annotation_font = {'size':14}
 
         self.__ax.clear()
 
@@ -62,7 +61,7 @@ class DataDisplay(FigureCanvas):
 
     def isLoaded(self):
         return self.__data is not None
-    
+        
     def mousePressEvent(self, event):
         if self.isLoaded():
             
@@ -126,7 +125,7 @@ class DataDisplay(FigureCanvas):
             if self.__clickmark is not None:
                 self.__ax.plot([self.__clickmark], [0], 'g^')
 
-            if self.__annotation is not None:
+            if self.__annotation is not None and len(self.__annotation) > 0:
                 (xmin, xmax) = self.__ax.get_xlim()
                 (ymin, ymax) = self.__ax.get_ylim()
                 
@@ -136,7 +135,7 @@ class DataDisplay(FigureCanvas):
                 self.__ax.annotate(self.__annotation,
                                    xy=(xpos, ypos),
                                    horizontalalignment='left', verticalalignment='top',
-                                   fontsize=self.__font["size"]*1.2+1)
+                                   fontsize=self.__annotation_font['size'])
             self.draw()
 
     def current_fdi(self):
@@ -169,17 +168,18 @@ class DataDisplay(FigureCanvas):
                            yerr=stdErrors, fmt='.', markersize=3,
                            markeredgecolor=self.__dc, markerfacecolor=self.__dc, ecolor=self.__dc, elinewidth=self.__ew,
                            barsabove=True, capsize=2)
-
-        self.__ax.set_ylabel('Counts (1/s)', self.__font)
-        self.__ax.set_xlabel('Energy (eV)', self.__font)
-
+        
+        self.__ax.set_ylabel('Counts (1/s)', fontdict=self.__label_font)
+        self.__ax.set_xlabel('Energy (eV)', fontdict=self.__label_font)
+        
+        
+        
         for tick in self.__ax.xaxis.get_major_ticks():
-            tick.label.set_size(self.__font["size"]-2)
-
+            tick.label.set_size(self.__scale_font['size'])
+        
         for tick in self.__ax.yaxis.get_major_ticks():
-            tick.label.set_size(self.__font["size"]-2)
-
-
+            tick.label.set_size(self.__scale_font['size'])
+    
     def shiftData(self, increment):
         if self.isLoaded():
             for set in self.__data:
@@ -212,9 +212,17 @@ class DataDisplay(FigureCanvas):
         #do a drag and drop zoom, because those increments stink
         pass
 
-    def font_size_changed(self, value):
+    def set_label_font_size(self, value):
         if value > 0:
-            self.__font["size"] = value
+            self.__label_font["size"] = value
+            
+    def set_scale_font_size(self, value):
+        if value > 0:
+            self.__scale_font["size"] = value
+
+    def set_annotation_font_size(self, value):
+        if value > 0:
+            self.__annotation_font["size"] = value
 
     def setData(self, data):
         self.__data = data

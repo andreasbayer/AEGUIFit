@@ -8,6 +8,7 @@ class dataControlWidget(QWidget):
     data_changed = pyqtSignal(bool)
     data_shift = pyqtSignal(float)
     load_fits = pyqtSignal(list)
+    load_view = pyqtSignal(str)
     
     SHOW_ERROR_BARS = "Show error bars"
     SHOW_ERROR_BARS_NOT_LOADED = "Show error bars (could not be calculated)"
@@ -36,6 +37,7 @@ class dataControlWidget(QWidget):
         self.__energyShiftValue = 0.0
         
         self.__data = None
+        self.__all_data = None
         self.__stdErrors = None
         
         self.__chkShowErrorBars.setCheckable(True)
@@ -95,8 +97,8 @@ class dataControlWidget(QWidget):
 
 
     def loadFile(self, fileName):
-        self.__data, self.__stdErrors, fit_strings = hl.readFileForFitsDataAndStdError(fileName)
-        #self.__data, self.__stdErrors = hl.readFileForDataAndStdError(fileName)
+        self.__all_data, self.__stdErrors, (fit_strings, view_string, data_string) = hl.readFileForFitsDataAndStdErrorAndMetaData(fileName)
+        self.__data = self.__all_data[:, 0:2]
 
         if len(self.__data) <= 1:
             raise Exception("Not enough data in file!")
@@ -113,5 +115,29 @@ class dataControlWidget(QWidget):
         
         self.data_changed.emit(check)
         self.load_fits.emit(fit_strings)
-
-
+        self.load_view.emit(view_string)
+        
+        self.load_from_data_string(data_string)
+        
+    def load_from_data_string(self, data_string):
+        
+        if data_string is not None:
+            split_string = data_string.split(',')
+            
+            for i in range(0, len(split_string)):
+                item = split_string[i].split('=')
+                
+                if len(item) == 2:
+                    if (item[0] == 'egs'):
+                        self.setEnergyShift(float(item[1]))
+                    elif (item[0] == 'seb'):
+                        if item[1] == '1' or item[1] == 'True':
+                            self.setShowErrorBars(True)
+                        elif item[1] == '0' or item[1] == 'False':
+                            self.setShowErrorBars(False)
+                    
+    def get_data_string(self):
+        return 'egs=' + str(self.getEnergyShift()) + ',seb=' + str(self.getShowErrorBars())
+    
+    def saveFile(self, fileName, fit_strings, view_string, data_string):
+        hl.saveFilewithMetaData(fileName, self.__all_data, (fit_strings, view_string, data_string))

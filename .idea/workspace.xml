@@ -5,10 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2cce7bfc-f757-42ce-8cc9-b56b3bbd1739" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/AEGUIFit.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/AEGUIFit.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AEFitDataInfo.py" beforeDir="false" afterPath="$PROJECT_DIR$/AEFitDataInfo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AEFitInfoWidget.py" beforeDir="false" afterPath="$PROJECT_DIR$/AEFitInfoWidget.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataControlWidget.py" beforeDir="false" afterPath="$PROJECT_DIR$/dataControlWidget.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dataDisplay.py" beforeDir="false" afterPath="$PROJECT_DIR$/dataDisplay.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitHelper.py" beforeDir="false" afterPath="$PROJECT_DIR$/fitHelper.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fitInfoWidgetContainer.py" beforeDir="false" afterPath="$PROJECT_DIR$/fitInfoWidgetContainer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flSaveFileDialog.py" beforeDir="false" afterPath="$PROJECT_DIR$/flSaveFileDialog.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/helplib.py" beforeDir="false" afterPath="$PROJECT_DIR$/helplib.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/multiDataDisplay.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/overnight_AE_parent_160C_I0011_155p8.txt" beforeDir="false" afterPath="$PROJECT_DIR$/overnight_AE_parent_160C_I0011_155p8.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/zoomButtonWidget.py" beforeDir="false" afterPath="$PROJECT_DIR$/zoomButtonWidget.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -16,51 +25,30 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FUSProjectUsageTrigger">
-    <session id="2111659519">
-      <usages-collector id="statistics.lifecycle.project">
-        <counts>
-          <entry key="project.open.time.4" value="1" />
-          <entry key="project.open.time.5" value="1" />
-          <entry key="project.opened" value="2" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.extensions.edit">
-        <counts>
-          <entry key="py" value="1566" />
-          <entry key="txt" value="283" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.edit">
-        <counts>
-          <entry key="PLAIN_TEXT" value="283" />
-          <entry key="Python" value="1566" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.extensions.open">
-        <counts>
-          <entry key="py" value="2" />
-          <entry key="txt" value="1" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.open">
-        <counts>
-          <entry key="PLAIN_TEXT" value="1" />
-          <entry key="Python" value="2" />
-        </counts>
-      </usages-collector>
-    </session>
-  </component>
   <component name="FavoritesManager">
     <favorites_list name="AEGUIFit" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/main.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="136">
+              <caret line="8" selection-start-line="8" selection-end-line="8" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/main.spec">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/AEFitInfoWidget.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="51" column="24" selection-start-line="51" selection-start-column="19" selection-end-line="51" selection-end-column="24" />
+            <state relative-caret-position="-3905">
+              <caret line="54" column="33" selection-start-line="54" selection-start-column="33" selection-end-line="54" selection-end-column="33" />
               <folding>
                 <element signature="e#0#98#0" expanded="true" />
               </folding>
@@ -69,42 +57,12 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/main.py">
+        <entry file="file://$PROJECT_DIR$/AEFitDataInfo.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="231">
-              <caret line="191" column="16" selection-start-line="191" selection-start-column="8" selection-end-line="191" selection-end-column="16" />
+            <state relative-caret-position="137">
+              <caret line="164" column="45" selection-start-line="164" selection-start-column="45" selection-end-line="164" selection-end-column="45" />
               <folding>
-                <element signature="e#0#10#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/flSaveFileDialog.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="20" selection-start-line="20" selection-end-line="20" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/fitHelper.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="397">
-              <caret line="53" column="4" lean-forward="true" selection-start-line="53" selection-start-column="4" selection-end-line="53" selection-end-column="4" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/dataDisplay.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="231">
-              <caret line="271" column="62" selection-start-line="271" selection-start-column="62" selection-end-line="271" selection-end-column="62" />
-              <folding>
-                <element signature="e#0#80#0" expanded="true" />
+                <element signature="e#0#33#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -113,11 +71,43 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/zoomButtonWidget.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="9" column="22" selection-start-line="9" selection-start-column="6" selection-end-line="9" selection-end-column="22" />
+            <state relative-caret-position="33">
+              <caret line="2" selection-start-line="2" selection-end-line="2" selection-end-column="35" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/fitInfoWidgetContainer.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="425">
+              <caret line="59" column="60" selection-start-line="59" selection-start-column="60" selection-end-line="59" selection-end-column="60" />
               <folding>
-                <element signature="e#0#130#0" expanded="true" />
-                <marker date="1560292220566" expanded="true" signature="4274:4283" ph="..." />
+                <element signature="e#0#87#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/dataDisplay.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="187">
+              <caret line="24" column="8" selection-start-line="24" selection-start-column="8" selection-end-line="24" selection-end-column="8" />
+              <folding>
+                <element signature="e#0#80#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tabFits.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="351">
+              <caret line="21" column="8" selection-start-line="21" selection-start-column="8" selection-end-line="21" selection-end-column="8" />
+              <folding>
+                <element signature="e#0#47#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -126,43 +116,10 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dataControlWidget.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="498">
-              <caret line="97" column="64" selection-start-line="97" selection-start-column="64" selection-end-line="97" selection-end-column="64" />
+            <state relative-caret-position="308">
+              <caret line="116" selection-start-line="116" selection-end-line="116" />
               <folding>
                 <element signature="e#0#83#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/helplib.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-206">
-              <caret line="79" column="19" lean-forward="true" selection-start-line="79" selection-start-column="19" selection-end-line="79" selection-end-column="19" />
-              <folding>
-                <element signature="e#19#38#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Todo.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="8" column="18" selection-start-line="8" selection-start-column="18" selection-end-line="8" selection-end-column="18" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/customFitInfoWidget.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2465">
-              <caret line="149" column="8" selection-start-line="149" selection-start-column="8" selection-end-line="149" selection-end-column="8" />
-              <folding>
-                <element signature="e#0#98#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -179,36 +136,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>MARK_DEFAULT_TEXT</find>
-      <find>mark_default_text</find>
-      <find>find_best</find>
-      <find>cut_relatively_equal</find>
-      <find>self.__upperzoom</find>
-      <find>fix</find>
-      <find>increase_fig</find>
-      <find>ddvbox</find>
-      <find>font_change</find>
-      <find>cmd_f</find>
-      <find>font_size</find>
-      <find>font_size_changed</find>
       <find>annotation</find>
-      <find>stretch</find>
-      <find>add_layout</find>
-      <find>layout</find>
-      <find>round</find>
-      <find>lblaeval</find>
-      <find>VALSTRING</find>
-      <find>save</find>
-      <find>set_size_inches</find>
-      <find>savefig</find>
-      <find>open</find>
-      <find>//!!</find>
-      <find>font</find>
+      <find>annotation_font_size_changed</find>
+      <find>set_</find>
+      <find>cmd</find>
+      <find>range</find>
+      <find>__dsbAEFrom</find>
+      <find>shift_fit</find>
+      <find>showerrorbars</find>
+      <find>data</find>
+      <find>addfit</find>
+      <find>cmdfit</find>
+      <find>fitdata</find>
       <find>savefile</find>
-      <find>openfile</find>
-      <find>loaddata</find>
-      <find>loadfile</find>
-      <find>ignored_columns</find>
+      <find>for</find>
+      <find>loadData</find>
+      <find>open</find>
+      <find>c_stddev</find>
+      <find>success</find>
+      <find>get_data</find>
+      <find>get_fit_size</find>
+      <find>load_fits</find>
+      <find>oad_fits</find>
+      <find>fitini</find>
+      <find>save</find>
+      <find>string</find>
+      <find>annotation_font</find>
+      <find>ddmain</find>
+      <find>strings</find>
+      <find>font size</find>
+      <find>height</find>
     </findStrings>
     <replaceStrings>
       <replace>mbt</replace>
@@ -244,25 +201,27 @@
         <option value="$PROJECT_DIR$/SaveFitDataDialog.py" />
         <option value="$PROJECT_DIR$/dataDisplay_backup_single_display.py" />
         <option value="$PROJECT_DIR$/multiDataDisplay.py" />
-        <option value="$PROJECT_DIR$/flSaveFileDialog.py" />
         <option value="$PROJECT_DIR$/dist/customFitInfoWidget.py" />
         <option value="$PROJECT_DIR$/customFitDataInfo.py" />
         <option value="$PROJECT_DIR$/customFitInfoWidget.py" />
         <option value="$PROJECT_DIR$/polyFitDataInfo.py" />
         <option value="$PROJECT_DIR$/polyFitInfoWidget.py" />
-        <option value="$PROJECT_DIR$/dataControlWidget.py" />
         <option value="$PROJECT_DIR$/fitDataInfo.py" />
         <option value="$PROJECT_DIR$/fitInfoWidget.py" />
-        <option value="$PROJECT_DIR$/AEFitDataInfo.py" />
         <option value="$PROJECT_DIR$/tabFits.py" />
-        <option value="$PROJECT_DIR$/fitInfoWidgetContainer.py" />
+        <option value="$PROJECT_DIR$/Todo.txt" />
+        <option value="$PROJECT_DIR$/overnight_AE_parent_160C_I0011_155p8.txt" />
+        <option value="$PROJECT_DIR$/AEFitDataInfo.py" />
+        <option value="$PROJECT_DIR$/fitHelper.py" />
+        <option value="$PROJECT_DIR$/flSaveFileDialog.py" />
+        <option value="$PROJECT_DIR$/helplib.py" />
+        <option value="$PROJECT_DIR$/dataControlWidget.py" />
+        <option value="$PROJECT_DIR$/save.txt" />
         <option value="$PROJECT_DIR$/AEFitInfoWidget.py" />
         <option value="$PROJECT_DIR$/zoomButtonWidget.py" />
-        <option value="$PROJECT_DIR$/main.py" />
-        <option value="$PROJECT_DIR$/fitHelper.py" />
         <option value="$PROJECT_DIR$/dataDisplay.py" />
-        <option value="$PROJECT_DIR$/helplib.py" />
-        <option value="$PROJECT_DIR$/Todo.txt" />
+        <option value="$PROJECT_DIR$/main.py" />
+        <option value="$PROJECT_DIR$/fitInfoWidgetContainer.py" />
       </list>
     </option>
   </component>
@@ -319,9 +278,10 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="C:/Program Files/Git/git-cmd.exe" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="vcs.Git" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -344,7 +304,28 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.main">
+  <component name="RunManager">
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <module name="AEGUIFit" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Users\andreas\AppData\Local\Programs\Python\Python36-32\python.exe" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="AEGUIFit" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -352,9 +333,9 @@
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="" />
+      <option name="SDK_HOME" value="C:\Users\andreas\AppData\Local\Programs\Python\Python36-32\python.exe" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
+      <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
@@ -366,35 +347,9 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="polyFitDataInfo" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="AEGUIFit" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/polyFitDataInfo.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <list>
-      <item itemvalue="Python.main" />
-      <item itemvalue="Python.polyFitDataInfo" />
-    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python.main" />
-        <item itemvalue="Python.polyFitDataInfo" />
       </list>
     </recent_temporary>
   </component>
@@ -421,31 +376,47 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1176" extended-state="6" />
-    <editor active="true" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49852508" visible="true" weight="0.16069546" />
       <window_info id="Structure" order="1" sideWeight="0.5014749" side_tool="true" weight="0.3648294" />
       <window_info id="Favorites" order="2" sideWeight="0.5014749" side_tool="true" weight="0.3648294" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49868765" weight="0.32777232" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4943132" visible="true" weight="0.2423945" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.7069116" weight="0.65063787" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49789253" weight="0.32666665" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.625922" weight="0.24222222" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.7044257" weight="0.39666668" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.49956256" weight="0.32970297" />
-      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.29308838" side_tool="true" weight="0.2940594" />
+      <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.49956256" weight="0.3288889" />
+      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.29557428" side_tool="true" weight="0.39666668" />
       <window_info anchor="bottom" id="Version Control" order="8" />
-      <window_info anchor="bottom" id="Python Console" order="9" sideWeight="0.8433946" weight="0.32875368" />
-      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.49956256" weight="0.3238469" />
+      <window_info anchor="bottom" id="Python Console" order="9" sideWeight="0.8433946" weight="0.32777777" />
+      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.49894625" weight="0.31777778" />
       <window_info anchor="bottom" id="Educational.CheckDetails" order="11" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
     </layout>
-  </component>
-  <component name="VcsContentAnnotationSettings">
-    <option name="myLimit" value="2678400000" />
+    <layout-to-restore>
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49852508" visible="true" weight="0.16069546" />
+      <window_info id="Structure" order="1" sideWeight="0.5014749" side_tool="true" weight="0.3648294" />
+      <window_info id="Favorites" order="2" sideWeight="0.5014749" side_tool="true" weight="0.3648294" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info active="true" anchor="bottom" id="Find" order="1" sideWeight="0.49789253" visible="true" weight="0.32666665" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.625922" weight="0.24222222" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.7044257" weight="0.39666668" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.49956256" weight="0.3288889" />
+      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.29557428" side_tool="true" weight="0.39666668" />
+      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info anchor="bottom" id="Python Console" order="9" sideWeight="0.8433946" weight="0.32777777" />
+      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.49894625" weight="0.31777778" />
+      <window_info anchor="bottom" id="Educational.CheckDetails" order="11" />
+      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+    </layout-to-restore>
   </component>
   <component name="VcsManagerConfiguration">
     <ignored-roots>
@@ -482,19 +453,9 @@
           <option name="timeStamp" value="378" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/AEFitDataInfo.py</url>
-          <line>163</line>
-          <option name="timeStamp" value="415" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/AEFitInfoWidget.py</url>
-          <line>268</line>
+          <line>281</line>
           <option name="timeStamp" value="445" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/AEFitDataInfo.py</url>
-          <line>145</line>
-          <option name="timeStamp" value="449" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/flSaveFileDialog.py</url>
@@ -508,13 +469,23 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/dataDisplay.py</url>
-          <line>143</line>
+          <line>142</line>
           <option name="timeStamp" value="503" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/fitHelper.py</url>
           <line>121</line>
           <option name="timeStamp" value="504" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/fitInfoWidgetContainer.py</url>
+          <line>72</line>
+          <option name="timeStamp" value="552" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/dataDisplay.py</url>
+          <line>52</line>
+          <option name="timeStamp" value="553" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -527,60 +498,59 @@
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
-        <watch expression="min_above_x(std_errs, 0)" language="Python" />
-        <watch expression="10**np.floor(np.log10(min_above_x(std_errs, 0)))" language="Python" />
+        <watch expression="line" language="Python" />
       </configuration>
     </watches-manager>
   </component>
   <component name="debuggerHistoryManager">
     <expressions id="watch">
       <expression>
-        <expression-string>10**np.floor(np.log10(min_above_x(std_errs, 0)))</expression-string>
+        <expression-string>line</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>np.floor(np.log10(min_above_x(std_errs, 0)))</expression-string>
+        <expression-string>c_stddev</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>np.log10(min_above_x(std_errs, 0))</expression-string>
+        <expression-string>__py_debug_temp_var_1257820867.getFoundAE_dev()</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>min_above_x(std_errs, 0)</expression-string>
+        <expression-string>__py_debug_temp_var_1257820867.getFoundAE()</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>np.ceil(x)</expression-string>
+        <expression-string>__py_debug_temp_var_1585438915[:,0:2]</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>self.getCurrentData()[xmin]</expression-string>
+        <expression-string>__py_debug_temp_var_1585438915[:,0:1]</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>self.getCurrentData()</expression-string>
+        <expression-string>__py_debug_temp_var_1585438915[:,0]</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>__py_debug_temp_var_1933254698.get_xlim()</expression-string>
+        <expression-string>__py_debug_temp_var_2112469488.value()</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>__py_debug_temp_var_1933254698.Ax</expression-string>
+        <expression-string>input</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>self.__ax.</expression-string>
+        <expression-string>__py_debug_temp_var_1352798895.value()</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
@@ -593,6 +563,11 @@
       </expression>
     </expressions>
     <expressions id="evaluateExpression">
+      <expression>
+        <expression-string>self.__dsbScaleFontSize</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
       <expression>
         <expression-string>len(__py_debug_temp_var_752015422)</expression-string>
         <language-id>Python</language-id>
@@ -620,13 +595,6 @@
     <entry file="file://$USER_HOME$/.PyCharmCE2018.3/system/python_stubs/-1598016785/PyQt5/QtGui/QPaintDevice.py" />
     <entry file="file://$USER_HOME$/.PyCharmCE2018.3/system/python_stubs/-1598016785/PyQt5/QtWidgets/QWidget.py" />
     <entry file="file://$USER_HOME$/.PyCharmCE2018.3/system/python_stubs/-1598016785/PyQt5/QtWidgets/QMainWindow.py" />
-    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/_pydev_imps/_pydev_execfile.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="17" selection-start-line="17" selection-end-line="17" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="19278">
@@ -634,20 +602,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36-32/Lib/site-packages/matplotlib/backends/backend_qt5.py" />
     <entry file="file://$PROJECT_DIR$/fitData.py" />
     <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36-32/Lib/site-packages/matplotlib/transforms.py" />
     <entry file="file://$USER_HOME$/.PyCharmCE2018.3/system/python_stubs/-1598016785/scipy/special/_ufuncs.py" />
     <entry file="file://$PROJECT_DIR$/SaveFitDataDialog.py" />
     <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36-32/Lib/site-packages/matplotlib/artist.py" />
     <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36-32/Lib/site-packages/matplotlib/backends/backend_agg.py" />
-    <entry file="file://$PROJECT_DIR$/fitButtonGrid.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="26" selection-start-line="2" selection-start-column="26" selection-end-line="2" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/dataDisplay_backup_single_display.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="51">
@@ -655,8 +615,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/multiDataDisplay.py" />
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36-32/Lib/codecs.py" />
     <entry file="file://$PROJECT_DIR$/customFitDataInfo.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
@@ -682,53 +640,9 @@
       </provider>
     </entry>
     <entry file="file://$USER_HOME$/AppData/Local/Continuum/anaconda3/Lib/site-packages/numpy/linalg/linalg.py" />
-    <entry file="file://$PROJECT_DIR$/fitInfoWidget.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1394">
-          <caret line="84" column="8" selection-start-line="84" selection-start-column="8" selection-end-line="84" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fitDataInfo.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1258">
-          <caret line="82" selection-start-line="82" selection-end-line="82" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/AppData/Local/Continuum/anaconda3/Lib/site-packages/matplotlib/axes/_axes.py" />
     <entry file="file://$USER_HOME$/AppData/Local/Continuum/anaconda3/Lib/site-packages/matplotlib/backends/backend_agg.py" />
     <entry file="file://$USER_HOME$/AppData/Local/Continuum/anaconda3/Lib/site-packages/matplotlib/mathtext.py" />
-    <entry file="file://$PROJECT_DIR$/tabFits.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="21" column="8" selection-start-line="21" selection-start-column="8" selection-end-line="21" selection-end-column="8" />
-          <folding>
-            <element signature="e#0#47#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/AEFitDataInfo.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2363">
-          <caret line="141" selection-start-line="141" selection-end-line="141" />
-          <folding>
-            <element signature="e#0#33#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fitInfoWidgetContainer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2703">
-          <caret line="166" selection-start-line="166" selection-end-line="166" />
-          <folding>
-            <element signature="e#0#87#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/customFitInfoWidget.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2465">
@@ -739,85 +653,184 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/AEFitInfoWidget.py">
+    <entry file="file://$PROJECT_DIR$/Todo.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="51" column="24" selection-start-line="51" selection-start-column="19" selection-end-line="51" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#98#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="136">
+          <caret line="8" column="18" selection-start-line="8" selection-start-column="18" selection-end-line="8" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/overnight_MS_AE_scans_159C_I007_44p3.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/multiDataDisplay.py" />
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/_pydev_imps/_pydev_execfile.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="17" selection-start-line="17" selection-end-line="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36-32/Lib/codecs.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="321" column="50" lean-forward="true" selection-start-line="321" selection-start-column="50" selection-end-line="321" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/overnight_AE_parent_160C_I0011_155p8.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="17" selection-start-line="3" selection-start-column="17" selection-end-line="3" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36-32/Lib/site-packages/matplotlib/backends/backend_qt5.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="292" selection-start-line="292" selection-end-line="292" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/flSaveFileDialog.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="20" selection-start-line="20" selection-end-line="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/zoomButtonWidget.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="22" selection-start-line="9" selection-start-column="6" selection-end-line="9" selection-end-column="22" />
-          <folding>
-            <element signature="e#0#130#0" expanded="true" />
-            <marker date="1560292220566" expanded="true" signature="4274:4283" ph="..." />
-          </folding>
+        <state relative-caret-position="408">
+          <caret line="24" column="5" selection-start-line="24" selection-start-column="5" selection-end-line="24" selection-end-column="5" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/fitHelper.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="397">
-          <caret line="53" column="4" lean-forward="true" selection-start-line="53" selection-start-column="4" selection-end-line="53" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dataDisplay.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="231">
-          <caret line="271" column="62" selection-start-line="271" selection-start-column="62" selection-end-line="271" selection-end-column="62" />
+        <state relative-caret-position="154">
+          <caret line="172" selection-start-line="172" selection-end-line="172" />
           <folding>
-            <element signature="e#0#80#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="231">
-          <caret line="191" column="16" selection-start-line="191" selection-start-column="8" selection-end-line="191" selection-end-column="16" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dataControlWidget.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="498">
-          <caret line="97" column="64" selection-start-line="97" selection-start-column="64" selection-end-line="97" selection-end-column="64" />
-          <folding>
-            <element signature="e#0#83#0" expanded="true" />
+            <element signature="e#0#19#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/helplib.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-206">
-          <caret line="79" column="19" lean-forward="true" selection-start-line="79" selection-start-column="19" selection-end-line="79" selection-end-column="19" />
+        <state relative-caret-position="154">
+          <caret line="141" column="66" selection-start-line="141" selection-start-column="66" selection-end-line="141" selection-end-column="66" />
           <folding>
             <element signature="e#19#38#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Todo.txt">
+    <entry file="file://$PROJECT_DIR$/Rebecca.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fitInfoWidget.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-553">
+          <caret line="33" column="22" selection-start-line="33" selection-start-column="16" selection-end-line="33" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fitButtonGrid.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-624">
+          <caret line="2" column="26" selection-start-line="2" selection-start-column="26" selection-end-line="2" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fitDataInfo.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-80">
+          <caret line="46" selection-start-line="46" selection-end-line="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AEFitInfoWidget.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3905">
+          <caret line="54" column="33" selection-start-line="54" selection-start-column="33" selection-end-line="54" selection-end-column="33" />
+          <folding>
+            <element signature="e#0#98#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tabFits.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="351">
+          <caret line="21" column="8" selection-start-line="21" selection-start-column="8" selection-end-line="21" selection-end-column="8" />
+          <folding>
+            <element signature="e#0#47#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/save.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="10" selection-start-line="2" selection-start-column="10" selection-end-line="2" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dataControlWidget.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="116" selection-start-line="116" selection-end-line="116" />
+          <folding>
+            <element signature="e#0#83#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AEFitDataInfo.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="137">
+          <caret line="164" column="45" selection-start-line="164" selection-start-column="45" selection-end-line="164" selection-end-column="45" />
+          <folding>
+            <element signature="e#0#33#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.spec">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dataDisplay.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="24" column="8" selection-start-line="24" selection-start-column="8" selection-end-line="24" selection-end-column="8" />
+          <folding>
+            <element signature="e#0#80#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.PyCharmCE2019.1/system/python_stubs/-1598016785/PyQt5/QtWidgets/QWidget.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="193">
+          <caret line="756" column="8" selection-start-line="756" selection-start-column="8" selection-end-line="756" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/zoomButtonWidget.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="33">
+          <caret line="2" selection-start-line="2" selection-end-line="2" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
-          <caret line="8" column="18" selection-start-line="8" selection-start-column="18" selection-end-line="8" selection-end-column="18" />
+          <caret line="8" selection-start-line="8" selection-end-line="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fitInfoWidgetContainer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="59" column="60" selection-start-line="59" selection-start-column="60" selection-end-line="59" selection-end-column="60" />
+          <folding>
+            <element signature="e#0#87#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

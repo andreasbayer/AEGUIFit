@@ -10,9 +10,11 @@ import numpy as np
 class ZoomButtonWidget(QGroupBox):
     show_all = pyqtSignal()
     zoom_by_increment = pyqtSignal(str, int)
-    font_size_changed = pyqtSignal(float)
+    scale_font_size_changed = pyqtSignal(float)
+    label_font_size_changed = pyqtSignal(float)
     fig_size_changed = pyqtSignal(tuple)
     annotation_changed = pyqtSignal(str)
+    annotation_font_size_changed = pyqtSignal(float)
     
     def __init__(self):
         QWidget.__init__(self)
@@ -28,11 +30,19 @@ class ZoomButtonWidget(QGroupBox):
         self.__cmdUUZoom = QPushButton("U->")
         self.__cmdShowAll = QPushButton("Show All")
 
-        self.__lblFontSize = QLabel("Font size:")
-        self.__dsbFontSize = QDoubleSpinBox()
-        self.__dsbFontSize.setRange(1, fli.max)
-        self.__dsbFontSize.setValue(12)
-        self.__dsbFontSize.setSingleStep(0.5)
+        self.__lblLabelFontSize = QLabel("Label font size:")
+        self.__dsbLabelFontSize = QDoubleSpinBox()
+        self.__dsbLabelFontSize.setRange(1, fli.max)
+        self.__dsbLabelFontSize.setValue(12)
+        self.__dsbLabelFontSize.setSingleStep(0.5)
+        self.__dsbLabelFontSize.setMaximumWidth(75)
+        
+        self.__lblScaleFontSize = QLabel("Scale font size:")
+        self.__dsbScaleFontSize = QDoubleSpinBox()
+        self.__dsbScaleFontSize.setRange(1, fli.max)
+        self.__dsbScaleFontSize.setValue(12)
+        self.__dsbScaleFontSize.setSingleStep(0.5)
+        self.__dsbScaleFontSize.setMaximumWidth(75)
 
         self.__lblFigHeight = QLabel("Height: ")
         self.__lblFigWidth = QLabel("Width: ")
@@ -43,17 +53,25 @@ class ZoomButtonWidget(QGroupBox):
         self.__dsbFigHeight.setRange(2, fli.max)
         self.__dsbFigHeight.setValue(6)
         self.__dsbFigHeight.setSingleStep(0.1)
+        self.__dsbFigHeight.setMaximumWidth(75)
 
         self.__dsbFigWidth.setRange(2, fli.max)
         self.__dsbFigWidth.setValue(12)
         self.__dsbFigWidth.setSingleStep(0.1)
+        self.__dsbFigWidth.setMaximumWidth(75)
 
         self.__lblAnnotation = QLabel("Annotation:")
         self.__edtAnnotation = QPlainTextEdit("")
         self.__edtAnnotation.setFixedHeight(100)
-
+        
+        self.__lblAnnotationFontSize = QLabel("Annotation Font size:")
+        self.__dsbAnnotationFontSize = QDoubleSpinBox()
+        self.__dsbAnnotationFontSize.setRange(1, fli.max)
+        self.__dsbAnnotationFontSize.setValue(12)
+        self.__dsbAnnotationFontSize.setSingleStep(0.5)
+        self.__dsbAnnotationFontSize.setMaximumWidth(75)
+        
         self.setFixedHeight(135)
-
 
         repeat_delay = 0
         
@@ -80,14 +98,18 @@ class ZoomButtonWidget(QGroupBox):
         hbox_zoom.addWidget(self.__cmdShowAll)
         hbox_zoom.addWidget(self.__cmdUDZoom)
         hbox_zoom.addWidget(self.__cmdUUZoom)
-
-        hbox_fig_sizes.addWidget(self.__lblFontSize)
-        hbox_fig_sizes.addWidget(self.__dsbFontSize)
-
+        
         hbox_fig_sizes.addWidget(self.__lblFigWidth)
         hbox_fig_sizes.addWidget(self.__dsbFigWidth)
         hbox_fig_sizes.addWidget(self.__lblFigHeight)
         hbox_fig_sizes.addWidget(self.__dsbFigHeight)
+
+        hbox_fig_sizes.addWidget(self.__lblLabelFontSize)
+        hbox_fig_sizes.addWidget(self.__dsbLabelFontSize)
+        hbox_fig_sizes.addWidget(self.__lblScaleFontSize)
+        hbox_fig_sizes.addWidget(self.__dsbScaleFontSize)
+        hbox_fig_sizes.addWidget(self.__lblAnnotationFontSize)
+        hbox_fig_sizes.addWidget(self.__dsbAnnotationFontSize)
 
         hbox_annotation.addWidget(self.__lblAnnotation)
         hbox_annotation.addWidget(self.__edtAnnotation)
@@ -107,8 +129,10 @@ class ZoomButtonWidget(QGroupBox):
         self.__cmdUUZoom.pressed.connect(self.on_cmdUUZoom_pressed)
         self.__cmdUDZoom.pressed.connect(self.on_cmdUDZoom_pressed)
         self.__cmdShowAll.pressed.connect(self.on_cmdShowAll_pressed)
-
-        self.__dsbFontSize.valueChanged.connect(self.on_dsb_font_size_changed)
+        
+        self.__dsbLabelFontSize.valueChanged.connect(self.on_dsb_label_font_size_changed)
+        self.__dsbScaleFontSize.valueChanged.connect(self.on_dsb_scale_font_size_changed)
+        self.__dsbAnnotationFontSize.valueChanged.connect(self.on_dsb_annotation_font_size_changed)
 
         self.__dsbFigWidth.valueChanged.connect(self.on_dsbFigWidth_changed)
         self.__dsbFigHeight.valueChanged.connect(self.on_dsbFigHeight_changed)
@@ -132,12 +156,14 @@ class ZoomButtonWidget(QGroupBox):
     def on_cmdShowAll_pressed(self):
         self.show_all.emit()
 
-    def on_dsb_font_size_changed(self):
-        self.font_size_changed.emit(self.__dsbFontSize.value())
-
-    def change_fig_size(self, size):
-        self.__dsbFigWidth = size[0]
-        self.__dsbFigHeight = size[1]
+    def on_dsb_label_font_size_changed(self):
+        self.label_font_size_changed.emit(self.get_label_font_size())
+    
+    def on_dsb_scale_font_size_changed(self):
+        self.scale_font_size_changed.emit(self.__dsbScaleFontSize.value())
+    
+    def on_dsb_annotation_font_size_changed(self):
+        self.annotation_font_size_changed.emit(self.get_annotation_font_size())
 
     def on_dsbFigWidth_changed(self):
         self.fig_size_changed.emit((self.__dsbFigWidth.value(), self.__dsbFigHeight.value()))
@@ -147,6 +173,77 @@ class ZoomButtonWidget(QGroupBox):
 
     def on_annotation_changed(self):
         self.annotation_changed.emit(self.__edtAnnotation.toPlainText())
+
+    def load_from_view_string(self, view_string):
+        if view_string is not None:
+            split_string = view_string.split(',')
+        
+            for i in range(0, len(split_string)):
+                item = split_string[i].split('=')
+            
+                if len(item) == 2:
+                    if (item[0] == 'atx'):
+                        self.set_annotation_text(str(item[1]).replace('\\n', '\n'))
+                    elif (item[0] == 'afs'):
+                        self.set_annotation_font_size(float(item[1]))
+                    elif (item[0] == 'fiw'):
+                        self.set_fig_size((float(item[1]), None))
+                    elif (item[0] == 'fih'):
+                        self.set_fig_size((None, float(item[1])))
+                    elif (item[0] == 'lfs'):
+                        self.set_label_font_size(float(item[1]))
+                    elif (item[0] == 'sfs'):
+                        self.set_scale_font_size(float(item[1]))
+
+    def get_view_string(self):
+    
+        atx = self.get_annotation_text().replace('\n', '\\n')
+        afs = str(self.get_annotation_font_size())
+        fiw = str(self.get_fig_size()[0])
+        fih = str(self.get_fig_size()[1])
+        lfs = str(self.get_label_font_size())
+        sfs = str(self.get_scale_font_size())
+        
+        
+        return 'atx=' + atx + ',' +\
+                'afs=' + afs + ',' +\
+                'fiw=' + fiw + ',' +\
+                'fih=' + fih + ',' +\
+                'lfs=' + lfs + ',' +\
+                'sfs=' + sfs
+
+    def get_annotation_text(self):
+        return self.__edtAnnotation.toPlainText()
+    
+    def set_annotation_text(self, text):
+        self.__edtAnnotation.setPlainText(text)
+        
+    def get_annotation_font_size(self):
+        return self.__dsbAnnotationFontSize.value()
+    
+    def set_annotation_font_size(self, value):
+        self.__dsbAnnotationFontSize.setValue(value)
+    
+    def get_label_font_size(self):
+        return self.__dsbLabelFontSize.value()
+    
+    def set_label_font_size(self, value):
+        self.__dsbLabelFontSize.setValue(value)
+    
+    def get_scale_font_size(self):
+        return self.__dsbScaleFontSize.value()
+    
+    def set_scale_font_size(self, value):
+        self.__dsbScaleFontSize.setValue(value)
+
+    def set_fig_size(self, size):
+        if size[0] != None:
+            self.__dsbFigWidth.setValue(size[0])
+        if size[1] != None:
+            self.__dsbFigHeight.setValue(size[1])
+            
+    def get_fig_size(self):
+        return (self.__dsbFigWidth.value(), self.__dsbFigHeight.value())
 
     # def connect_and_emit_trigger(self):
     #     # Connect the trigger signal to a slot.

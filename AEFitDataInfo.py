@@ -72,8 +72,11 @@ class AEFitDataInfo(fitDataInfo):
 
         if digits == -1:
             digits = 4
-
-        return round(self._stdDev[0], digits)
+            
+        if len(self._stdDev) == 4:
+            return round(self._stdDev[0], digits)
+        else:
+            return -1
 
     def getFoundAE(self, digits=-1):
 
@@ -87,7 +90,10 @@ class AEFitDataInfo(fitDataInfo):
         if digits == -1:
             digits = 4
 
-        return round(self._stdDev[1], digits)
+        if len(self._stdDev) == 4:
+            return round(self._stdDev[1], digits)
+        else:
+            return -1
 
     def getScaleFactor(self, digits=-1):
 
@@ -114,8 +120,11 @@ class AEFitDataInfo(fitDataInfo):
 
         if digits == -1:
             digits = 4
-
-        return round(self._stdDev[3], digits)
+        
+        if len(self._stdDev) == 4:
+            return round(self._stdDev[3], digits)
+        else:
+            return -1
 
     def getFittedFWHM(self):
         return self._fittedFWHM
@@ -143,6 +152,8 @@ class AEFitDataInfo(fitDataInfo):
             
             self._setFitData(fh.data_from_fit_and_parameters(self._data, self._fitFunction, self._p, self._FWHM,
                                                              continuation=True))
+            
+            
             
             self._msg = self.SUCCESS
         except:

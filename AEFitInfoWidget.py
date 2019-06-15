@@ -5,6 +5,9 @@ import fitHelper as fh
 import sys
 import fitInfoWidget as fiw
 
+FITINITIALS = "aef"
+
+
 class AEFitInfoWidget(fiw.fitInfoWidget):
     AEFOUNDAT = "Found AE at {:.2f} eV"
     STDDEVAT = "with a stdDev of {:.2f} eV"
@@ -49,7 +52,8 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
             
     def get_fit_string(self):
 
-        return str(round(self.getAEFrom(), 3)) + "p" +\
+        return FITINITIALS + '=' + \
+               str(round(self.getAEFrom(), 3)) + "p" +\
                str(round(self.getAETo(), 3)) + "p" +\
                str(round(self.getFWHM(), 3)) + "p" +\
                str(round(self.getMinSpan(), 3))
@@ -221,10 +225,10 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         if self.__AEFitDataInfo.is_initialized():
             self.setAEFrom(data[0][0])
             self.setAETo(data[-1][0])
-
+    
             self.__dsbAEFrom.setMinimum(data[0][0])
             self.__dsbAEFrom.setMaximum(data[-1][0])
-            
+    
             self.__dsbAETo.setMinimum(data[0][0])
             self.__dsbAETo.setMaximum(data[-1][0])
     
@@ -267,8 +271,17 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
     def shiftData(self, increment):
         self.__AEFitDataInfo.shift_fit(increment)
         
-        self.setAEFrom(self.getAEFrom() + increment)
-        self.setAETo(self.getAETo() + increment)
+        new_AEFrom = self.getAEFrom() + increment
+        new_AETo = self.getAETo() + increment
+
+        self.__dsbAEFrom.setMinimum(self.__dsbAEFrom.minimum() + increment)
+        self.__dsbAEFrom.setMaximum(self.__dsbAEFrom.maximum() + increment)
+
+        self.__dsbAETo.setMinimum(self.__dsbAETo.minimum() + increment)
+        self.__dsbAETo.setMaximum(self.__dsbAETo.maximum() + increment)
+        
+        self.setAEFrom(new_AEFrom)
+        self.setAETo(new_AETo)
     
     def fitToFunction(self):
         msg = self.__AEFitDataInfo.fitToFunction()

@@ -1,6 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QGridLayout, QMessageBox, QAction, QGroupBox, \
-    QFileDialog, QSizePolicy, QProgressBar, QLabel, QPushButton, QVBoxLayout
+from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QGridLayout, QMessageBox, QAction, QGroupBox, QFileDialog, QSizePolicy, QProgressBar, QLabel, QPushButton, QVBoxLayout
 import flSaveFileDialog as fsd
 
 import dataDisplay as dd
@@ -22,6 +21,8 @@ class App(QMainWindow):
         self.top = 100
         self.width = 1280
         self.height = 900
+        self.bottom = 150
+        self.right = 300
         self.initUI()
         self.menuInit()
 
@@ -88,7 +89,7 @@ class App(QMainWindow):
 
         self.progressBar.setFixedWidth(200)
 
-        self.lblEnergyMark = QLabel(dd.DataDisplay.mark_default_text)#dd.mark_default_text)
+        self.lblEnergyMark = QLabel(dd.DataDisplay.mark_default_text)
         self.statusBar().addPermanentWidget(self.lblEnergyMark, 1)
 
         self.lblProgUpdate = QLabel('')
@@ -115,17 +116,20 @@ class App(QMainWindow):
         # layout.setRowStretch(1, 50)
 
         self.ficFits = fic.fitInfoWidgetContainer()
+        self.dcwData = dcw.dataControlWidget()
+        self.zbwMain = zbw.ZoomButtonWidget()
+        
         self.ficFits.Post_Fit.connect(self.PostFit)  # self.ddMain.addFit(self.ficFits.getFitDataInfo())
         self.ficFits.Combined_Fit_Data_Updated.connect(self.Combined_Fit_Data_Updated)
         self.ficFits.progressUpdate.connect(self.progressUpdate)
         self.ficFits.disable_fit.connect(self.disable_fit)
         self.ficFits.remove_fit.connect(self.remove_fit)
 
-        self.dcwData = dcw.dataControlWidget()
         self.dcwData.showErrorBars_changed.connect(self.showErrorBars_changed)
         self.dcwData.data_changed.connect(self.dcwData_changed)
         self.dcwData.data_shift.connect(self.ddMain.shiftData)
         self.dcwData.load_fits.connect(self.ficFits.load_fits)
+        self.dcwData.load_view.connect(self.zbwMain.load_from_view_string)
 
         self.dcwData.data_shift.connect(self.ficFits.shift_data)
         # has to be generalized for multiple fiw
@@ -133,13 +137,14 @@ class App(QMainWindow):
         self.ficFits.zoom_to_fit.connect(self.zoom_to_fit)
         # generalize
 
-        self.zbwMain = zbw.ZoomButtonWidget()
         # self.zbwMain.lower_down.connect(self.)
         self.zbwMain.zoom_by_increment.connect(self.zoom_by_increment)
         self.zbwMain.show_all.connect(self.zoom_show_all)
-        self.zbwMain.font_size_changed.connect(self.font_size_changed)
+        self.zbwMain.scale_font_size_changed.connect(self.scale_font_size_changed)
+        self.zbwMain.label_font_size_changed.connect(self.label_font_size_changed)
         self.zbwMain.fig_size_changed.connect(self.fig_size_changed)
         self.zbwMain.annotation_changed.connect(self.annotation_changed)
+        self.zbwMain.annotation_font_size_changed.connect(self.annotation_font_size_changed)
 
         self.tabFits = tft.tabFits()
         self.ficFits.fit_added.connect(self.tabFits.addFit)
@@ -174,6 +179,22 @@ class App(QMainWindow):
         self.setCentralWidget(mainWidget)
 
         self.show()
+        
+        
+    def set_dims(self):
+        self.ficFits.setFixedHeight(self.height-self.bottom)
+        #self.ddMain.hei
+        self.dcwData.setFixedHeight(self.bottom)
+        self.zbwMain.setFixedHeight(self.bottom)
+        
+        self.ficFits.setFixedWidth(self.right)
+        self.dcwData.setFixedWidth(self.right)
+        self.zbwMain.setFixedWidth(self.width-self.right)
+        
+        #self.height
+        
+    def resizeEvent(self, *args, **kwargs):
+        self.set_dims()
 
     def progressUpdate(self, relation, p):
         self.progressBar.setValue(relation * 100)
@@ -191,6 +212,13 @@ class App(QMainWindow):
 
     def loadData(self, fileName):
         self.dcwData.loadFile(fileName)
+    
+    def saveData(self, fileName):
+        data_string = self.dcwData.get_data_string()
+        view_string = self.zbwMain.get_view_string()
+        fit_strings = self.ficFits.get_fit_strings()
+        
+        self.dcwData.saveFile(fileName, fit_strings, view_string, data_string)
 
     def dcwData_changed(self, showErrorBars):
         data = self.dcwData.getData()
@@ -222,12 +250,19 @@ class App(QMainWindow):
         except:
             self.set_display_msg('Zoom to fit failed.')
 
-    def font_size_changed(self, value):
+    def scale_font_size_changed(self, value):
         try:
-            self.ddMain.font_size_changed(value)
+            self.ddMain.set_scale_font_size(value)
             self.ddMain.refresh()
         except:
-            self.set_display_msg('Chainging font failed.')
+            self.set_display_msg('Changing scale font size failed.')
+            
+    def label_font_size_changed(self, value):
+        try:
+            self.ddMain.set_label_font_size(value)
+            self.ddMain.refresh()
+        except:
+            self.set_display_msg('Changing label font failed.')
 
     def fig_size_changed(self, new_fig_size):
         try:
@@ -244,6 +279,13 @@ class App(QMainWindow):
             self.set_display_msg('')
         except:
             self.set_display_msg('Setting annotation failed.')
+
+    def annotation_font_size_changed(self, value):
+        try:
+            self.ddMain.set_annotation_font_size(value)
+            self.ddMain.refresh()
+        except:
+            self.set_display_msg('Changing annotation font failed.')
 
     def set_display_msg(self, msg):
         self.lblDisplayStat.setText(msg)
@@ -321,13 +363,23 @@ class App(QMainWindow):
                 QMessageBox.critical(self, "Open file failed!", "Error while opening " + fileName, QMessageBox.Ok,
                                      QMessageBox.Ok)
                 self.setWindowTitle(TITLE)
-        # load fits
 
     def saveFile(self):
         saveDialog = fsd.flSaveFileDialog()
-
+    
         # name, ext = fsd.flSaveFileDialog.getSaveFileName(self, "Save Fit Data", "", "*.txt")
-        name, ext = saveDialog.getSaveFileName(self, "Save File", "", "*.txt")
+        fileName, ext = saveDialog.getSaveFileName(self, "Save File", "", "*.txt")
+
+        if fileName is not '':  # todo check file validity
+            try:
+                self.saveData(fileName)
+            except:
+                QMessageBox.critical(self, "Saving file failed!", "Error while saving " + fileName, QMessageBox.Ok,
+                                     QMessageBox.Ok)
+    
+    
+        
+        
 
     def reset(self, enable):
         self.ficFits.reset(enable)

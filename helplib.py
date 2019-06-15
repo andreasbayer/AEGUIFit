@@ -67,12 +67,43 @@ def readfile(filename, tolerate_spaces=False, x_y_data_only=False):
     
     return data
 
+def saveFilewithMetaData(fileName, data, metadata):
+    
+    fit_strings = metadata[0]
+    view_string = metadata[1]
+    data_string = metadata[2]
+    
+    try:
+        f = openfile(fileName, "w+")
+    except IOError:
+        raise IOError
 
-def readFileForFitsDataAndStdError(filename, tolerate_spaces=False, x_y_data_only=False):
+    #write metadata
+    f.write('#view:' + view_string + '\n')
+    f.write('#data:' + data_string + '\n')
+    
+    for fit_string in fit_strings:
+        f.write('#fits:' + fit_string + '\n')
+
+    for line in data:
+        
+        line_string = ""
+        
+        for value in line:
+            line_string += str(value) + '\t'
+        line_string = line_string.rstrip('\t')
+        
+        f.write(line_string + '\n')
+        
+    f.close()
+    
+
+def readFileForFitsDataAndStdErrorAndMetaData(filename, tolerate_spaces=False, x_y_data_only=False):
     # create empty list
     a = []
     fit_p_strings = list()
-    view_p_strings = list()
+    view_p_string = None
+    data_p_string = None
     ignored_columns = list()  # test data?
     
     try:
@@ -93,7 +124,7 @@ def readFileForFitsDataAndStdError(filename, tolerate_spaces=False, x_y_data_onl
             # only number tabulator number
             if num_tab_num.match(line):
 
-                line_data = line.strip('\r\n').split('\t')
+                line_data = line.rstrip('\n').rstrip('\r').split('\t')
                 
                 #remove ignored columns, which is fit data, not measurements
                 for column in reversed(ignored_columns):
@@ -108,20 +139,20 @@ def readFileForFitsDataAndStdError(filename, tolerate_spaces=False, x_y_data_onl
                     a.append(line_data)
         else:
             # metadata
-            line_data = line.lstrip("#").strip('\r\n').split('\t')
+            line_data = line.lstrip("#").rstrip('\n').rstrip('\r')  #.split('\t')
             
-            for i in range(0, len(line_data)):
-                if line_data[i].startswith("fl"):
-                    fit_p_strings.append(line_data[i].lstrip("fl"))
-                    ignored_columns.append(i)
-                elif line_data[i].startswith("fig"):
-                    view_p_strings.apend(line_data[i].lstrip("fig"))
-                    ignored_columns.append(i)
-
+            #for i in range(0, len(line_data)):
+            if line_data.startswith("fits:"):
+                fit_p_strings.append(line_data.lstrip("fits:"))
+                #ignored_columns.append(i)
+            elif line_data.startswith("view:"):
+                view_p_string = line_data.lstrip("view:")
+                #ignored_columns.append(i)
+            elif line_data.startswith("data:"):
+                data_p_string = line_data.lstrip("data:")
     
     # convert list a to float array
     data = array(a, dtype=float)
-    
     
     if len(data) == 0:
         raise IOError('File did not contain any valid lines')
@@ -129,7 +160,7 @@ def readFileForFitsDataAndStdError(filename, tolerate_spaces=False, x_y_data_onl
     # close file
     f.close()
     
-    return data[:, [0, 1]], calc_std_errors(data), fit_p_strings, view_p_strings
+    return data, calc_std_errors(data), (fit_p_strings, view_p_string, data_p_string)
 
 
 def readFileForDataAndStdError(filename, tolerate_spaces=False):
