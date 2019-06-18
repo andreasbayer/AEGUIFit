@@ -356,8 +356,8 @@ def fwhm_to_sigma(fwhm):
 def eval_fit_function(fwhm):
     # p[0] = y shift
     # p[1] = ae
-    # p[2] = alpha
-    # p[3] = n
+    # p[2] = scale
+    # p[3] = alpha
     
     sigma = fwhm_to_sigma(fwhm)
 

@@ -33,14 +33,12 @@ class ZoomButtonWidget(QGroupBox):
         self.__lblLabelFontSize = QLabel("Label font size:")
         self.__dsbLabelFontSize = QDoubleSpinBox()
         self.__dsbLabelFontSize.setRange(1, fli.max)
-        self.__dsbLabelFontSize.setValue(12)
         self.__dsbLabelFontSize.setSingleStep(0.5)
         self.__dsbLabelFontSize.setMaximumWidth(75)
         
         self.__lblScaleFontSize = QLabel("Scale font size:")
         self.__dsbScaleFontSize = QDoubleSpinBox()
         self.__dsbScaleFontSize.setRange(1, fli.max)
-        self.__dsbScaleFontSize.setValue(12)
         self.__dsbScaleFontSize.setSingleStep(0.5)
         self.__dsbScaleFontSize.setMaximumWidth(75)
 
@@ -67,7 +65,6 @@ class ZoomButtonWidget(QGroupBox):
         self.__lblAnnotationFontSize = QLabel("Annotation Font size:")
         self.__dsbAnnotationFontSize = QDoubleSpinBox()
         self.__dsbAnnotationFontSize.setRange(1, fli.max)
-        self.__dsbAnnotationFontSize.setValue(12)
         self.__dsbAnnotationFontSize.setSingleStep(0.5)
         self.__dsbAnnotationFontSize.setMaximumWidth(75)
         
@@ -138,6 +135,10 @@ class ZoomButtonWidget(QGroupBox):
         self.__dsbFigHeight.valueChanged.connect(self.on_dsbFigHeight_changed)
 
         self.__edtAnnotation.textChanged.connect(self.on_annotation_changed)
+        
+        self.__dsbLabelFontSize.setValue(12)
+        self.__dsbScaleFontSize.setValue(15)
+        self.__dsbAnnotationFontSize.setValue(30)
 
         self.setEnabled(False)
     

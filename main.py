@@ -22,7 +22,7 @@ class App(QMainWindow):
         self.width = 1280
         self.height = 900
         self.bottom = 150
-        self.right = 300
+        self.right = 235
         self.initUI()
         self.menuInit()
 
@@ -349,7 +349,7 @@ class App(QMainWindow):
 
     def openFile(self):
         options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
+        #options |= QFileDialog.DontUseNativeDialog
         fileName, _ = QFileDialog.getOpenFileName(self, "Open file", "", "Text Files (*.txt);;All Files (*)",
                                                   options=options)
         if fileName is not '':  # todo check file validity

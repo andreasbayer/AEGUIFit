@@ -4,17 +4,19 @@ import AEFitDataInfo as aef
 import fitHelper as fh
 import sys
 import fitInfoWidget as fiw
+import numpy as np
+import matplotlib.pyplot as plt
+import dia_goodness_of_minspan as gom
 
 FITINITIALS = "aef"
+AEFOUNDAT = "Found AE at {:.2f} eV"
+STDDEVAT = "with a stdDev of {:.2f} eV"
+
+VALSTRING = r'{:.3f} ' + u'\u00B1' + r' {:.3f}'
+AEUNIT = "eV"
 
 
 class AEFitInfoWidget(fiw.fitInfoWidget):
-    AEFOUNDAT = "Found AE at {:.2f} eV"
-    STDDEVAT = "with a stdDev of {:.2f} eV"
-
-    VALSTRING = r'{:.3f} ' + u'\u00B1' + r' {:.3f}'
-    AEUNIT = "eV"
-    
     AEFrom_changed = pyqtSignal()
     AETo_changed = pyqtSignal()
     minspan_changed = pyqtSignal()
@@ -47,17 +49,12 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
             self.setFWHM(float(p[2]))
             self.setMinSpan(float(p[3]))
             
-            str = self.get_fit_string()
-            print(str)
-            
     def get_fit_string(self):
-
         return FITINITIALS + '=' + \
                str(round(self.getAEFrom(), 3)) + "p" +\
                str(round(self.getAETo(), 3)) + "p" +\
                str(round(self.getFWHM(), 3)) + "p" +\
                str(round(self.getMinSpan(), 3))
-    
     
     def reset(self, enable):
         
@@ -68,7 +65,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         self.setFWHM(0.3)
         self.setMinSpan(3)
         
-        self.__cmdZoomToFitArea.setEnabled(False)
+        self.setPostFitFunctionsEnabled(False)
 
         #todo: reset parameter values and std-devs
     
@@ -81,6 +78,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         self.__cmdZoomToFitArea.clicked.connect(self.__cmdZoomToFitArea_clicked)
         self.__chkDisableFit.stateChanged.connect(self.__chkDisableFit_stateChanged)
         self.__cmdRemoveFit.clicked.connect(self.__cmdRemoveFit_clicked)
+        self.__cmdGoodnessOfMinSpan.clicked.connect(self.__cmdGoodnessOfMinSpan_clicked)
     
     def emitProgressUpdate(self, relation, p):
         self.progressUpdate.emit(relation, p)
@@ -97,10 +95,12 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         self.__dsbAEFrom.setRange(0, sys.float_info.max)
         self.__dsbAEFrom.setValue(0)
         self.__dsbAEFrom.setSingleStep(0.1)
+        self.__dsbAEFrom.setFixedWidth(75)
         
         self.__lblAETo = QLabel(" to ")
         self.__dsbAETo = QDoubleSpinBox()
         self.__dsbAETo.setSingleStep(0.1)
+        self.__dsbAETo.setFixedWidth(75)
         
         self.__mainLayout.addRow(self.__lblAEFrom, self.__dsbAEFrom)
         self.__mainLayout.addRow(self.__lblAETo, self.__dsbAETo)
@@ -109,14 +109,27 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         self.__dsbFWHM = QDoubleSpinBox()
         self.__dsbFWHM.setSingleStep(0.05)
         self.__dsbFWHM.setRange(0, sys.float_info.max)
+        self.__dsbFWHM.setFixedWidth(75)
         
         self.__lblMinSpan = QLabel("Min Span:")
         self.__dsbMinSpan = QDoubleSpinBox()
         self.__dsbMinSpan.setSingleStep(0.05)
         self.__dsbMinSpan.setRange(0, sys.float_info.max)
+        self.__dsbMinSpan.setFixedWidth(75)
         
         self.__cmdFit = QPushButton("Fit")
+        self.__cmdFit.setFixedWidth(75)
         self.__cmdZoomToFitArea = QPushButton("Zoom To Fit")
+        self.__cmdZoomToFitArea.setFixedWidth(75)
+
+        self.__cmdGoodnessOfMinSpan = QPushButton("Test Min Span")
+        self.__cmdGoodnessOfMinSpan.setFixedWidth(75)
+        self.__dsbGoodnessOfMinSpan_steps = QDoubleSpinBox()
+        self.__dsbGoodnessOfMinSpan_steps.setRange(0, sys.float_info.max)
+        self.__dsbGoodnessOfMinSpan_steps.setValue(0)
+        self.__dsbGoodnessOfMinSpan_steps.setSingleStep(0.1)
+        self.__dsbGoodnessOfMinSpan_steps.setFixedWidth(60)
+        self.__dsbGoodnessOfMinSpan_steps.setVisible(False)
         
         self.__mainLayout.addRow(self.__lblFWHM, self.__dsbFWHM)
         self.__mainLayout.addRow(self.__lblMinSpan, self.__dsbMinSpan)
@@ -130,8 +143,8 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         
         self.__mainLayout.addRow(self.__lblFitFunc, self.__edtFitFunc)
         
-        #self.__lblFoundAE = QLabel(self.AEFOUNDAT.format(0))
-        #self.__lblStdDev = QLabel(self.STDDEVAT.format(0))
+        #self.__lblFoundAE = QLabel(AEFOUNDAT.format(0))
+        #self.__lblStdDev = QLabel(STDDEVAT.format(0))
 
         self.__lblFitParameter = QLabel("Fit Parameter:")
         self.__lblStdDev = QLabel("Std Dev.:")
@@ -154,10 +167,13 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
 
         self.__chkDisableFit = QCheckBox("Disable")
         self.__cmdRemoveFit = QPushButton("Remove")
+        self.__cmdRemoveFit.setFixedWidth(75)
         
         self.__mainLayout.setRowWrapPolicy(QFormLayout.DontWrapRows)
         
         self.setLayout(self.__mainLayout)
+        
+        self.setFixedHeight(280)
         
         # self.__mainLayout.addWidget(self.__lblAEFrom)
         # self.__mainLayout.addWidget(self.__dsbAEFrom)
@@ -172,6 +188,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         
         #self.__mainLayout.addRow(self.__lblFoundAE, self.__lblStdDev)
         self.__mainLayout.addRow(self.__cmdZoomToFitArea, self.__cmdFit)
+        self.__mainLayout.addRow(self.__dsbGoodnessOfMinSpan_steps, self.__cmdGoodnessOfMinSpan)
         self.__mainLayout.addRow(self.__chkDisableFit, self.__cmdRemoveFit)
         
         self.setEnabled(True)
@@ -234,6 +251,9 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
     
     def __cmdFit_clicked(self):
         self.fitToFunction()
+
+    def __cmdGoodnessOfMinSpan_clicked(self):
+        self.testGoodnessOfMinSpan()
     
     def __cmdZoomToFitArea_clicked(self):
         if self.__AEFitDataInfo.isFitted():
@@ -289,27 +309,73 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         self.Post_Fit.emit(self.__AEFitDataInfo, msg)
         
         if msg == self.__AEFitDataInfo.SUCCESS:
-            #self.__lblFoundAE.setText(self.AEFOUNDAT.format(self.__AEFitDataInfo.getFoundAE()))
-            #self.__lblStdDev.setText(self.STDDEVAT.format(self.__AEFitDataInfo.getStdDeviation()))
+            #self.__lblFoundAE.setText(AEFOUNDAT.format(self.__AEFitDataInfo.getFoundAE()))
+            #self.__lblStdDev.setText(STDDEVAT.format(self.__AEFitDataInfo.getStdDeviation()))
 
-            self.__lblAEVal.setText(self.VALSTRING.format(self.__AEFitDataInfo.getFoundAE(),
-                                                          self.__AEFitDataInfo.getFoundAE_dev()) + " " + self.AEUNIT)
+            self.__lblAEVal.setText(VALSTRING.format(self.__AEFitDataInfo.getFoundAE(),
+                                                          self.__AEFitDataInfo.getFoundAE_dev()) + " " + AEUNIT)
 
-            self.__lblAlphaVal.setText(self.VALSTRING.format(self.__AEFitDataInfo.getAlpha(),
+            self.__lblAlphaVal.setText(VALSTRING.format(self.__AEFitDataInfo.getAlpha(),
                                                              self.__AEFitDataInfo.getAlpha_dev()))
 
-            self.__lblScaleVal.setText(self.VALSTRING.format(self.__AEFitDataInfo.getScaleFactor(),
+            self.__lblScaleVal.setText(VALSTRING.format(self.__AEFitDataInfo.getScaleFactor(),
                                                              self.__AEFitDataInfo.getScaleFactor_dev()))
 
-            self.__lblYOffsetVal.setText(self.VALSTRING.format(self.__AEFitDataInfo.getYOffset(),
+            self.__lblYOffsetVal.setText(VALSTRING.format(self.__AEFitDataInfo.getYOffset(),
                                                                self.__AEFitDataInfo.getYOffset_dev()))
 
             #todo: set fitparameter values and errors
 
             self.__dsbFWHM.setValue(self.__AEFitDataInfo.getFittedFWHM())
             self.__edtFitFunc.setText(self.__AEFitDataInfo.getFitFunc())
-            self.__cmdZoomToFitArea.setEnabled(True)
+            self.setPostFitFunctionsEnabled(True)
         else:
-            self.__cmdZoomToFitArea.setEnabled(False)
+            self.setPostFitFunctionsEnabled(False)
         
         return msg, self.__AEFitDataInfo
+    
+    def setPostFitFunctionsEnabled(self, enabled):
+        self.__cmdZoomToFitArea.setEnabled(enabled)
+        self.__cmdGoodnessOfMinSpan.setEnabled(enabled)
+
+    def testGoodnessOfMinSpan(self):
+        minspans, aes, alphas, ae_errs, alpha_errs = self.__AEFitDataInfo.testGoodnessOfMinSpan()
+
+        #print("minspans:")
+        #print(minspans)
+
+        #print("aes:")
+        #print(aes)
+        #print("avg:")
+        #print(np.average(aes))
+        #print("std deviation:")
+        #print(np.std(aes))
+
+        #print("alphas:")
+        #print(alphas)
+        #print("avg:")
+        #print(np.average(alphas))
+        #print("std deviation:")
+        #print(np.std(alphas))
+
+        dia_gom = gom.dia_goodness_of_minspan()
+        
+        dia_gom.setAEs(aes, ae_errs)
+        dia_gom.setAlphas(alphas, alpha_errs)
+        dia_gom.setMinSpans(minspans)
+        
+        dia_gom.plot()
+        #dia_gom.display_statistics()
+        dia_gom.show()
+        
+        #try:
+        #    plt.figure()
+        #    plt.plot(minspans, aes)
+        #    plt.plot(minspans, alphas)
+        #    #plt.ylabel('')
+        #    plt.show()
+        #except Exception as e:
+        #    print(e)
+        
+        
+    

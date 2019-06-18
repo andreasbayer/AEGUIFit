@@ -1,6 +1,7 @@
 from sys import float_info as fli
 from fitDataInfo import fitDataInfo
 import fitHelper as fh
+import numpy as np
 
 
 class AEFitDataInfo(fitDataInfo):
@@ -153,14 +154,43 @@ class AEFitDataInfo(fitDataInfo):
             self._setFitData(fh.data_from_fit_and_parameters(self._data, self._fitFunction, self._p, self._FWHM,
                                                              continuation=True))
             
-            
-            
             self._msg = self.SUCCESS
         except:
             self._setFitData(None)
             self._msg = "Error while fitting."
         
         return self._msg
+    
+    
+    def testGoodnessOfMinSpan(self):
+        spacing = 0.1
+        pm_range = 1
+        
+        # todo consider data range too
+        test_minspan = self._minspan - pm_range
+        
+        aes = np.array([])
+        alphas = np.array([])
+        ae_errs = np.array([])
+        alpha_errs = np.array([])
+        minspans = np.array([])
+        
+        while test_minspan <= self._minspan + pm_range:
+            
+            p, stdDev, fitRelBounds_x, fitRelBounds_y, fittedFWHM, fitfunc = \
+                fh.find_best_fit(self._data, self._stdErr, self._p, self._FWHM, test_minspan,
+                                 [self._AEFrom, self._AETo], self.progressUpdate)
+            
+            aes = np.append(aes, p[1])
+            ae_errs = np.append(ae_errs, stdDev[1])
+            alphas = np.append(alphas, p[3])
+            alpha_errs = np.append(alpha_errs, stdDev[3])
+            minspans = np.append(minspans, test_minspan)
+            
+            test_minspan += spacing
+            
+        return minspans, aes, alphas, ae_errs, alpha_errs
+            
     
     def progressUpdate(self, relation, info):
         if self._passProgressUpdate is not None:

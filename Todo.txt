@@ -16,3 +16,6 @@ fitstrings:
 
 
 -----------------
+
+
+upon opening file and the initial fitting of saved parameters/curves the energy shift is not being considered

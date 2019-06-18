@@ -114,10 +114,9 @@ class dataControlWidget(QWidget):
         self.__chkShowErrorBars.setChecked(check)
         
         self.data_changed.emit(check)
-        self.load_fits.emit(fit_strings)
-        self.load_view.emit(view_string)
-        
         self.load_from_data_string(data_string)
+        self.load_view.emit(view_string)
+        self.load_fits.emit(fit_strings)
         
     def load_from_data_string(self, data_string):
         
