@@ -94,11 +94,11 @@ class dataControlWidget(QWidget):
     
     def setShowErrorBars(self, value):
         self.__chkShowErrorBars.setChecked(value)
-
-
+    
     def loadFile(self, fileName):
         self.__all_data, self.__stdErrors, (fit_strings, view_string, data_string) = hl.readFileForFitsDataAndStdErrorAndMetaData(fileName)
-        self.__data = self.__all_data[:, 0:2]
+        #the last[:] makes it a copy. this is important to not save altered data!
+        self.__data = self.__all_data[:, 0:2][:]
 
         if len(self.__data) <= 1:
             raise Exception("Not enough data in file!")
