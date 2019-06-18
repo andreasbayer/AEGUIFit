@@ -8,6 +8,7 @@ class dataControlWidget(QWidget):
     data_changed = pyqtSignal(bool)
     data_shift = pyqtSignal(float)
     load_fits = pyqtSignal(list)
+    fit_loaded_fits = pyqtSignal(list)
     load_view = pyqtSignal(str)
     
     SHOW_ERROR_BARS = "Show error bars"
@@ -19,6 +20,7 @@ class dataControlWidget(QWidget):
         self.__lblEnergyShift = QLabel("Energy Shift:")
         self.__dsbEnergyShift = QDoubleSpinBox()
         self.__dsbEnergyShift.valueChanged.connect(self.__energyShiftChanged)
+        self.__dsbEnergyShift.setSingleStep(0.01)
         
         self.__chkShowErrorBars = QCheckBox(self.SHOW_ERROR_BARS_NOT_LOADED)
         self.__chkShowErrorBars.stateChanged.connect(self.__chkShowErrorBars_changed)
@@ -98,7 +100,7 @@ class dataControlWidget(QWidget):
     def loadFile(self, fileName):
         self.__all_data, self.__stdErrors, (fit_strings, view_string, data_string) = hl.readFileForFitsDataAndStdErrorAndMetaData(fileName)
         #the last[:] makes it a copy. this is important to not save altered data!
-        self.__data = self.__all_data[:, 0:2][:]
+        self.__data = (self.__all_data[:, 0:2]).copy()
 
         if len(self.__data) <= 1:
             raise Exception("Not enough data in file!")
@@ -115,11 +117,11 @@ class dataControlWidget(QWidget):
         
         self.data_changed.emit(check)
         self.load_from_data_string(data_string)
-        self.load_view.emit(view_string)
         self.load_fits.emit(fit_strings)
+        self.load_view.emit(view_string)
+        self.fit_loaded_fits.emit(fit_strings)
         
     def load_from_data_string(self, data_string):
-        
         if data_string is not None:
             split_string = data_string.split(',')
             

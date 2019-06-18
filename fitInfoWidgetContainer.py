@@ -68,16 +68,17 @@ class fitInfoWidgetContainer(QGroupBox):
         self.reset(False)
         
     def load_fits(self, fit_strings):
-        
         for fit_string in fit_strings:
             item = fit_string.split('=')
             if item[0] == afw.FITINITIALS:
-                
                 new_fit = afw.AEFitInfoWidget(len(self.__fitInfoWidgets), self.shift_data, item[1])
-                
                 self.__add_fiw(new_fit)
-                new_fit.fitToFunction()
+           
                 
+    def fit_loaded_fits(self, fit_strings):
+        for fiw_i in self.__fitInfoWidgets:
+            fiw_i.fitToFunction()
+            
     def get_fit_strings(self):
         
         fit_strings = list()
@@ -86,7 +87,6 @@ class fitInfoWidgetContainer(QGroupBox):
             fit_strings.append(fiw_i.get_fit_string())
             
         return fit_strings
-        
 
     def __cmdAddFitClicked(self, checked):
         self.__add_fit(self.__cbxFits.currentIndex())

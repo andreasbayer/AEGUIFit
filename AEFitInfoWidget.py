@@ -201,13 +201,13 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         return  (self.__AEFitDataInfo is not None) and self.__AEFitDataInfo.isFitted()
     
     def getAEFrom(self):
-        return self.__dsbAEFrom.value()
+        return self.__AEFitDataInfo.getAEFrom()
     
     def setAEFrom(self, value):
         self.__dsbAEFrom.setValue(float(value))
     
     def getAETo(self):
-        return self.__dsbAETo.value()
+        return self.__AEFitDataInfo.getAETo()
     
     def setAETo(self, value):
         self.__dsbAETo.setValue(float(value))
@@ -231,10 +231,10 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
     def __chkDisableFit_stateChanged(self, state):
         self.getFitDataInfo().setDisabled(state == Qt.Checked)
         self.disable_fit.emit(self.getFitDataInfo(), (state == Qt.Checked))
-        
+    
     def __cmdRemoveFit_clicked(self):
         self.remove_fit.emit(self.getFitDataInfo())
-        
+    
     def _on_set_data(self, data, std_err):
         self.__AEFitDataInfo.setData(data)
         self.__AEFitDataInfo.setStdErr(std_err)
@@ -270,11 +270,11 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         return self.__AEFitDataInfo.get_fit_index()
         
     def __spbAEFrom_changed(self):
-        self.__AEFitDataInfo.setAEFrom(self.getAEFrom())
+        self.__AEFitDataInfo.setAEFrom(self.__dsbAEFrom.value())
         self.AEFrom_changed.emit()
     
     def __spbAETo_changed(self):
-        self.__AEFitDataInfo.setAETo(self.getAETo())
+        self.__AEFitDataInfo.setAETo(self.__dsbAETo.value())
         self.AETo_changed.emit()
     
     def __dsbFWHM_changed(self):
@@ -339,7 +339,8 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         self.__cmdGoodnessOfMinSpan.setEnabled(enabled)
 
     def testGoodnessOfMinSpan(self):
-        minspans, aes, alphas, ae_errs, alpha_errs = self.__AEFitDataInfo.testGoodnessOfMinSpan()
+        minspans, y_offsets, aes, scale_factors, alphas,\
+        y_offset_errrs, ae_errs, scale_factor_errs, alpha_errs,  = self.__AEFitDataInfo.testGoodnessOfMinSpan()
 
         #print("minspans:")
         #print(minspans)
@@ -360,8 +361,11 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
 
         dia_gom = gom.dia_goodness_of_minspan()
         
+        dia_gom.setYOffset(y_offsets, y_offset_errrs)
         dia_gom.setAEs(aes, ae_errs)
+        dia_gom.setScaleFactors(scale_factors, scale_factor_errs)
         dia_gom.setAlphas(alphas, alpha_errs)
+        
         dia_gom.setMinSpans(minspans)
         
         dia_gom.plot()

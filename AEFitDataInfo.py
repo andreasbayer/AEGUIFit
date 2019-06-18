@@ -16,6 +16,7 @@ class AEFitDataInfo(fitDataInfo):
         self._fitRelBounds = [0.0] * 2
         self._fittedFWHM = 0
         self._FWHM = 0
+        self._shift = 0
     
     def is_initialized(self):
         return (self._AETo == fli.max)
@@ -74,10 +75,10 @@ class AEFitDataInfo(fitDataInfo):
         if digits == -1:
             digits = 4
             
-        if len(self._stdDev) == 4:
+        try:
             return round(self._stdDev[0], digits)
-        else:
-            return -1
+        except:
+            return np.nan
 
     def getFoundAE(self, digits=-1):
 
@@ -91,10 +92,10 @@ class AEFitDataInfo(fitDataInfo):
         if digits == -1:
             digits = 4
 
-        if len(self._stdDev) == 4:
+        try:
             return round(self._stdDev[1], digits)
-        else:
-            return -1
+        except:
+            return np.nan
 
     def getScaleFactor(self, digits=-1):
 
@@ -107,8 +108,10 @@ class AEFitDataInfo(fitDataInfo):
 
         if digits == -1:
             digits = 4
-
-        return round(self._stdDev[2], digits)
+        try:
+            return round(self._stdDev[2], digits)
+        except:
+            return np.nan
 
     def getAlpha(self, digits=-1):
 
@@ -122,10 +125,10 @@ class AEFitDataInfo(fitDataInfo):
         if digits == -1:
             digits = 4
         
-        if len(self._stdDev) == 4:
+        try:
             return round(self._stdDev[3], digits)
-        else:
-            return -1
+        except:
+            return np.nan
 
     def getFittedFWHM(self):
         return self._fittedFWHM
@@ -169,10 +172,16 @@ class AEFitDataInfo(fitDataInfo):
         # todo consider data range too
         test_minspan = self._minspan - pm_range
         
+        y_offsets = np.array([])
         aes = np.array([])
+        scale_factors = np.array([])
         alphas = np.array([])
+        
+        y_offset_errs = np.array([])
         ae_errs = np.array([])
+        scale_factor_errs = np.array([])
         alpha_errs = np.array([])
+        
         minspans = np.array([])
         
         while test_minspan <= self._minspan + pm_range:
@@ -181,15 +190,23 @@ class AEFitDataInfo(fitDataInfo):
                 fh.find_best_fit(self._data, self._stdErr, self._p, self._FWHM, test_minspan,
                                  [self._AEFrom, self._AETo], self.progressUpdate)
             
+            y_offsets = np.append(y_offsets, p[0])
+            y_offset_errs = np.append(y_offset_errs, stdDev[0])
+            
             aes = np.append(aes, p[1])
             ae_errs = np.append(ae_errs, stdDev[1])
+            
+            scale_factors = np.append(scale_factors, p[2])
+            scale_factor_errs = np.append(scale_factor_errs, stdDev[2])
+            
             alphas = np.append(alphas, p[3])
             alpha_errs = np.append(alpha_errs, stdDev[3])
+            
             minspans = np.append(minspans, test_minspan)
             
             test_minspan += spacing
             
-        return minspans, aes, alphas, ae_errs, alpha_errs
+        return minspans, y_offsets, aes, scale_factors, alphas, y_offset_errs, ae_errs, scale_factor_errs, alpha_errs
             
     
     def progressUpdate(self, relation, info):
@@ -197,6 +214,8 @@ class AEFitDataInfo(fitDataInfo):
             self._passProgressUpdate(relation, info.tolist())
     
     def shift_fit(self, increment):
+        
+        self._shift += increment
         #fitDataInfo.shift_fit(increment)
         if self.isFitted():
             for set in self._fitData:

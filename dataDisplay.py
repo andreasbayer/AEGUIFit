@@ -27,8 +27,9 @@ class DataDisplay(FigureCanvas):
         self.__dc = 'black'
         self.__fc = 'orange'
         self.__ls = '-'
-        self.__ew = 1
+        self.__ew = 1.2
         self.__lw = 1.2
+        4#1.2
         self.__data = None
         self.__fdiFits = list()
         self.reset_fitIndex()

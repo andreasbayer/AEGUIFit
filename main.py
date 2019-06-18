@@ -18,7 +18,7 @@ class App(QMainWindow):
         super().__init__()
         self.title = TITLE
         self.left = 100
-        self.top = 100
+        self.top = 50
         self.width = 1280
         self.height = 900
         self.bottom = 150
@@ -129,6 +129,7 @@ class App(QMainWindow):
         self.dcwData.data_changed.connect(self.dcwData_changed)
         self.dcwData.data_shift.connect(self.ddMain.shiftData)
         self.dcwData.load_fits.connect(self.ficFits.load_fits)
+        self.dcwData.fit_loaded_fits.connect(self.ficFits.fit_loaded_fits)
         self.dcwData.load_view.connect(self.zbwMain.load_from_view_string)
 
         self.dcwData.data_shift.connect(self.ficFits.shift_data)
@@ -214,6 +215,8 @@ class App(QMainWindow):
         self.dcwData.loadFile(fileName)
     
     def saveData(self, fileName):
+        
+        
         data_string = self.dcwData.get_data_string()
         view_string = self.zbwMain.get_view_string()
         fit_strings = self.ficFits.get_fit_strings()
