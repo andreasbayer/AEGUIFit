@@ -38,13 +38,6 @@ class dia_goodness_of_minspan(QtWidgets.QDialog):
         self.sf_ax = self.figure.add_subplot(4, 1, 3)
         self.al_ax = self.figure.add_subplot(4, 1, 4)
 
-        self.yo_ax.set_ylabel('Y-Offset')
-        self.ae_ax.set_ylabel('AE')
-        self.sf_ax.set_ylabel('Scale Factor')
-        self.al_ax.set_ylabel('Alpha')
-
-        self.al_ax.set_xlabel('Min Span')
-
     def show_errorbars_changed(self, state):
         self.plot(show_error_bars=self.chk_show_errorbars.isChecked())
 
@@ -104,6 +97,14 @@ class dia_goodness_of_minspan(QtWidgets.QDialog):
         self.ae_ax.clear()
         self.sf_ax.clear()
         self.al_ax.clear()
+        
+        self.yo_ax.set_ylabel('Y-Offset')
+        self.ae_ax.set_ylabel('AE')
+        self.sf_ax.set_ylabel('Scale Factor')
+        self.al_ax.set_ylabel('Alpha')
+
+        self.al_ax.set_xlabel('Min Span')
+
         
         self.yo_ax.set_title(self.calc_stats())
         

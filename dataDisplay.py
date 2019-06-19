@@ -130,8 +130,8 @@ class DataDisplay(FigureCanvas):
                 (xmin, xmax) = self.__ax.get_xlim()
                 (ymin, ymax) = self.__ax.get_ylim()
                 
-                xpos = xmin + 0.1 * (xmax - xmin)
-                ypos = ymax - 0.1 * (ymax - ymin)
+                xpos = xmin + 0.01 * (xmax - xmin)
+                ypos = ymax - 0.01 * (ymax - ymin)
                 
                 self.__ax.annotate(self.__annotation,
                                    xy=(xpos, ypos),

@@ -5,14 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2cce7bfc-f757-42ce-8cc9-b56b3bbd1739" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/AEFitDataInfo.py" beforeDir="false" afterPath="$PROJECT_DIR$/AEFitDataInfo.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AEFitInfoWidget.py" beforeDir="false" afterPath="$PROJECT_DIR$/AEFitInfoWidget.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dataControlWidget.py" beforeDir="false" afterPath="$PROJECT_DIR$/dataControlWidget.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dataDisplay.py" beforeDir="false" afterPath="$PROJECT_DIR$/dataDisplay.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dia_goodness_of_minspan.py" beforeDir="false" afterPath="$PROJECT_DIR$/dia_goodness_of_minspan.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitInfoWidgetContainer.py" beforeDir="false" afterPath="$PROJECT_DIR$/fitInfoWidgetContainer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/save3.txt" beforeDir="false" afterPath="$PROJECT_DIR$/save3.txt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -48,11 +42,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dataControlWidget.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="391">
-              <caret line="38" column="37" lean-forward="true" selection-start-line="38" selection-start-column="37" selection-end-line="38" selection-end-column="37" />
+            <state relative-caret-position="357">
+              <caret line="36" column="4" lean-forward="true" selection-start-line="36" selection-start-column="4" selection-end-line="36" selection-end-column="4" />
               <folding>
                 <element signature="e#0#83#0" expanded="true" />
               </folding>
@@ -93,8 +87,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dia_goodness_of_minspan.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="193">
-              <caret line="107" column="46" selection-start-line="107" selection-start-column="46" selection-end-line="107" selection-end-column="46" />
+            <state relative-caret-position="295">
+              <caret line="98" column="26" lean-forward="true" selection-start-line="98" selection-start-column="26" selection-end-line="98" selection-end-column="26" />
               <folding>
                 <element signature="e#0#27#0" expanded="true" />
               </folding>
@@ -102,11 +96,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/dataDisplay.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="263">
-              <caret line="231" selection-start-line="231" selection-end-line="231" />
+              <caret line="133" column="33" selection-start-line="133" selection-start-column="33" selection-end-line="133" selection-end-column="33" />
               <folding>
                 <element signature="e#0#80#0" expanded="true" />
               </folding>
@@ -125,7 +119,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>energyshift</find>
       <find>fitinitials</find>
       <find>data_shift</find>
       <find>load_fits</find>
@@ -155,6 +148,7 @@
       <find>summary:</find>
       <find>dcwData_changed</find>
       <find>raw</find>
+      <find>annotation</find>
     </findStrings>
     <replaceStrings>
       <replace>mbt</replace>
@@ -207,14 +201,14 @@
         <option value="$PROJECT_DIR$/Todo.txt" />
         <option value="$PROJECT_DIR$/dialog_goodness_of_fit.py" />
         <option value="$PROJECT_DIR$/helplib.py" />
-        <option value="$PROJECT_DIR$/dataDisplay.py" />
         <option value="$PROJECT_DIR$/save3.txt" />
         <option value="$PROJECT_DIR$/main.py" />
-        <option value="$PROJECT_DIR$/dia_goodness_of_minspan.py" />
         <option value="$PROJECT_DIR$/AEFitInfoWidget.py" />
         <option value="$PROJECT_DIR$/fitInfoWidgetContainer.py" />
         <option value="$PROJECT_DIR$/AEFitDataInfo.py" />
         <option value="$PROJECT_DIR$/dataControlWidget.py" />
+        <option value="$PROJECT_DIR$/dia_goodness_of_minspan.py" />
+        <option value="$PROJECT_DIR$/dataDisplay.py" />
       </list>
     </option>
   </component>
@@ -278,7 +272,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="C:/Program Files/Git/git-cmd.exe" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/L-Histidine Data/data backup" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
@@ -333,7 +327,7 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="C:\Users\andreas\AppData\Local\Programs\Python\Python36-32\python.exe" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="WORKING_DIRECTORY" value="$USER_HOME$/Desktop/L-Histidine Data/data backup" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
@@ -494,17 +488,17 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/dia_goodness_of_minspan.py</url>
-          <line>48</line>
+          <line>41</line>
           <option name="timeStamp" value="594" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/dia_goodness_of_minspan.py</url>
-          <line>91</line>
+          <line>84</line>
           <option name="timeStamp" value="595" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/dia_goodness_of_minspan.py</url>
-          <line>88</line>
+          <line>81</line>
           <option name="timeStamp" value="598" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -852,32 +846,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dataDisplay.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="263">
-          <caret line="231" selection-start-line="231" selection-end-line="231" />
-          <folding>
-            <element signature="e#0#80#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="297">
           <caret line="232" selection-start-line="232" selection-end-line="232" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dia_goodness_of_minspan.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="193">
-          <caret line="107" column="46" selection-start-line="107" selection-start-column="46" selection-end-line="107" selection-end-column="46" />
-          <folding>
-            <element signature="e#0#27#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -911,10 +885,30 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/dataControlWidget.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="38" column="37" lean-forward="true" selection-start-line="38" selection-start-column="37" selection-end-line="38" selection-end-column="37" />
+        <state relative-caret-position="357">
+          <caret line="36" column="4" lean-forward="true" selection-start-line="36" selection-start-column="4" selection-end-line="36" selection-end-column="4" />
           <folding>
             <element signature="e#0#83#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dia_goodness_of_minspan.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="295">
+          <caret line="98" column="26" lean-forward="true" selection-start-line="98" selection-start-column="26" selection-end-line="98" selection-end-column="26" />
+          <folding>
+            <element signature="e#0#27#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dataDisplay.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="263">
+          <caret line="133" column="33" selection-start-line="133" selection-start-column="33" selection-end-line="133" selection-end-column="33" />
+          <folding>
+            <element signature="e#0#80#0" expanded="true" />
           </folding>
         </state>
       </provider>
