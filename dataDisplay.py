@@ -4,7 +4,15 @@ import matplotlib.pyplot as plt
 import fitDataInfo as fdi
 
 
+
 class DataDisplay(FigureCanvas):
+
+    std_fig_width = 640
+    std_fig_height = 480
+    std_label_font_size = 15
+    std_scale_font_size = 15
+    std_ann_font_size = 24
+
     statusbar_update = pyqtSignal(str)
 
     mark_default_text = 'Click on figure to show energy value.'
@@ -29,7 +37,7 @@ class DataDisplay(FigureCanvas):
         self.__ls = '-'
         self.__ew = 1.2
         self.__lw = 1.2
-        4#1.2
+        #1.2
         self.__data = None
         self.__fdiFits = list()
         self.reset_fitIndex()
@@ -42,32 +50,36 @@ class DataDisplay(FigureCanvas):
         self.__upperZoom = 0
         self.__lowerZoom = 0
 
-        self.__label_font = {'size':14}
-        self.__scale_font = {'size':14}
-        self.__annotation_font = {'size':14}
+        self.__label_font = {'size': self.std_label_font_size}
+        self.__scale_font = {'size': self.std_scale_font_size}
+        self.__annotation_font = {'size': self.std_ann_font_size}
 
         self.__ax.clear()
+        self.refresh()
+        self.set_fig_size([self.std_fig_width, self.std_fig_height], False)
 
     def draw_event(self, renderer):
-        #super.draw_event(renderer)
-        
         self.__inv = self.__ax.transData.inverted()
 
     def set_fig_size(self, figsize):
         self.__fig.figsize = figsize
 
-    def increase_fig_size(self, new_fig_size):
+    def set_fig_size(self, new_fig_size, forward=True):
         if new_fig_size[0] > 0 and new_fig_size[1] > 0:
-            self.__fig.set_size_inches(new_fig_size, forward=True)
+           try:
+               #self.__fig.set_size_inches(new_fig_size, forward=forward)
+               pass
+           except Exception as error:
+               print(error)
 
     def isLoaded(self):
         return self.__data is not None
         
     def mousePressEvent(self, event):
+        super().mousePressEvent(event)
+
         if self.isLoaded():
-            
-            #super.mousePressEvent(event)
-            
+
             if event.button() == Qt.LeftButton:
                 if self.__inv is not None:
                     values = (float(event.x()), float(event.y()))
@@ -76,17 +88,19 @@ class DataDisplay(FigureCanvas):
 
                     self.statusbar_update.emit(str(round(tr_point[0], 4)) + " eV")#, round(tr_point[1], 4))
                     # self.statusbar_update.emit(round(tr_point[0], 4), round(tr_point[1], 4))
-                    
+
                     self.__clickmark = tr_point[0]
-                    
+
                     self.refresh()
                 else:
                     tr_point = (0., 0.)
             elif event.button() == Qt.RightButton:
                 self.statusbar_update.emit(DataDisplay.mark_default_text)
-                
+
                 self.__clickmark = None
                 self.refresh()
+
+
    
     def refresh(self, data=None, stdErrors=None, showErrorBars=None):
         if data is not None:

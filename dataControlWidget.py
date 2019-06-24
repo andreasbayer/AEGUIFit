@@ -48,7 +48,6 @@ class dataControlWidget(QWidget):
         
         self.setEnabled(enable)
     
-    
     def __chkShowErrorBars_changed(self, state):
         self.__chkShowErrorBars.setCheckState(state)
         
@@ -98,8 +97,10 @@ class dataControlWidget(QWidget):
         self.__chkShowErrorBars.setChecked(value)
     
     def loadFile(self, fileName):
-        self.__all_data, self.__stdErrors, (fit_strings, view_string, data_string) = hl.readFileForFitsDataAndStdErrorAndMetaData(fileName)
-        #the last[:] makes it a copy. this is important to not save altered data!
+        self.__all_data, self.__stdErrors, (fit_strings, view_string, data_string) =\
+            hl.readFileForFitsDataAndStdErrorAndMetaData(fileName)
+
+        #we need a copy to not save any altered data!
         self.__data = (self.__all_data[:, 0:2]).copy()
 
         if len(self.__data) <= 1:

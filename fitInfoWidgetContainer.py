@@ -69,7 +69,7 @@ class fitInfoWidgetContainer(QGroupBox):
         
     def load_fits(self, fit_strings):
         for fit_string in fit_strings:
-            item = fit_string.split('=')
+            item = fit_string.split(':')
             if item[0] == afw.FITINITIALS:
                 new_fit = afw.AEFitInfoWidget(len(self.__fitInfoWidgets), self.shift_data, item[1])
                 self.__add_fiw(new_fit)

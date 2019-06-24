@@ -8,6 +8,7 @@ import fitDataInfo as fdi
 import zoomButtonWidget as zbw
 import fitInfoWidgetContainer as fic
 import tabFits as tft
+from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from numpy import empty
 
 TITLE = "AEGUIFit - "
@@ -36,21 +37,27 @@ class App(QMainWindow):
 
         mbtOpen = QAction('Open...', self)
         mbtOpen.setShortcut('Ctrl+O')
-        mbtOpen.setStatusTip('Open new file')
+        mbtOpen.setStatusTip('Open new file.')
         mbtOpen.triggered.connect(self.openFile)
         mnuFile.addAction(mbtOpen)
 
         mbtSave = QAction('Save...', self)
         mbtSave.setShortcut('Ctrl+S')
-        mbtSave.setStatusTip('Save all data with fit and fit parameters')
+        mbtSave.setStatusTip('Save all data with fit and fit parameters.')
         mbtSave.triggered.connect(self.saveFile)
         mnuFile.addAction(mbtSave)
+
+        mbtClose = QAction('Close', self)
+        #mbtClose.setShortcut('Ctrl+C')
+        mbtClose.setStatusTip('Close current file.')
+        mbtClose.triggered.connect(self.closeFile)
+        mnuFile.addAction(mbtClose)
 
         mnuFile.addSeparator()
 
         mbtQuit = QAction('Quit', self)
         mbtQuit.setShortcut('Ctrl+Q')
-        mbtQuit.setStatusTip('Quit application')
+        mbtQuit.setStatusTip('Quit application.')
         mbtQuit.triggered.connect(self.close)
         mnuFile.addAction(mbtQuit)
 
@@ -163,15 +170,14 @@ class App(QMainWindow):
         self.ddGbox = QGridLayout()
         self.ddGbox.addWidget(self.tabFits)
         self.ddGbox.addWidget(self.ddMain)
+        #self.toolbar = NavigationToolbar(self.ddMain, self)
+        #self.ddGbox.addWidget(self.toolbar)
 
         layout.addItem(self.ddGbox, 0, 0)
-
 
         layout.addWidget(self.ficFits, 0, 1)
         layout.addWidget(self.zbwMain, 1, 0)
         layout.addWidget(self.dcwData, 1, 1)
-
-
 
         self.horizontalGroupBox.setLayout(layout)
 
@@ -180,8 +186,7 @@ class App(QMainWindow):
         self.setCentralWidget(mainWidget)
 
         self.show()
-        
-        
+
     def set_dims(self):
         self.ficFits.setFixedHeight(self.height-self.bottom)
         #self.ddMain.hei
@@ -269,7 +274,7 @@ class App(QMainWindow):
 
     def fig_size_changed(self, new_fig_size):
         try:
-            self.ddMain.increase_fig_size(new_fig_size)
+            self.ddMain.set_fig_size(new_fig_size)
             self.ddMain.refresh()  # necessary?
         except:
             self.set_display_msg('changing figure size failed.')
@@ -379,18 +384,16 @@ class App(QMainWindow):
             except:
                 QMessageBox.critical(self, "Saving file failed!", "Error while saving " + fileName, QMessageBox.Ok,
                                      QMessageBox.Ok)
-    
-    
-        
-        
+
+    def closeFile(self):
+        self.reset(enable=False)
 
     def reset(self, enable):
         self.ficFits.reset(enable)
         self.dcwData.reset(enable)
         self.ddMain.reset()
         self.tabFits.reset()
-
-        self.zbwMain.setEnabled(enable)
+        self.zbwMain.reset(enable)
 
         self.progressBar.reset()
 

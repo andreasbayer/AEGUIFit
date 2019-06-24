@@ -31,7 +31,7 @@ def fit_function_to_data(data, p, fwhm, lb, ub, std_errs = None):
     # tighten sigma on the go (lasso sigma)
     
     base_func = eval_fit_function(fwhm)
-    
+
     res = optimize.curve_fit(base_func,
                              data[:, 0],
                              data[:, 1],
@@ -39,7 +39,7 @@ def fit_function_to_data(data, p, fwhm, lb, ub, std_errs = None):
                              sigma=std_errs,
                              method='trf',
                              absolute_sigma=True,
-                             bounds=([0, lb, -np.inf, -np.inf], [0.1, ub, np.inf, np.inf]),
+                             bounds=([0, lb, -np.inf, -np.inf], [np.inf, ub, np.inf, np.inf]),
                              # todo upperbound for constant background is arbitrary
                              check_finite=True)
     
@@ -122,12 +122,15 @@ def fix_std_errs(std_errs):
     #min_err = 10**np.floor(np.log10(min_above_x(std_errs, 0)))
     min_err = 10**-2
     fit_std_errs = np.array([])
-    
-    for std_err in std_errs:
-        if std_err == 0:
-            fit_std_errs = np.append(fit_std_errs, min_err)
-        else:
-            fit_std_errs = np.append(fit_std_errs, std_err)
+
+    if std_errs is not None:
+        for std_err in std_errs:
+            if std_err == 0:
+                fit_std_errs = np.append(fit_std_errs, min_err)
+            else:
+                fit_std_errs = np.append(fit_std_errs, std_err)
+    else:
+        fit_std_errs = None
     
     return fit_std_errs
 
@@ -211,7 +214,8 @@ def find_best_fit(data, std_errs, ip, fwhm, minspan, fit_bounds, update_function
         if iteration < n - 1:
             # use that position, to cut the data down to cutpercent*100% of its size
             cutdata = cut_relatively_equal(data, ae_pos, cutpercent ** (iteration + 1))
-            cutweights = cut_relatively_equal_1D(fit_weights, ae_pos, cutpercent ** (iteration + 1))
+            if fit_weights is not None:
+                cutweights = cut_relatively_equal_1D(fit_weights, ae_pos, cutpercent ** (iteration + 1))
         iteration += 1
         
         if update_function is not None:

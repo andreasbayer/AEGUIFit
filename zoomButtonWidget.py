@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QLabel, QWidget, QPushButton, QHBoxLayout, QVBoxLayo
     QDoubleSpinBox, QPlainTextEdit
 from PyQt5.QtCore import pyqtSignal
 from sys import float_info as fli
+import dataDisplay as dd
 import helplib as hl
 import fitDataInfo as fdi
 import numpy as np
@@ -48,13 +49,11 @@ class ZoomButtonWidget(QGroupBox):
         self.__dsbFigHeight = QDoubleSpinBox()
         self.__dsbFigWidth = QDoubleSpinBox()
 
-        self.__dsbFigHeight.setRange(2, fli.max)
-        self.__dsbFigHeight.setValue(6)
+        self.__dsbFigHeight.setRange(1, fli.max)
         self.__dsbFigHeight.setSingleStep(0.1)
         self.__dsbFigHeight.setMaximumWidth(75)
 
-        self.__dsbFigWidth.setRange(2, fli.max)
-        self.__dsbFigWidth.setValue(12)
+        self.__dsbFigWidth.setRange(1, fli.max)
         self.__dsbFigWidth.setSingleStep(0.1)
         self.__dsbFigWidth.setMaximumWidth(75)
 
@@ -136,12 +135,19 @@ class ZoomButtonWidget(QGroupBox):
 
         self.__edtAnnotation.textChanged.connect(self.on_annotation_changed)
         
-        self.__dsbLabelFontSize.setValue(12)
-        self.__dsbScaleFontSize.setValue(15)
-        self.__dsbAnnotationFontSize.setValue(30)
-
         self.setEnabled(False)
-    
+
+    def reset(self, enabled=True):
+        self.set_fig_size((dd.DataDisplay.std_fig_width, dd.DataDisplay.std_fig_height))
+
+        self.set_label_font_size(dd.DataDisplay.std_label_font_size)
+        self.set_scale_font_size(dd.DataDisplay.std_scale_font_size)
+        self.set_annotation_font_size(dd.DataDisplay.std_ann_font_size)
+
+        self.set_annotation_text('')
+
+        self.setEnabled(enabled)
+
     def on_cmdLDZoom_pressed(self):
         self.zoom_by_increment.emit('l', -self._increment_by)
     
@@ -178,26 +184,28 @@ class ZoomButtonWidget(QGroupBox):
     def load_from_view_string(self, view_string):
         if view_string is not None:
             split_string = view_string.split(',')
-        
-            for i in range(0, len(split_string)):
-                item = split_string[i].split('=')
-            
-                if len(item) == 2:
-                    if (item[0] == 'atx'):
-                        self.set_annotation_text(str(item[1]).replace('\\n', '\n'))
-                    elif (item[0] == 'afs'):
-                        self.set_annotation_font_size(float(item[1]))
-                    elif (item[0] == 'fiw'):
-                        self.set_fig_size((float(item[1]), None))
-                    elif (item[0] == 'fih'):
-                        self.set_fig_size((None, float(item[1])))
-                    elif (item[0] == 'lfs'):
-                        self.set_label_font_size(float(item[1]))
-                    elif (item[0] == 'sfs'):
-                        self.set_scale_font_size(float(item[1]))
+
+            try:
+                for i in range(0, len(split_string)):
+                    item = split_string[i].split('=')
+
+                    if len(item) == 2:
+                        if (item[0] == 'atx'):
+                            self.set_annotation_text(str(item[1]).replace('\\n', '\n'))
+                        elif (item[0] == 'afs'):
+                            self.set_annotation_font_size(float(item[1]))
+                        elif (item[0] == 'fiw'):
+                            self.set_fig_size((float(item[1]), None))
+                        elif (item[0] == 'fih'):
+                            self.set_fig_size((None, float(item[1])))
+                        elif (item[0] == 'lfs'):
+                            self.set_label_font_size(float(item[1]))
+                        elif (item[0] == 'sfs'):
+                            self.set_scale_font_size(float(item[1]))
+            except:
+                return 'Meta data might be corrupted.'
 
     def get_view_string(self):
-    
         atx = self.get_annotation_text().replace('\n', '\\n')
         afs = str(self.get_annotation_font_size())
         fiw = str(self.get_fig_size()[0])

@@ -41,20 +41,31 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
             self.init_from_parameters(parameters)
     
     def init_from_parameters(self, parameters):
-        p = parameters.split("p")
-        
-        if len(p) == 4:
-            self.setAEFrom(float(p[0]))
-            self.setAETo(float(p[1]))
-            self.setFWHM(float(p[2]))
-            self.setMinSpan(float(p[3]))
+        ps = parameters.split(",")
+
+        for parameter in ps:
+            (short, value) = parameter.split('=')
+            if short == 'aef':
+                self.setAEFrom(float(value))
+            elif short == 'aet':
+                self.setAETo(float(value))
+            elif short == 'fwh':
+                self.setFWHM(float(value))
+            elif short == 'mns':
+                self.setMinSpan(float(value))
+            elif short == 'wgt':
+                if value == '1' or value == 'True':
+                    self.setWeighted(True)
+                else:
+                    self.setWeighted(False)
             
     def get_fit_string(self):
         return FITINITIALS + '=' + \
-               str(round(self.getAEFrom(), 3)) + "p" +\
-               str(round(self.getAETo(), 3)) + "p" +\
-               str(round(self.getFWHM(), 3)) + "p" +\
-               str(round(self.getMinSpan(), 3))
+               'aef=' + str(round(self.getAEFrom(), 5)) + ',' +\
+               'aet=' + str(round(self.getAETo(), 5)) + ',' +\
+               'fwh=' + str(round(self.getFWHM(), 5)) + ',' +\
+               'mns=' + str(round(self.getMinSpan(), 5)) + ',' +\
+               'wgt=' + str(self.isWeighted())
     
     def reset(self, enable):
         
@@ -64,6 +75,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         
         self.setFWHM(0.3)
         self.setMinSpan(3)
+        self.setWeighted(True)
         
         self.setPostFitFunctionsEnabled(False)
 
@@ -77,6 +89,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         self.__cmdFit.clicked.connect(self.__cmdFit_clicked)
         self.__cmdZoomToFitArea.clicked.connect(self.__cmdZoomToFitArea_clicked)
         self.__chkDisableFit.stateChanged.connect(self.__chkDisableFit_stateChanged)
+        self.__chkWeightFit.stateChanged.connect(self.__chkWeightFit_stateChanged)
         self.__cmdRemoveFit.clicked.connect(self.__cmdRemoveFit_clicked)
         self.__cmdGoodnessOfMinSpan.clicked.connect(self.__cmdGoodnessOfMinSpan_clicked)
     
@@ -119,6 +132,9 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         
         self.__cmdFit = QPushButton("Fit")
         self.__cmdFit.setFixedWidth(75)
+        self.__chkWeightFit = QCheckBox("Weighted")
+
+
         self.__cmdZoomToFitArea = QPushButton("Zoom To Fit")
         self.__cmdZoomToFitArea.setFixedWidth(75)
 
@@ -137,7 +153,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         self.__lblFitFunc = QLabel("Fit-Funct:")
         self.__edtFitFunc = QLineEdit("")
         self.__edtFitFunc.setReadOnly(True)
-        
+
         self.__lblFitFunc.setVisible(False)
         self.__edtFitFunc.setVisible(False)
         
@@ -173,7 +189,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         
         self.setLayout(self.__mainLayout)
         
-        self.setFixedHeight(280)
+        self.setFixedHeight(300)
         
         # self.__mainLayout.addWidget(self.__lblAEFrom)
         # self.__mainLayout.addWidget(self.__dsbAEFrom)
@@ -187,7 +203,8 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         # self.__mainLayout.addWidget(self.__dsbMinSpan)
         
         #self.__mainLayout.addRow(self.__lblFoundAE, self.__lblStdDev)
-        self.__mainLayout.addRow(self.__cmdZoomToFitArea, self.__cmdFit)
+        self.__mainLayout.addRow(self.__chkWeightFit, self.__cmdFit)
+        self.__mainLayout.addRow(self.__cmdZoomToFitArea)
         self.__mainLayout.addRow(self.__dsbGoodnessOfMinSpan_steps, self.__cmdGoodnessOfMinSpan)
         self.__mainLayout.addRow(self.__chkDisableFit, self.__cmdRemoveFit)
         
@@ -224,6 +241,12 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
     
     def setMinSpan(self, value):
         self.__dsbMinSpan.setValue(float(value))
+
+    def setWeighted(self, value):
+        self.__chkWeightFit.setChecked(value)
+
+    def isWeighted(self):
+        return self.__chkWeightFit.isChecked()
     
     def getFitDataInfo(self):
         return self.__AEFitDataInfo
@@ -231,6 +254,9 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
     def __chkDisableFit_stateChanged(self, state):
         self.getFitDataInfo().setDisabled(state == Qt.Checked)
         self.disable_fit.emit(self.getFitDataInfo(), (state == Qt.Checked))
+
+    def __chkWeightFit_stateChanged(self, state):
+        self.__AEFitDataInfo.set_weighted(state == Qt.Checked)
     
     def __cmdRemoveFit_clicked(self):
         self.remove_fit.emit(self.getFitDataInfo())
