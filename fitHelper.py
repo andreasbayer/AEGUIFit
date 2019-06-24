@@ -119,11 +119,11 @@ def min_above_x(np_array, x):
 
 def fix_std_errs(std_errs):
     # a problem in the reduced chi squared fit are the variances = 0, which do happen at smaller energies.
-    #min_err = 10**np.floor(np.log10(min_above_x(std_errs, 0)))
-    min_err = 10**-2
+    #min_err = 10**-2
     fit_std_errs = np.array([])
 
     if std_errs is not None:
+        min_err = 10 ** np.floor(np.log10(min_above_x(std_errs, 0)))
         for std_err in std_errs:
             if std_err == 0:
                 fit_std_errs = np.append(fit_std_errs, min_err)

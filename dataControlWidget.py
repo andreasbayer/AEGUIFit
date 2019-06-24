@@ -105,7 +105,7 @@ class dataControlWidget(QWidget):
 
         if len(self.__data) <= 1:
             raise Exception("Not enough data in file!")
-
+        
         check = self.hasStdErrors()
         
         if check:
@@ -117,8 +117,8 @@ class dataControlWidget(QWidget):
         self.__chkShowErrorBars.setChecked(check)
         
         self.data_changed.emit(check)
-        self.load_from_data_string(data_string)
         self.load_fits.emit(fit_strings)
+        self.load_from_data_string(data_string)
         self.load_view.emit(view_string)
         self.fit_loaded_fits.emit(fit_strings)
         

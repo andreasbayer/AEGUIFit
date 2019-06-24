@@ -44,11 +44,17 @@ class AEFitDataInfo(fitDataInfo):
     def getAEFrom(self):
         return self._AEFrom
     
+    def getCleanAEFrom(self):
+        return self._AEFrom - self._shift
+    
     def setAEFrom(self, AEFrom):
         self._AEFrom = AEFrom
     
     def getAETo(self):
         return self._AETo
+    
+    def getCleanAETo(self):
+        return self._AETo - self._shift
     
     def setAETo(self, AETo):
         self._AETo = AETo
@@ -197,10 +203,15 @@ class AEFitDataInfo(fitDataInfo):
         
         minspans = np.array([])
         
+        weights = None
+
+        if self.is_weighted():
+            weights = self._stdErr
+        
         while test_minspan <= self._minspan + pm_range:
             
             p, stdDev, fitRelBounds_x, fitRelBounds_y, fittedFWHM, fitfunc = \
-                fh.find_best_fit(self._data, self._stdErr, self._p, self._FWHM, test_minspan,
+                fh.find_best_fit(self._data, weights, self._p, self._FWHM, test_minspan,
                                  [self._AEFrom, self._AETo], self.progressUpdate)
             
             y_offsets = np.append(y_offsets, p[0])

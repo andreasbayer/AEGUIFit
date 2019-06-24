@@ -78,9 +78,8 @@ class fitInfoWidgetContainer(QGroupBox):
     def fit_loaded_fits(self, fit_strings):
         for fiw_i in self.__fitInfoWidgets:
             fiw_i.fitToFunction()
-            
+    
     def get_fit_strings(self):
-        
         fit_strings = list()
         
         for fiw_i in self.__fitInfoWidgets:
