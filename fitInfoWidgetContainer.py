@@ -14,7 +14,7 @@ class fitInfoWidgetContainer(QGroupBox):
 
     Post_Fit = pyqtSignal(str, fid.fitDataInfo, ndarray)
     Combined_Fit_Data_Updated = pyqtSignal(ndarray)
-    zoom_to_fit = pyqtSignal(int, int, int)
+    zoom_to_fit = pyqtSignal(float, float, int)
     shift_data = pyqtSignal(float)
     fit_added = pyqtSignal(fid.fitDataInfo)
     remove_fit = pyqtSignal(fid.fitDataInfo)
@@ -160,8 +160,8 @@ class fitInfoWidgetContainer(QGroupBox):
         self.__update_diff_data(fdi_Info.get_fit_index()+1)
         self.Post_Fit.emit(msg, fdi_Info, self.__combined_fit_data)
     
-    def __zoom_to_fit(self, lb, ub, index):
-        self.zoom_to_fit.emit(lb, ub, index)
+    def __zoom_to_fit(self, lb, ub, fit_index):
+        self.zoom_to_fit.emit(lb, ub, fit_index)
         #pass
     
     def __update_combined_fit_data(self):

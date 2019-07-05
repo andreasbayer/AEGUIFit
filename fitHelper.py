@@ -38,9 +38,10 @@ def fit_function_to_data(data, p, fwhm, lb, ub, std_errs = None):
                              p[:],
                              sigma=std_errs,
                              method='trf',
-                             absolute_sigma=True,
-                             bounds=([0, lb, -np.inf, -np.inf], [np.inf, ub, np.inf, np.inf]),
+                             absolute_sigma=False,
+                             #bounds=([0, lb, -np.inf, -np.inf], [0.1, ub, np.inf, np.inf]),
                              # todo upperbound for constant background is arbitrary
+                             bounds=([0, lb, -np.inf, -np.inf], [np.inf, ub, np.inf, np.inf]),
                              check_finite=True)
     
     # return initial_parameters and stddev for the parameters

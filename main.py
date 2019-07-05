@@ -7,8 +7,8 @@ import dataControlWidget as dcw
 import fitDataInfo as fdi
 import zoomButtonWidget as zbw
 import fitInfoWidgetContainer as fic
+import displayToolbar as dt
 import tabFits as tft
-from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from numpy import empty
 
 TITLE = "AEGUIFit - "
@@ -170,8 +170,10 @@ class App(QMainWindow):
         self.ddGbox = QGridLayout()
         self.ddGbox.addWidget(self.tabFits)
         self.ddGbox.addWidget(self.ddMain)
-        #self.toolbar = NavigationToolbar(self.ddMain, self)
-        #self.ddGbox.addWidget(self.toolbar)
+        self.dtToolbar = dt.displayToolbar(self.ddMain, self)
+        self.ddGbox.addWidget(self.dtToolbar)
+
+
 
         layout.addItem(self.ddGbox, 0, 0)
 
@@ -250,10 +252,10 @@ class App(QMainWindow):
         except:
             self.set_display_msg('Showing all failed.')
 
-    def zoom_to_fit(self, lb, ub, index):
+    def zoom_to_fit(self, lb, ub, fit_index):
         try:
-            self.ddMain.ZoomToFit(lb, ub, index)
-            self.ddMain.refresh()
+            self.ddMain.ZoomToFit(lb, ub, fit_index)
+            #self.ddMain.refresh()
         except:
             self.set_display_msg('Zoom to fit failed.')
 
@@ -279,9 +281,8 @@ class App(QMainWindow):
             self.set_display_msg('changing figure size failed.')
 
     def annotation_changed(self, annotation):
-        self.ddMain.set_annotation(annotation)
-
         try:
+            self.ddMain.set_annotation(annotation)
             self.ddMain.refresh()
             self.set_display_msg('')
         except:
