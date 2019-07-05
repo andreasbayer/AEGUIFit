@@ -25,8 +25,8 @@ class tabFits(QTabWidget):
         
         self.addTab(QWidget(), p_fitDataInfo.getName())
         
-    def removeFit(self, p_fit_data_info):
-        self.removeTab(p_fit_data_info.get_fit_index()+1)
+    def removeFit(self, fit_index):
+        self.removeTab(fit_index+1)
     
         
     def current_changed(self, p_int):

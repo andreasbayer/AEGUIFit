@@ -45,7 +45,7 @@ class DataDisplay(FigureCanvas):
         self.__stdErrors = None
         self.__clickmark = None
         self.__showErrorBars = False
-        self.__annotation = None
+        self.__annotations = None
         
         self.__upperZoom = 0
         self.__lowerZoom = 0
@@ -60,7 +60,7 @@ class DataDisplay(FigureCanvas):
 
     def draw_event(self, renderer):
         self.__inv = self.__ax.transData.inverted()
-
+ 
     def set_fig_size(self, figsize):
         self.__fig.figsize = figsize
 
@@ -99,8 +99,6 @@ class DataDisplay(FigureCanvas):
 
                 self.__clickmark = None
                 self.refresh()
-
-
    
     def refresh(self, data=None, stdErrors=None, showErrorBars=None):
         if data is not None:
@@ -140,17 +138,20 @@ class DataDisplay(FigureCanvas):
             if self.__clickmark is not None:
                 self.__ax.plot([self.__clickmark], [0], 'g^')
 
-            if self.__annotation is not None and len(self.__annotation) > 0:
+            if self.__annotations is not None and len(self.__annotations) > 0:
                 (xmin, xmax) = self.__ax.get_xlim()
                 (ymin, ymax) = self.__ax.get_ylim()
                 
                 xpos = xmin + 0.01 * (xmax - xmin)
                 ypos = ymax - 0.01 * (ymax - ymin)
                 
-                self.__ax.annotate(self.__annotation,
-                                   xy=(xpos, ypos),
-                                   horizontalalignment='left', verticalalignment='top',
-                                   fontsize=self.__annotation_font['size'])
+                if len(self.__annotations) >= self.__fitIndex:
+                    annotation = self.__annotations[self.__fitIndex+1]
+                
+                    self.__ax.annotate(annotation,
+                                       xy=(xpos, ypos),
+                                       horizontalalignment='left', verticalalignment='top',
+                                       fontsize=self.__annotation_font['size'])
             self.draw()
 
     def current_fdi(self):
@@ -163,7 +164,7 @@ class DataDisplay(FigureCanvas):
         return self.__data
 
     def set_annotation(self, annotation):
-        self.__annotation = annotation
+        self.__annotations = annotation.split('-- next --\n')
     
     def getCurrentFitData(self):
         if self.show_all_fits():
@@ -290,7 +291,7 @@ class DataDisplay(FigureCanvas):
             self.__ax.plot(self.__combined_fit_data[self.__lowerZoom:self.__upperZoom, 0],
                            self.__combined_fit_data[self.__lowerZoom:self.__upperZoom, 1],
                            linestyle=self.__ls, color=self.__fc, linewidth=self.__lw)
-        
+            
             for fdiCurrent in self.__fdiFits:
                 if fdiCurrent.isFitted() and fdiCurrent.isDisabled() != True:
                     self.__mark_ae_data_in_plot(fdiCurrent)

@@ -221,7 +221,6 @@ class App(QMainWindow):
     
     def saveData(self, fileName):
         
-        
         data_string = self.dcwData.get_data_string()
         view_string = self.zbwMain.get_view_string()
         fit_strings = self.ficFits.get_fit_strings()
