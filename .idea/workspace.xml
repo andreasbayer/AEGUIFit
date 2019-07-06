@@ -19,7 +19,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fitHelper.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
+            <state relative-caret-position="1921">
               <caret line="121" column="21" selection-start-line="121" selection-start-column="5" selection-end-line="121" selection-end-column="21" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
@@ -31,7 +31,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/AEFitDataInfo.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2752">
+            <state relative-caret-position="748">
               <caret line="47" selection-start-line="47" selection-end-line="47" />
               <folding>
                 <element signature="e#0#33#0" expanded="true" />
@@ -43,7 +43,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/AEFitInfoWidget.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-5285">
+            <state relative-caret-position="918">
               <caret line="62" selection-start-line="62" selection-end-line="62" />
               <folding>
                 <element signature="e#0#98#0" expanded="true" />
@@ -55,7 +55,7 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/customFitDataInfo.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1035">
+            <state relative-caret-position="17">
               <caret line="12" column="39" selection-start-line="12" selection-start-column="21" selection-end-line="12" selection-end-column="39" />
             </state>
           </provider>
@@ -72,7 +72,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>changed</find>
       <find>__connect</find>
       <find>chkweight</find>
       <find>isweighted</find>
@@ -102,6 +101,7 @@
       <find>reset</find>
       <find>getclean</find>
       <find>clean</find>
+      <find>-- next</find>
     </findStrings>
     <replaceStrings>
       <replace>mbt</replace>
@@ -165,7 +165,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="272" />
     <option name="y" value="212" />
     <option name="width" value="974" />
@@ -203,7 +203,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -220,6 +219,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
       <pane id="Course" />
     </panes>
   </component>
@@ -322,7 +322,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49852508" visible="true" weight="0.16069546" />
       <window_info id="Structure" order="1" sideWeight="0.5014749" side_tool="true" weight="0.3648294" />
@@ -638,9 +638,6 @@
           <caret line="228" column="8" lean-forward="true" selection-start-line="228" selection-start-column="8" selection-end-line="228" selection-end-column="8" />
           <folding>
             <element signature="e#0#143#0" expanded="true" />
-            <marker date="1561376909548" expanded="true" signature="5522:5523" ph="..." />
-            <marker date="1561376909548" expanded="true" signature="5895:5900" ph="..." />
-            <marker date="1561376909548" expanded="true" signature="5931:5940" ph="..." />
           </folding>
         </state>
       </provider>
@@ -735,7 +732,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/fitHelper.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
+        <state relative-caret-position="1921">
           <caret line="121" column="21" selection-start-line="121" selection-start-column="5" selection-end-line="121" selection-end-column="21" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
@@ -745,7 +742,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/AEFitDataInfo.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2752">
+        <state relative-caret-position="748">
           <caret line="47" selection-start-line="47" selection-end-line="47" />
           <folding>
             <element signature="e#0#33#0" expanded="true" />
@@ -755,7 +752,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/AEFitInfoWidget.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-5285">
+        <state relative-caret-position="918">
           <caret line="62" selection-start-line="62" selection-end-line="62" />
           <folding>
             <element signature="e#0#98#0" expanded="true" />
@@ -765,7 +762,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/customFitDataInfo.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1035">
+        <state relative-caret-position="17">
           <caret line="12" column="39" selection-start-line="12" selection-start-column="21" selection-end-line="12" selection-end-column="39" />
         </state>
       </provider>
