@@ -1,18 +1,25 @@
-Header:
+Problems/Bugs:
 
-viewstring: "fig"
-annotation text, annotation font size, fig height, fig width, label font size, scale font size
-"atx",     "afs",                      "fh",       "fw",      "lfs",           "sfs"
-
-datastring: "dat"
-energy shift, show error bars
-"egs",        "seb"
-
-fitstrings:
-
-"f1"...onset fit
-"py"...poly fit
-"cu"...custom fit
+- AE_To and AE_From and data are not properly adjusted to energy shift upon loading file
+- When Exporting Data, have the selection for measurement data (and maybe also the range) in the file_save dialog
 
 
------------------
+Crashes:
+
+
+
+
+New Features:
+
+- Implement the figure toolbar including
+  - zoom borders (from and too)
+  - zoom to fit
+  - show all
+  - move upper or lower boundary
+
+  refresh removes zooming by the toolbar
+
+- Custom Function
+
+- Polynomial Fit
+

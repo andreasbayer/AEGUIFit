@@ -289,12 +289,11 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
     
     def __cmdZoomToFitArea_clicked(self):
         if self.__AEFitDataInfo.isFitted():
-            lb = fh.find_ev_position(self.__AEFitDataInfo.getFitData(), self.__AEFitDataInfo.getFitRelFrom())
-            ub = fh.find_ev_position(self.__AEFitDataInfo.getFitData(), self.__AEFitDataInfo.getFitRelTo())
+            lb = self.__AEFitDataInfo.getFitRelFrom()
+            ub = self.__AEFitDataInfo.getFitRelTo()
             
             self.zoom_to_fit.emit(lb, ub, self.__AEFitDataInfo.get_fit_index())
-            
-            
+
     def getName(self):
         return self.__AEFitDataInfo.getName()
             
