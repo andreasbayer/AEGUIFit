@@ -5,7 +5,7 @@ import fitDataInfo as fdi
 class fitInfoWidget(QGroupBox):
     
     Post_Fit = pyqtSignal(fdi.fitDataInfo, str)
-    zoom_to_fit = pyqtSignal(int, int, int)
+    zoom_to_fit = pyqtSignal(float, float, int)
     progressUpdate = pyqtSignal(float, list)
     disable_fit = pyqtSignal(fdi.fitDataInfo, bool)
     remove_fit = pyqtSignal(fdi.fitDataInfo)

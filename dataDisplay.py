@@ -118,16 +118,16 @@ class DataDisplay(FigureCanvas):
             self.__showErrorBars = showErrorBars
         
         if self.isLoaded():
-            if stdErrors is not None:
-                self.__stdErrors = stdErrors
-            
-            if self.__stdErrors is not None:
-                stdErrors = self.__stdErrors[:]
-            else:
-                stdErrors = None
-            
             if self.__showErrorBars == False:
                 stdErrors = None
+            else:
+                if stdErrors is not None:
+                    self.__stdErrors = stdErrors
+                
+                if self.__stdErrors is not None:
+                    stdErrors = self.__stdErrors[:]
+                else:
+                    stdErrors = None
                 
             self.__ax.clear()
 
@@ -250,41 +250,55 @@ class DataDisplay(FigureCanvas):
 
     def _zoom_to_xbounds(self, x_lb, x_ub):
             (x_margin, y_margin) = self.__ax.margins()
-            y_lb = self._find_y_min_between(x_lb, x_ub, self.getCurrentData())
-
+            y_lb = self._find_y_min_between(x_lb, x_ub, self.getCurrentData(), self.getStdErrors())
+            #y_lb = self._find_y_min_between(x_lb, x_ub, self.getCurrentData(), None)
+            
             if y_lb > 0:
                 y_lb = 0
-
-            y_ub = self._find_y_max_between(x_lb, x_ub, self.getCurrentData())
+            
+            y_ub = self._find_y_max_between(x_lb, x_ub, self.getCurrentData(), self.getStdErrors())
+            #y_ub = self._find_y_max_between(x_lb, x_ub, self.getCurrentData(), None)
 
             x_dev = (x_ub-x_lb) * x_margin/2
             y_dev = (y_ub - y_lb) * y_margin / 2
 
-            #self.__ax.set_xlim(x_lb - x_dev, x_ub + x_dev)
-            #self.__ax.set_ylim(y_lb - y_dev, y_ub + y_dev)
+            self.__ax.set_xlim(x_lb - x_dev, x_ub + x_dev)
+            self.__ax.set_ylim(y_lb - y_dev, y_ub + y_dev)
 
-            self.__ax.set_xlim(x_lb, x_ub)
-            self.__ax.set_ylim(y_lb, y_ub)
+            #self.__ax.set_xlim(x_lb, x_ub)
+            #self.__ax.set_ylim(y_lb, y_ub)
             self.draw()
 
-    def _find_y_max_between(self, xmin, xmax, data):
+    def _find_y_max_between(self, xmin, xmax, data, errors):
         y_max = None
-
-        for (x, y) in data:
+        error = 0
+        for i in range(1, len(data)):
+            (x, y) = data[i]
+            
+            if errors is not None and i < len(errors):
+                error = errors[i]
+            else:
+                error = 0
+            
             if xmin <= x <= xmax:
-                if y_max is None or y > y_max:
-                    y_max = y
+                if y_max is None or y + error > y_max:
+                    y_max = y + error
 
         return y_max
 
-    def _find_y_min_between(self, xmin, xmax, data):
+    def _find_y_min_between(self, xmin, xmax, data, errors):
         y_min = None
-
-        for (x, y) in data:
+        error = 0
+        for i in range(1, len(data)):
+            (x, y) = data[i]
+            
+            if errors is not None and i < len(errors):
+                error = errors[i]
+            
             if xmin <= x <= xmax:
-                if y_min is None or y < y_min:
-                    y_min = y
-
+                if y_min is None or y - error < y_min:
+                    y_min = y - error
+    
         return y_min
 
     def ZoomWithMouse(self):
@@ -311,6 +325,9 @@ class DataDisplay(FigureCanvas):
     
     def setStdErrors(self, stdErrors):
         self.__stdErrors = stdErrors
+        
+    def getStdErrors(self):
+        return self.__stdErrors
     
     def addFit(self, p_fitDataInfo):
         self.__fdiFits.append(p_fitDataInfo)
