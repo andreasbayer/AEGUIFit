@@ -1,8 +1,6 @@
 import matplotlib
 matplotlib.use('Qt5Agg')
 import matplotlib.pyplot as plt
-import matplotlib
-
 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from PyQt5.QtCore import pyqtSignal, Qt
