@@ -67,12 +67,13 @@ class DataDisplay(FigureCanvas):
         self.__fig.figsize = figsize
 
     def set_fig_size(self, new_fig_size, forward=True):
-        if new_fig_size[0] > 0 and new_fig_size[1] > 0:
-           try:
-               self.__fig.set_size_inches(new_fig_size, forward=True)
-               #pass
-           except Exception as error:
-               print(error)
+        if self.isLoaded():
+            if new_fig_size[0] > 0 and new_fig_size[1] > 0:
+               try:
+                   self.__fig.set_size_inches(new_fig_size, forward=True)
+                   #pass
+               except Exception as error:
+                   print(error)
 
     def isLoaded(self):
         return self.__data is not None

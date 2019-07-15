@@ -58,7 +58,7 @@ class fitInfoWidgetContainer(QGroupBox):
         self.__vbFitInfoWidgets = QVBoxLayout()
         self.__scrollArea.setWidgetResizable(True)
         #self.__scrollArea.setLayout(self.__vbFitInfoWidgets)
-        self.__scrollArea.setAlignment(Qt.AlignTop)
+        #self.__scrollArea.setAlignment(Qt.AlignTop)
         
         self.__widgetFrame = QFrame()
         self.__widgetFrame.setLayout(self.__vbFitInfoWidgets)
@@ -67,7 +67,7 @@ class fitInfoWidgetContainer(QGroupBox):
         
         #self.__mainLayout.addWidget(self.__cbxFits)
         #self.__mainLayout.addWidget(self.__cmdAddFit)
-
+        
         self.setLayout(self.__mainLayout)
         
         self.reset(False)
