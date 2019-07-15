@@ -31,10 +31,10 @@ class fitInfoWidgetContainer(QGroupBox):
 
 
     def __initLayout(self):
-        
+
         self.__mainLayout = QVBoxLayout()
-        self.__scrollArea = QScrollArea()
-    
+        self.__scrollArea = QScrollArea(self)
+
         self.__cbxFits = QComboBox()
         self.__cbxFits.addItem("Onset Fit")
         self.__cbxFits.addItem("Polynomial Fit")

@@ -179,9 +179,12 @@ class DataDisplay(FigureCanvas):
                 annotation = self.__annotations[self.__fitIndex + 1]
 
                 self.__ax.annotate(annotation,
-                                   xy=(xpos, ypos),
-                                   xycoords = 'axes fraction',
-                                   horizontalalignment='left', verticalalignment='top',
+                                   #xy=(xpos, ypos),
+                                   #xycoords = 'axes fraction',
+                                   xytext = (xpos, ypos),
+                                   textcoords = 'axes fraction',
+                                   horizontalalignment='left',
+                                   verticalalignment='top',
                                    fontsize=self.__annotation_font['size'])
 
     def current_fdi(self):
