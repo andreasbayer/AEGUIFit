@@ -177,8 +177,8 @@ class DataDisplay(FigureCanvas):
                 annotation = self.__annotations[self.__fitIndex + 1]
 
                 self.__ax.annotate(annotation,
-                                   #xy=(xpos, ypos),
-                                   #xycoords = 'axes fraction',
+                                   xy=(xpos, ypos),
+                                   xycoords = 'axes fraction',
                                    xytext = (xpos, ypos),
                                    textcoords = 'axes fraction',
                                    horizontalalignment='left',
@@ -197,6 +197,10 @@ class DataDisplay(FigureCanvas):
         else:
             return self.current_fdi().get_data()
 
+
+    def getAllData(self):
+        return self.__data
+
     def set_annotation(self, annotation):
         self.__annotations = annotation.split('-- next --\n')
         self.update_annotations()
@@ -213,6 +217,19 @@ class DataDisplay(FigureCanvas):
                 return self.current_fdi().getFitData()
             else:
                 return None
+
+    def getAllFitData(self):
+
+        all_fit_data = list()
+
+        for fit in self.__fdiFits:
+            if fit.isFitted() and fit.isDisabled() is False:
+                all_fit_data.append(fit.getFitData())
+
+        return all_fit_data
+
+    def getCombinedFitData(self):
+        return self.__combined_fit_data
 
     def __plot_data(self, data, stdErrors):
         self.__ax.errorbar(data[:, 0],

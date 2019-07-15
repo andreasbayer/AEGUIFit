@@ -72,3 +72,4 @@ __pycache__/polyFitDataInfo.cpython-36.pyc
 __pycache__/polyFitInfoWidget.cpython-36.pyc
 __pycache__/tabFits.cpython-36.pyc
 __pycache__/zoomButtonWidget.cpython-36.pyc
+*.pyc

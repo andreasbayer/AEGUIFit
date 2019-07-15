@@ -161,7 +161,6 @@ class AEFitDataInfo(fitDataInfo):
         if self.is_weighted():
             weights = self._stdErr
 
-        
         try:
             self._p, self._stdDev, self._fitRelBounds[0], self._fitRelBounds[
                 1], self._fittedFWHM, self._fitFunction \
@@ -246,4 +245,13 @@ class AEFitDataInfo(fitDataInfo):
 
         for set in self._data:
             set[0] += increment
-            
+
+
+    def get_meta_string(self):
+        metastring = 'y-offset = ' + str(self.getYOffset()) + '±' + str(self.getYOffset_dev()) + ' '
+        metastring += 'AE = ' + str(self.getFoundAE()) + '±' + str(self.getFoundAE_dev()) + ' '
+        metastring += 'Scale Factor = ' + str(self.getScaleFactor()) + '±' + str(self.getScaleFactor_dev()) + ' '
+        metastring += 'Alpha = ' + str(self.getAlpha()) + '±' + str(self.getAlpha_dev())
+
+        return metastring
+

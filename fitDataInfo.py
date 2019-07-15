@@ -18,7 +18,7 @@ class fitDataInfo():
         
     def getName(self):
         pass
-    
+
     def isDisabled(self):
         return self._isDisabled
     
@@ -68,7 +68,7 @@ class fitDataInfo():
     
     def getFitData(self):
         return self._fitData
-    
+
     def get_data(self):
         return self._data
     
@@ -79,4 +79,7 @@ class fitDataInfo():
         pass
     
     def shift_fit(self, increment):
+        pass
+
+    def get_meta_string(self):
         pass

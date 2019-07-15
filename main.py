@@ -61,23 +61,31 @@ class App(QMainWindow):
         mbtQuit.triggered.connect(self.close)
         mnuFile.addAction(mbtQuit)
 
-        mbtSaveFig = QAction('Save Figure', self)
+        mbtSaveFig = QAction('Save Figure ...', self)
         mbtSaveFig.setShortcut('Ctrl+F')
-        mbtSaveFig.setStatusTip('Save figure as is shown ...')
+        mbtSaveFig.setStatusTip('Save figure as is shown.')
         mbtSaveFig.triggered.connect(self.saveFig)
         mnuExport.addAction(mbtSaveFig)
 
-        mbtSaveFitData = QAction('Save Fit Data', self)
-        mbtSaveFitData.setShortcut('Ctrl+D')
-        mbtSaveFitData.setStatusTip('Save visible data points produced by the fit function in a .txt file ...')
-        mbtSaveFitData.triggered.connect(self.saveFitData)
-        mnuExport.addAction(mbtSaveFitData)
+        mbtExportAllData = QAction('Export All Data and Meta Data ...')
+        mbtExportAllData.setShortcut('Ctrl+E')
+        mbtExportAllData.setStatusTip('Export all data, errors, combined and individual fits, as well as their parameters and the engergy shift in a .txt file.')
+        mbtExportAllData.triggered.connect(self.exportAllData)
+        mnuExport.addAction(mbtExportAllData)
 
-        mbtSaveFitDataWithData = QAction('Save Fit Data including Measurement Data', self)
-        mbtSaveFitDataWithData.setShortcut('Ctrl+M')
-        mbtSaveFitDataWithData.setStatusTip('Save visible data points produced by the fit function in a .txt file ...')
-        mbtSaveFitDataWithData.triggered.connect(self.saveFitData)
-        mnuExport.addAction(mbtSaveFitDataWithData)
+        mbtExportVisibleData = QAction('Export Visible Data...', self)
+        mbtExportVisibleData.setShortcut('Ctrl+D')
+        mbtExportVisibleData.setStatusTip('Export all visible data in a .txt file.')
+        mbtExportVisibleData.triggered.connect(self.exportData)
+        mnuExport.addAction(mbtExportVisibleData)
+
+        #mbtSaveFitDataWithData = QAction('Save Fit Data including Measurement Data', self)
+        #mbtSaveFitDataWithData.setShortcut('Ctrl+M')
+        #mbtSaveFitDataWithData.setStatusTip('Save visible data points produced by the fit function in a .txt file ...')
+        #mbtSaveFitDataWithData.triggered.connect(self.saveFitData)
+        #mnuExport.addAction(mbtSaveFitDataWithData)
+
+
 
         mbtAbout = QAction('About', self)
         mbtAbout.setShortcut("F1")
@@ -326,11 +334,43 @@ class App(QMainWindow):
 
         file.close()
 
-    def saveFitData(self):
+    def writeAllDataToFile(self, filename):
+        file = open(filename, "w+")
+
+        data = self.ddMain.getAllData()
+        errors = self.ddMain.getStdErrors()
+        all_fit_data = self.ddMain.getAllFitData()
+        combined_fit = self.ddMain.getCombinedFitData()
+
+        self.writeMetaData()
+
+        for i in range(0, len(data)):
+            file.write('%f\t' % data[i][0])
+            file.write('%f\t' % data[i][1])
+            file.write('%f\t' % errors[i])
+            file.write('%f' % combined_fit[i])
+
+            for fit_data in all_fit_data:
+                file.write('\t%f', fit_data[i][1])
+
+            file.write('\r\n')
+
+        file.close()
+
+    def writeMetaData(self, file, fits):
+
+        file.write('# Energy shift = ' + str(self.dcwData.getEnergyShift()) + '\r\n')
+
+        for fit in fits:
+            file.write('# ' + fit.get_meta_string + '\r\n')
+
+        file.write('# -------------------------------------------------------------')
+
+    def exportData(self):
         saveDialog = fsd.flSaveFileDialog()
 
         # name, ext = fsd.flSaveFileDialog.getSaveFileName(self, "Save Fit Data", "", "*.txt")
-        name, ext = saveDialog.getSaveFileName(self, "Save Fit Data", "", "*.txt")
+        name, ext = saveDialog.getSaveFileName(self, "Export Visible Data", "", "*.txt")
 
         if name != '':
 
@@ -352,8 +392,21 @@ class App(QMainWindow):
                         #    QMessageBox.information(self, "", "Without M-Data", QMessageBox.Ok, QMessageBox.Ok)
                         self.writeFitDataToFile(name, includeMeausredData=False)
                 except:
-                    QMessageBox.critical(self, "Saving Data failed!", "Error while saving figure", QMessageBox.Ok,
-                                         QMessageBox.Ok)
+                    QMessageBox.critical(self, "Exporting data failed!", "Please contact developers for further information.",
+                                         QMessageBox.Ok, QMessageBox.Ok)
+
+
+    def exportAllData(self):
+        saveDialog = fsd.flSaveFileDialog()
+
+        # name, ext = fsd.flSaveFileDialog.getSaveFileName(self, "Save Fit Data", "", "*.txt")
+        name, ext = saveDialog.getSaveFileName(self, "Export All Data", "", "*.txt")
+
+        try:
+            self.writeAllDataToFile(name, includeMeausredData=False)
+        except:
+            QMessageBox.critical(self, "Exporting all data failed!", "Please contact developers for further information.",
+                                 QMessageBox.Ok, QMessageBox.Ok)
 
     def openFile(self):
         options = QFileDialog.Options()
