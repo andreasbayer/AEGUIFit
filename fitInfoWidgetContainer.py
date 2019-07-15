@@ -31,7 +31,6 @@ class fitInfoWidgetContainer(QGroupBox):
 
 
     def __initLayout(self):
-        #self.scroll = QScrollArea()
         
         self.__mainLayout = QVBoxLayout()
         self.__scrollArea = QScrollArea()

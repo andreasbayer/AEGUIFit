@@ -155,9 +155,9 @@ class DataDisplay(FigureCanvas):
             
             self.update_clickmark()
             self.update_annotations()
-
+            
             self.draw()
-
+            
     def update_clickmark(self):
         if self.__clickmark is not None:
             #if self.__data[self.__lowerZoom, 0] <= self.__clickmark <= self.__data[self.__upperZoom, 0]:
