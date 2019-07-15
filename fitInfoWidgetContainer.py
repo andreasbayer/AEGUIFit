@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QGroupBox, QPushButton, QComboBox, QVBoxLayout, QHBoxLayout, QScrollArea
+from PyQt5.QtWidgets import QGroupBox, QPushButton, QComboBox, QVBoxLayout, QHBoxLayout, QScrollArea, QFrame
 from PyQt5.QtCore import pyqtSignal, Qt
 #from PyQt5.Qt import ali
 import AEFitInfoWidget as afw
@@ -31,10 +31,11 @@ class fitInfoWidgetContainer(QGroupBox):
 
 
     def __initLayout(self):
-        #self.scroll = QScrollArea()
-        
+
         self.__mainLayout = QVBoxLayout()
-        self.__scrollArea = QScrollArea()
+        self.__scrollArea = QScrollArea(self)
+
+        self.__innerFrame = QFrame(self.__scrollArea)
     
         self.__cbxFits = QComboBox()
         self.__cbxFits.addItem("Onset Fit")
@@ -55,11 +56,14 @@ class fitInfoWidgetContainer(QGroupBox):
         self.__mainLayout.addLayout(self.__hbMenu)
         self.__mainLayout.addWidget(self.__scrollArea)
         
-        self.__vbFitInfoWidgets = QVBoxLayout()
         self.__scrollArea.setWidgetResizable(True)
-        self.__scrollArea.setLayout(self.__vbFitInfoWidgets)
-        self.__scrollArea.setAlignment(Qt.AlignTop)
-        
+        #self.__scrollArea.setLayout()
+        self.__scrollArea.setWidget(self.__innerFrame)
+        self.__vbFitInfoWidgets = QVBoxLayout()
+        self.__vbFitInfoWidgets.setAlignment(Qt.AlignTop)
+        self.__innerFrame.setLayout(self.__vbFitInfoWidgets)
+
+
         #self.__mainLayout.addWidget(self.__cbxFits)
         #self.__mainLayout.addWidget(self.__cmdAddFit)
 

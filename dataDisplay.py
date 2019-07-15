@@ -18,6 +18,7 @@ class DataDisplay(FigureCanvas):
     def __init__(self, parent=None):
         self.__fig, self.__ax = plt.subplots(1, 1, tight_layout=True)
         FigureCanvas.__init__(self, self.__fig)
+        #super(FigureCanvas, self).__init__(self.__fig)
 
         if self.hasMouseTracking():
             self.setMouseTracking(True)
@@ -60,12 +61,13 @@ class DataDisplay(FigureCanvas):
         self.__fig.figsize = figsize
 
     def set_fig_size(self, new_fig_size, forward=True):
-        if new_fig_size[0] > 0 and new_fig_size[1] > 0:
-           try:
-               #self.__fig.set_size_inches(new_fig_size, forward=forward)
-               pass
-           except Exception as error:
-               print(error)
+        if self.isLoaded():
+            if new_fig_size[0] > 0 and new_fig_size[1] > 0:
+               try:
+                   self.__fig.set_size_inches(new_fig_size, forward=False)
+                   #pass
+               except Exception as error:
+                   print(error)
 
     def isLoaded(self):
         return self.__data is not None
@@ -164,11 +166,19 @@ class DataDisplay(FigureCanvas):
             xpos = xmin + 0.01 * (xmax - xmin)
             ypos = ymax - 0.01 * (ymax - ymin)
 
-            if len(self.__annotations) >= self.__fitIndex:
+            xfrac = 0.03
+            yfrac = 0.95
+
+            if len(self.__annotations) > self.__fitIndex + 1:
                 annotation = self.__annotations[self.__fitIndex + 1]
 
                 self.__ax.annotate(annotation,
-                                   xy=(xpos, ypos),
+                                   #xy=(xpos, ypos),
+                                   #xytext=(xpos, ypos),
+                                   xy=(xfrac, yfrac),
+                                   xytext=(xfrac, yfrac),
+                                   xycoords='axes fraction',
+                                   textcoords='axes fraction',
                                    horizontalalignment='left', verticalalignment='top',
                                    fontsize=self.__annotation_font['size'])
 
