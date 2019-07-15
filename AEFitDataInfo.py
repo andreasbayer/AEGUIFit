@@ -248,10 +248,13 @@ class AEFitDataInfo(fitDataInfo):
 
 
     def get_meta_string(self):
-        metastring = 'y-offset = ' + str(self.getYOffset()) + '±' + str(self.getYOffset_dev()) + ' '
-        metastring += 'AE = ' + str(self.getFoundAE()) + '±' + str(self.getFoundAE_dev()) + ' '
-        metastring += 'Scale Factor = ' + str(self.getScaleFactor()) + '±' + str(self.getScaleFactor_dev()) + ' '
-        metastring += 'Alpha = ' + str(self.getAlpha()) + '±' + str(self.getAlpha_dev())
+        metastring = ""
+
+        if self.isFitted():
+            metastring = 'Y-offset = ' + str(self.getYOffset()) + '+-' + str(self.getYOffset_dev()) + ' '
+            metastring += 'AE = ' + str(self.getFoundAE()) + '+-' + str(self.getFoundAE_dev()) + ' '
+            metastring += 'Scale Factor = ' + str(self.getScaleFactor()) + '+-' + str(self.getScaleFactor_dev()) + ' '
+            metastring += 'Alpha = ' + str(self.getAlpha()) + '+-' + str(self.getAlpha_dev())
 
         return metastring
 

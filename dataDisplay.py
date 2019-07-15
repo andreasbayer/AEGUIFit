@@ -16,6 +16,7 @@ class DataDisplay(FigureCanvas):
     std_ann_font_size = 24
 
     statusbar_update = pyqtSignal(str)
+    is_loaded_changed = pyqtSignal(bool)
 
     mark_default_text = 'Click on figure to show energy value.'
 
@@ -41,11 +42,11 @@ class DataDisplay(FigureCanvas):
         self.__ew = 1.2
         self.__lw = 1.2
         #1.2
-        self.__data = None
+        self.setData(None)
         self.__fdiFits = list()
         self.reset_fitIndex()
         self.__combined_fit_data = list()
-        self.__stdErrors = None
+        self.setStdErrors(None)
         self.__clickmark = None
         self.__showErrorBars = False
         self.__annotations = None
@@ -74,6 +75,7 @@ class DataDisplay(FigureCanvas):
                    print(error)
 
     def isLoaded(self):
+        # if this changes, the trigger for is_loaded_changed has also be changed!
         return self.__data is not None
         
     def mousePressEvent(self, event):
@@ -218,12 +220,12 @@ class DataDisplay(FigureCanvas):
             else:
                 return None
 
-    def getAllFitData(self):
+    def getAllFitData(self, incl_disabled=False):
 
         all_fit_data = list()
 
         for fit in self.__fdiFits:
-            if fit.isFitted() and fit.isDisabled() is False:
+            if fit.isFitted() and (fit.isDisabled() is False or incl_disabled):
                 all_fit_data.append(fit.getFitData())
 
         return all_fit_data
@@ -349,6 +351,8 @@ class DataDisplay(FigureCanvas):
 
     def setData(self, data):
         self.__data = data
+
+        self.is_loaded_changed.emit(self.isLoaded())
             
         #self.__upperZoom = len(data)-1
         #self.__lowerZoom = 0

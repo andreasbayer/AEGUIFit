@@ -94,3 +94,4 @@ class fitInfoWidget(QGroupBox):
     
     def fitToFunction(self):
         pass
+

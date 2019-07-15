@@ -28,70 +28,69 @@ class App(QMainWindow):
         self.menuInit()
 
     def menuInit(self):
-        mbrMain = self.menuBar()
-        mnuFile = mbrMain.addMenu('File')
-        mnuExport = mbrMain.addMenu('Export')
-        # mnuConfig = mbrMain.addMenu('Configurations')
-        mnuConfig = mbrMain.addMenu('')
-        mnuHelp = mbrMain.addMenu('Help')
+        self.mbrMain = self.menuBar()
+        self.mnuFile = self.mbrMain.addMenu('File')
+        self.mnuExport = self.mbrMain.addMenu('Export')
+        # mnuConfig = self.mbrMain.addMenu('Configurations')
+        #self.mnuConfig = self.mbrMain.addMenu('')
+        self.mnuHelp = self.mbrMain.addMenu('Help')
 
-        mbtOpen = QAction('Open...', self)
-        mbtOpen.setShortcut('Ctrl+O')
-        mbtOpen.setStatusTip('Open new file.')
-        mbtOpen.triggered.connect(self.openFile)
-        mnuFile.addAction(mbtOpen)
+        self.mbtOpen = QAction('Open...', self)
+        self.mbtOpen.setShortcut('Ctrl+O')
+        self.mbtOpen.setStatusTip('Open new file.')
+        self.mbtOpen.triggered.connect(self.openFile)
+        self.mnuFile.addAction(self.mbtOpen)
 
-        mbtSave = QAction('Save...', self)
-        mbtSave.setShortcut('Ctrl+S')
-        mbtSave.setStatusTip('Save all data with fit and fit parameters.')
-        mbtSave.triggered.connect(self.saveFile)
-        mnuFile.addAction(mbtSave)
+        self.mbtSave = QAction('Save...', self)
+        self.mbtSave.setShortcut('Ctrl+S')
+        self.mbtSave.setStatusTip('Save all data with fit and fit parameters.')
+        self.mbtSave.triggered.connect(self.saveFile)
+        self.mnuFile.addAction(self.mbtSave)
 
-        mbtClose = QAction('Close', self)
-        #mbtClose.setShortcut('Ctrl+C')
-        mbtClose.setStatusTip('Close current file.')
-        mbtClose.triggered.connect(self.closeFile)
-        mnuFile.addAction(mbtClose)
+        self.mbtClose = QAction('Close', self)
+        #self.mbtClose.setShortcut('Ctrl+C')
+        self.mbtClose.setStatusTip('Close current file.')
+        self.mbtClose.triggered.connect(self.closeFile)
+        self.mnuFile.addAction(self.mbtClose)
 
-        mnuFile.addSeparator()
+        self.mnuFile.addSeparator()
 
-        mbtQuit = QAction('Quit', self)
-        mbtQuit.setShortcut('Ctrl+Q')
-        mbtQuit.setStatusTip('Quit application.')
-        mbtQuit.triggered.connect(self.close)
-        mnuFile.addAction(mbtQuit)
+        self.mbtQuit = QAction('Quit', self)
+        self.mbtQuit.setShortcut('Ctrl+Q')
+        self.mbtQuit.setStatusTip('Quit application.')
+        self.mbtQuit.triggered.connect(self.close)
+        self.mnuFile.addAction(self.mbtQuit)
 
-        mbtSaveFig = QAction('Save Figure ...', self)
-        mbtSaveFig.setShortcut('Ctrl+F')
-        mbtSaveFig.setStatusTip('Save figure as is shown.')
-        mbtSaveFig.triggered.connect(self.saveFig)
-        mnuExport.addAction(mbtSaveFig)
+        self.mbtSaveFig = QAction('Save Figure ...', self)
+        self.mbtSaveFig.setShortcut('Ctrl+F')
+        self.mbtSaveFig.setStatusTip('Save figure as is shown.')
+        self.mbtSaveFig.triggered.connect(self.saveFig)
+        self.mnuExport.addAction(self.mbtSaveFig)
 
-        mbtExportAllData = QAction('Export All Data and Meta Data ...')
-        mbtExportAllData.setShortcut('Ctrl+E')
-        mbtExportAllData.setStatusTip('Export all data, errors, combined and individual fits, as well as their parameters and the engergy shift in a .txt file.')
-        mbtExportAllData.triggered.connect(self.exportAllData)
-        mnuExport.addAction(mbtExportAllData)
+        self.mbtExportAllData = QAction('Export All Data and Meta Data ...', self)
+        self.mbtExportAllData.setShortcut('Ctrl+E')
+        self.mbtExportAllData.setStatusTip('Export all data, errors, combined and individual fits, as well as their parameters and the engergy shift in a .txt file.')
+        self.mbtExportAllData.triggered.connect(self.exportAllData)
+        self.mnuExport.addAction(self.mbtExportAllData)
 
-        mbtExportVisibleData = QAction('Export Visible Data...', self)
-        mbtExportVisibleData.setShortcut('Ctrl+D')
-        mbtExportVisibleData.setStatusTip('Export all visible data in a .txt file.')
-        mbtExportVisibleData.triggered.connect(self.exportData)
-        mnuExport.addAction(mbtExportVisibleData)
+        self.mbtExportVisibleData = QAction('Export Visible Data...', self)
+        self.mbtExportVisibleData.setShortcut('Ctrl+D')
+        self.mbtExportVisibleData.setStatusTip('Export all visible data in a .txt file.')
+        self.mbtExportVisibleData.triggered.connect(self.exportData)
+        self.mnuExport.addAction(self.mbtExportVisibleData)
 
-        #mbtSaveFitDataWithData = QAction('Save Fit Data including Measurement Data', self)
-        #mbtSaveFitDataWithData.setShortcut('Ctrl+M')
-        #mbtSaveFitDataWithData.setStatusTip('Save visible data points produced by the fit function in a .txt file ...')
-        #mbtSaveFitDataWithData.triggered.connect(self.saveFitData)
-        #mnuExport.addAction(mbtSaveFitDataWithData)
+        self.mbtAbout = QAction('About', self)
+        self.mbtAbout.setShortcut("F1")
+        self.mbtAbout.setStatusTip('About this program')
+        self.mbtAbout.triggered.connect(self.showAbout)
+        self.mnuHelp.addAction(self.mbtAbout)
 
+        self.resetMenuBar(False)
 
-
-        mbtAbout = QAction('About', self)
-        mbtAbout.setShortcut("F1")
-        mbtAbout.setStatusTip('About this program')
-        mbtAbout.triggered.connect(self.showAbout)
-        mnuHelp.addAction(mbtAbout)
+    def resetMenuBar(self, isLoaded):
+        self.mnuExport.setDisabled(not isLoaded)
+        self.mbtClose.setDisabled(not isLoaded)
+        self.mbtSave.setDisabled(not isLoaded)
 
     def initUI(self):
         self.setWindowTitle(self.title)
@@ -123,9 +122,10 @@ class App(QMainWindow):
                                   QSizePolicy.Expanding)
 
         self.ddMain.statusbar_update.connect(self.dd_statusbar_update)
+        self.ddMain.is_loaded_changed.connect(self.dd_is_loaded_changed)
 
         self.horizontalGroupBox = QGroupBox("Grid")
-        layout = QGridLayout()
+        self.grid_layout = QGridLayout()
         # layout.setRowStretch(0, 50)
         #layout.setColumnStretch(0, 80)
         # layout.setRowStretch(1, 50)
@@ -139,6 +139,8 @@ class App(QMainWindow):
         self.ficFits.progressUpdate.connect(self.progressUpdate)
         self.ficFits.disable_fit.connect(self.disable_fit)
         self.ficFits.remove_fit.connect(self.remove_fit)
+        self.ficFits.setSizePolicy(QSizePolicy.Expanding,
+                                   QSizePolicy.Expanding)
 
         self.dcwData.showErrorBars_changed.connect(self.showErrorBars_changed)
         self.dcwData.data_changed.connect(self.dcwData_changed)
@@ -181,25 +183,23 @@ class App(QMainWindow):
         self.dtToolbar = dt.displayToolbar(self.ddMain, self)
         self.ddGbox.addWidget(self.dtToolbar)
 
+        self.grid_layout.addItem(self.ddGbox, 0, 0)
 
+        self.grid_layout.addWidget(self.ficFits, 0, 1)
+        self.grid_layout.addWidget(self.zbwMain, 1, 0)
+        self.grid_layout.addWidget(self.dcwData, 1, 1)
 
-        layout.addItem(self.ddGbox, 0, 0)
-
-        layout.addWidget(self.ficFits, 0, 1)
-        layout.addWidget(self.zbwMain, 1, 0)
-        layout.addWidget(self.dcwData, 1, 1)
-
-        self.horizontalGroupBox.setLayout(layout)
+        self.horizontalGroupBox.setLayout(self.grid_layout)
 
         mainWidget = QWidget(self)
-        mainWidget.setLayout(layout)
+        mainWidget.setLayout(self.grid_layout)
         self.setCentralWidget(mainWidget)
 
         self.show()
 
     def set_dims(self):
-        self.ficFits.setFixedHeight(self.height-self.bottom)
-        #self.ddMain.hei
+        #self.ficFits.setFixedHeight(self.height-self.bottom)
+
         self.dcwData.setFixedHeight(self.bottom)
         self.zbwMain.setFixedHeight(self.bottom)
         
@@ -225,6 +225,9 @@ class App(QMainWindow):
 
     def dd_statusbar_update(self, str_update):
         self.lblEnergyMark.setText(str_update)
+
+    def dd_is_loaded_changed(self, is_loaded):
+        self.resetMenuBar(is_loaded)
 
     def loadData(self, fileName):
         self.dcwData.loadFile(fileName)
@@ -339,32 +342,58 @@ class App(QMainWindow):
 
         data = self.ddMain.getAllData()
         errors = self.ddMain.getStdErrors()
-        all_fit_data = self.ddMain.getAllFitData()
+        all_fit_data = self.ddMain.getAllFitData(incl_disabled=False)
         combined_fit = self.ddMain.getCombinedFitData()
 
-        self.writeMetaData()
+        self.writeMetaData(file)
+
+        write_errors = len(errors) > 0
+        write_afd = len(all_fit_data) > 0
+        write_combined_fit = len(combined_fit) > 0
+
+        file.write('Energy\tCounts')
+
+        if write_errors:
+            file.write('\tErrors')
+
+        if write_combined_fit:
+            file.write('\tCombined Fit')
+
+        if write_afd:
+            for i in range(0, len(all_fit_data)):
+                file.write('\tFit ' + str(i + 1))
+
+        file.write('\r\n')
 
         for i in range(0, len(data)):
             file.write('%f\t' % data[i][0])
             file.write('%f\t' % data[i][1])
-            file.write('%f\t' % errors[i])
-            file.write('%f' % combined_fit[i])
 
-            for fit_data in all_fit_data:
-                file.write('\t%f', fit_data[i][1])
+            if write_errors:
+                file.write('%f\t' % errors[i])
+
+            if write_combined_fit:
+                file.write('%f' % combined_fit[i][1])
+
+            if write_afd:
+                for fit_data in all_fit_data:
+                    file.write('\t%f' % fit_data[i][1])
 
             file.write('\r\n')
 
         file.close()
 
-    def writeMetaData(self, file, fits):
+    def writeMetaData(self, file):
 
         file.write('# Energy shift = ' + str(self.dcwData.getEnergyShift()) + '\r\n')
 
-        for fit in fits:
-            file.write('# ' + fit.get_meta_string + '\r\n')
+        fits = self.ficFits.get_fit_info_widgets()
 
-        file.write('# -------------------------------------------------------------')
+        for fiwFit in fits:
+            if not fiwFit.isDisabled():
+                file.write('# ' + fiwFit.getFitDataInfo().get_meta_string() + '\r\n')
+
+        file.write('# -------------------------------------------------------------\r\n')
 
     def exportData(self):
         saveDialog = fsd.flSaveFileDialog()
@@ -403,7 +432,9 @@ class App(QMainWindow):
         name, ext = saveDialog.getSaveFileName(self, "Export All Data", "", "*.txt")
 
         try:
-            self.writeAllDataToFile(name, includeMeausredData=False)
+            self.writeAllDataToFile(name)
+
+            self.set_display_msg('Exporting All Data was successful.')
         except:
             QMessageBox.critical(self, "Exporting all data failed!", "Please contact developers for further information.",
                                  QMessageBox.Ok, QMessageBox.Ok)
@@ -447,6 +478,7 @@ class App(QMainWindow):
         self.ddMain.reset()
         self.tabFits.reset()
         self.zbwMain.reset(enable)
+        self.resetMenuBar(self.ddMain.isLoaded())
 
         self.progressBar.reset()
 

@@ -77,8 +77,7 @@ class fitInfoWidgetContainer(QGroupBox):
             if item[0] == afw.FITINITIALS:
                 new_fit = afw.AEFitInfoWidget(len(self.__fitInfoWidgets), self.shift_data, item[1])
                 self.__add_fiw(new_fit)
-           
-                
+
     def fit_loaded_fits(self, fit_strings):
         for fiw_i in self.__fitInfoWidgets:
             fiw_i.fitToFunction()
@@ -235,3 +234,6 @@ class fitInfoWidgetContainer(QGroupBox):
     
     def setStdErr(self, std_err):
         self.__std_err = std_err
+
+    def get_fit_info_widgets(self):
+        return self.__fitInfoWidgets
