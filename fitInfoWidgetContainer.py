@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QGroupBox, QPushButton, QComboBox, QVBoxLayout, QHBoxLayout, QScrollArea
+from PyQt5.QtWidgets import QGroupBox, QPushButton, QComboBox, QVBoxLayout, QHBoxLayout, QScrollArea, QFrame
 from PyQt5.QtCore import pyqtSignal, Qt
 #from PyQt5.Qt import ali
 import AEFitInfoWidget as afw
@@ -57,8 +57,13 @@ class fitInfoWidgetContainer(QGroupBox):
         
         self.__vbFitInfoWidgets = QVBoxLayout()
         self.__scrollArea.setWidgetResizable(True)
-        self.__scrollArea.setLayout(self.__vbFitInfoWidgets)
+        #self.__scrollArea.setLayout(self.__vbFitInfoWidgets)
         self.__scrollArea.setAlignment(Qt.AlignTop)
+        
+        self.__widgetFrame = QFrame()
+        self.__widgetFrame.setLayout(self.__vbFitInfoWidgets)
+        self.__scrollArea.setWidget(self.__widgetFrame)
+        self.__vbFitInfoWidgets.setAlignment(Qt.AlignTop)
         
         #self.__mainLayout.addWidget(self.__cbxFits)
         #self.__mainLayout.addWidget(self.__cmdAddFit)
@@ -135,7 +140,7 @@ class fitInfoWidgetContainer(QGroupBox):
         self.disable_fit.emit(fdi_Info)
         
     def __remove_fit(self, fdi_Info):
-        #backwards for loop?
+        
         for i_fiw in reversed(self.__fitInfoWidgets):
             if i_fiw.getFitDataInfo() != fdi_Info:
                 #update index

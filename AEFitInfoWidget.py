@@ -61,8 +61,8 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
             
     def get_fit_string(self):
         return FITINITIALS + ':' + \
-               'aef=' + str(round(self.getCleanAEFrom(), 5)) + ',' +\
-               'aet=' + str(round(self.getCleanAETo(), 5)) + ',' +\
+               'aef=' + str(round(self.getAEFrom(), 5)) + ',' +\
+               'aet=' + str(round(self.getAETo(), 5)) + ',' +\
                'fwh=' + str(round(self.getFWHM(), 5)) + ',' +\
                'mns=' + str(round(self.getMinSpan(), 5)) + ',' +\
                'wgt=' + str(self.isWeighted())
@@ -219,12 +219,6 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
     
     def getAEFrom(self):
         return self.__AEFitDataInfo.getAEFrom()
-    
-    def getCleanAEFrom(self):
-        return self.__AEFitDataInfo.getCleanAEFrom()
-    
-    def getCleanAETo(self):
-        return self.__AEFitDataInfo.getCleanAETo()
     
     def setAEFrom(self, value):
         self.__dsbAEFrom.setValue(float(value))

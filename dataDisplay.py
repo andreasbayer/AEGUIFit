@@ -1,12 +1,18 @@
+import matplotlib
+matplotlib.use('Qt5Agg')
+import matplotlib.pyplot as plt
+import matplotlib
+
+
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from PyQt5.QtCore import pyqtSignal, Qt
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import fitDataInfo as fdi
 
 class DataDisplay(FigureCanvas):
 
-    std_fig_width = 640
-    std_fig_height = 480
+    std_fig_width = 6.40
+    std_fig_height = 4.80
     std_label_font_size = 15
     std_scale_font_size = 15
     std_ann_font_size = 24
@@ -17,7 +23,8 @@ class DataDisplay(FigureCanvas):
 
     def __init__(self, parent=None):
         self.__fig, self.__ax = plt.subplots(1, 1, tight_layout=True)
-        FigureCanvas.__init__(self, self.__fig)
+#        FigureCanvas.__init__(self, self.__fig)
+        super(FigureCanvas, self).__init__(self.__fig)
 
         if self.hasMouseTracking():
             self.setMouseTracking(True)
@@ -62,8 +69,8 @@ class DataDisplay(FigureCanvas):
     def set_fig_size(self, new_fig_size, forward=True):
         if new_fig_size[0] > 0 and new_fig_size[1] > 0:
            try:
-               #self.__fig.set_size_inches(new_fig_size, forward=forward)
-               pass
+               self.__fig.set_size_inches(new_fig_size, forward=True)
+               #pass
            except Exception as error:
                print(error)
 
@@ -163,12 +170,16 @@ class DataDisplay(FigureCanvas):
 
             xpos = xmin + 0.01 * (xmax - xmin)
             ypos = ymax - 0.01 * (ymax - ymin)
+            
+            xpos = 0.02
+            ypos = 0.98
 
-            if len(self.__annotations) >= self.__fitIndex:
+            if len(self.__annotations) > self.__fitIndex+1:
                 annotation = self.__annotations[self.__fitIndex + 1]
 
                 self.__ax.annotate(annotation,
                                    xy=(xpos, ypos),
+                                   xycoords = 'axes fraction',
                                    horizontalalignment='left', verticalalignment='top',
                                    fontsize=self.__annotation_font['size'])
 
