@@ -44,17 +44,12 @@ class AEFitDataInfo(fitDataInfo):
     def getAEFrom(self):
         return self._AEFrom
     
-    def getCleanAEFrom(self):
-        return self._AEFrom - self._shift
     
     def setAEFrom(self, AEFrom):
         self._AEFrom = AEFrom
     
     def getAETo(self):
         return self._AETo
-    
-    def getCleanAETo(self):
-        return self._AETo - self._shift
     
     def setAETo(self, AETo):
         self._AETo = AETo

@@ -36,8 +36,6 @@ class dataControlWidget(QWidget):
         self.reset(False)
     
     def reset(self, enable):
-        self.__energyShiftValue = 0.0
-        
         self.__data = None
         self.__all_data = None
         self.__stdErrors = None
@@ -45,6 +43,9 @@ class dataControlWidget(QWidget):
         self.__chkShowErrorBars.setCheckable(True)
         self.__chkShowErrorBars.setChecked(False)
         self.__chkShowErrorBars.setEnabled(False)
+        
+        self.setEnergyShift(0.0)
+        self.__prevShift = 0.0
         
         self.setEnabled(enable)
     
@@ -54,8 +55,10 @@ class dataControlWidget(QWidget):
         self.showErrorBars_changed.emit(self.getShowErrorBars())
     
     def __energyShiftChanged(self, energyShift):
-        increment = energyShift - self.__energyShiftValue
-        self.__energyShiftValue = energyShift
+        increment = energyShift - self.__prevShift
+        self.__prevShift = energyShift
+        
+        self.setEnergyShift(energyShift)
         
         self.data_shift.emit(increment)
         self.data_changed.emit(self.getShowErrorBars())
@@ -117,8 +120,8 @@ class dataControlWidget(QWidget):
         self.__chkShowErrorBars.setChecked(check)
         
         self.data_changed.emit(check)
-        self.load_fits.emit(fit_strings)
         self.load_from_data_string(data_string)
+        self.load_fits.emit(fit_strings)
         self.load_view.emit(view_string)
         self.fit_loaded_fits.emit(fit_strings)
         

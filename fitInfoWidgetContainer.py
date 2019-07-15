@@ -35,8 +35,6 @@ class fitInfoWidgetContainer(QGroupBox):
         self.__mainLayout = QVBoxLayout()
         self.__scrollArea = QScrollArea(self)
 
-        self.__innerFrame = QFrame(self.__scrollArea)
-    
         self.__cbxFits = QComboBox()
         self.__cbxFits.addItem("Onset Fit")
         self.__cbxFits.addItem("Polynomial Fit")
@@ -56,17 +54,19 @@ class fitInfoWidgetContainer(QGroupBox):
         self.__mainLayout.addLayout(self.__hbMenu)
         self.__mainLayout.addWidget(self.__scrollArea)
         
-        self.__scrollArea.setWidgetResizable(True)
-        #self.__scrollArea.setLayout()
-        self.__scrollArea.setWidget(self.__innerFrame)
         self.__vbFitInfoWidgets = QVBoxLayout()
+        self.__scrollArea.setWidgetResizable(True)
+        #self.__scrollArea.setLayout(self.__vbFitInfoWidgets)
+        #self.__scrollArea.setAlignment(Qt.AlignTop)
+        
+        self.__widgetFrame = QFrame()
+        self.__widgetFrame.setLayout(self.__vbFitInfoWidgets)
+        self.__scrollArea.setWidget(self.__widgetFrame)
         self.__vbFitInfoWidgets.setAlignment(Qt.AlignTop)
-        self.__innerFrame.setLayout(self.__vbFitInfoWidgets)
-
-
+        
         #self.__mainLayout.addWidget(self.__cbxFits)
         #self.__mainLayout.addWidget(self.__cmdAddFit)
-
+        
         self.setLayout(self.__mainLayout)
         
         self.reset(False)
@@ -139,7 +139,7 @@ class fitInfoWidgetContainer(QGroupBox):
         self.disable_fit.emit(fdi_Info)
         
     def __remove_fit(self, fdi_Info):
-        #backwards for loop?
+        
         for i_fiw in reversed(self.__fitInfoWidgets):
             if i_fiw.getFitDataInfo() != fdi_Info:
                 #update index
