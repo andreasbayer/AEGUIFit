@@ -64,6 +64,9 @@ class fitInfoWidget(QGroupBox):
     
     def getData(self):
         return self.__data
+
+    def isWeighted(self):
+        pass
     
     def is_initialized(self):
         return (self.__data is None)
@@ -72,7 +75,7 @@ class fitInfoWidget(QGroupBox):
         self._on_set_data(data, std_err)
         self.__data = data
         self.__std_err = std_err
-    
+
     def _on_set_data(self, data, std_err):
         pass
     

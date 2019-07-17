@@ -350,9 +350,7 @@ def data_from_fit_and_parameters(data, fit_func, p, fwhm, continuation=False):
     return a
 
 def cutarray(data, lowerlim=None, upperlim=None):
-    a, b = cutarray2(data, lowerlim, upperlim)
-    
-    return a
+    return cutarray2(data, lowerlim, upperlim)
 
 def fwhm_to_sigma(fwhm):
     sigma = fwhm / (2 * sqrt(2 * np.log(2)))
@@ -407,10 +405,13 @@ def fit_continuation(data, p, fwhm):
     
     return data
 
-def cutarray2(data, lowerlim=None, upperlim=None, data2=None):
+def cutarray2(data, lowerlim=None, upperlim=None, data2=None, returnIndexes=False):
     # this function cuts an array and returns it
-    # if lowerlim or upperlim are not defined, the maximum is assumed
-    
+    # if lowerlim or upperlim are not defined, the minimum and maximum is assumed
+
+    i_from = -1
+    i_to = -1
+
     if lowerlim is None:
         lowerlim = data[:, 0].min()
     
@@ -426,12 +427,26 @@ def cutarray2(data, lowerlim=None, upperlim=None, data2=None):
     for i in range(0, len(data)):
         point = data[i]
         
-        if (point[0] >= lowerlim) and (point[0] <= upperlim):
+        if point[0] >= lowerlim and point[0] <= upperlim:
             newdata.append(point)
+
+            if i_from == -1:
+                i_from = i
             
             if data2 is not None:
                 newdata2.append(data2[i])
+        elif i_from != -1 and i_to == -1:
+            i_to = i
     
     # data = array(newdata, dtype=float)
     
-    return array(newdata, dtype=float), array(newdata2, dtype=float)
+    if data2 is None:
+        if returnIndexes:
+            return array(newdata, dtype=float), (i_from, i_to)
+        else:
+            return array(newdata, dtype=float)
+    else:
+        if returnIndexes:
+            return array(newdata, dtype=float), array(newdata2, dtype=float), (i_from , i_to)
+        else:
+            return array(newdata, dtype=float), array(newdata2, dtype=float)

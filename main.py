@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QGridLayout, QMessageBox, QAction, QGroupBox, QFileDialog, QSizePolicy, QProgressBar, QLabel, QPushButton, QVBoxLayout
+from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QGridLayout, QMessageBox, QAction, QGroupBox, QFileDialog, QSizePolicy, QProgressBar, QLabel, QPushButton
 import flSaveFileDialog as fsd
 
 import dataDisplay as dd
@@ -11,7 +11,7 @@ import displayToolbar as dt
 import tabFits as tft
 from numpy import empty
 
-TITLE = "AEGUIFit - "
+TITLE = "AEGUIFit 2.02 - "
 
 class App(QMainWindow):
 
@@ -22,8 +22,8 @@ class App(QMainWindow):
         self.top = 50
         self.width = 1280
         self.height = 900
-        self.bottom = 150
-        self.right = 235
+        self.bottom = 180
+        self.right = 240
         self.initUI()
         self.menuInit()
 
@@ -163,6 +163,8 @@ class App(QMainWindow):
         self.zbwMain.fig_size_changed.connect(self.fig_size_changed)
         self.zbwMain.annotation_changed.connect(self.annotation_changed)
         self.zbwMain.annotation_font_size_changed.connect(self.annotation_font_size_changed)
+        self.zbwMain.setSizePolicy(QSizePolicy.Expanding,
+                                   QSizePolicy.Expanding)
 
         self.tabFits = tft.tabFits()
         self.ficFits.fit_added.connect(self.tabFits.addFit)
@@ -184,7 +186,6 @@ class App(QMainWindow):
         self.ddGbox.addWidget(self.dtToolbar)
 
         self.grid_layout.addItem(self.ddGbox, 0, 0)
-
         self.grid_layout.addWidget(self.ficFits, 0, 1)
         self.grid_layout.addWidget(self.zbwMain, 1, 0)
         self.grid_layout.addWidget(self.dcwData, 1, 1)
@@ -198,16 +199,11 @@ class App(QMainWindow):
         self.show()
 
     def set_dims(self):
-        #self.ficFits.setFixedHeight(self.height-self.bottom)
-
         self.dcwData.setFixedHeight(self.bottom)
         self.zbwMain.setFixedHeight(self.bottom)
         
         self.ficFits.setFixedWidth(self.right)
         self.dcwData.setFixedWidth(self.right)
-        self.zbwMain.setFixedWidth(self.width-self.right)
-        
-        #self.height
         
     def resizeEvent(self, *args, **kwargs):
         self.set_dims()
@@ -220,7 +216,9 @@ class App(QMainWindow):
 
     def showAbout(self):
         QMessageBox.information(self, "Info",
-                                "In case of unexpected behaviours, errors, crashes, improvements or general questions about the program, please feel free to send an e-mail to\nandreas.bayer@uibk.ac.at",
+                                "AEGUIFit version 2.01\n\n" +
+                                "In case of unexpected behaviours, errors, crashes, improvements or general questions about the program, please feel free to send an e-mail to:\n\n" +
+                                "andreas.bayer@uibk.ac.at",
                                 QMessageBox.Ok, QMessageBox.Ok)
 
     def dd_statusbar_update(self, str_update):
@@ -253,6 +251,8 @@ class App(QMainWindow):
         try:
             self.ddMain.ZoomByIncrement(bound, increment)
             self.ddMain.refresh()
+
+            self.set_display_msg('')
         except:
             self.set_display_msg('Zooming failed.')
 
@@ -260,6 +260,8 @@ class App(QMainWindow):
         try:
             self.ddMain.ZoomShowAll()
             self.ddMain.refresh()
+
+            self.set_display_msg('')
         except:
             self.set_display_msg('Showing all failed.')
 
@@ -267,6 +269,8 @@ class App(QMainWindow):
         try:
             self.ddMain.ZoomToFit(lb, ub, fit_index)
             #self.ddMain.refresh()
+
+            self.set_display_msg('')
         except:
             self.set_display_msg('Zoom to fit failed.')
 
@@ -274,6 +278,8 @@ class App(QMainWindow):
         try:
             self.ddMain.set_scale_font_size(value)
             self.ddMain.refresh()
+
+            self.set_display_msg('')
         except:
             self.set_display_msg('Changing scale font size failed.')
             
@@ -281,6 +287,8 @@ class App(QMainWindow):
         try:
             self.ddMain.set_label_font_size(value)
             self.ddMain.refresh()
+
+            self.set_display_msg('')
         except:
             self.set_display_msg('Changing label font failed.')
 
@@ -288,6 +296,8 @@ class App(QMainWindow):
         try:
             self.ddMain.set_fig_size(new_fig_size)
             self.ddMain.refresh()  # necessary?
+
+            self.set_display_msg('')
         except:
             self.set_display_msg('changing figure size failed.')
 
@@ -303,6 +313,7 @@ class App(QMainWindow):
         try:
             self.ddMain.set_annotation_font_size(value)
             self.ddMain.refresh()
+            self.set_display_msg('')
         except:
             self.set_display_msg('Changing annotation font failed.')
 
@@ -503,6 +514,8 @@ class App(QMainWindow):
             self.ddMain.removeFit(p_FitDataInfo)
             self.ddMain.refresh()
             self.tabFits.removeFit(p_FitDataInfo.get_fit_index())
+
+            self.set_display_msg('')
         except:
             self.set_display_msg('Removing fit failed.')
 

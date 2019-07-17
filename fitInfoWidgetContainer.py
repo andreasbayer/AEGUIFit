@@ -40,6 +40,8 @@ class fitInfoWidgetContainer(QGroupBox):
         self.__cbxFits.addItem("Polynomial Fit")
         self.__cbxFits.addItem("Custom Function")
         self.__cbxFits.setVisible(True)
+
+        self.setTitle('Fit Settings')
         
         self.__mainLayout.stretch(100)
         
@@ -74,9 +76,13 @@ class fitInfoWidgetContainer(QGroupBox):
     def load_fits(self, fit_strings):
         for fit_string in fit_strings:
             item = fit_string.split(':')
-            if item[0] == afw.FITINITIALS:
+            if item[0] == afw.AEFitInfoWidget.FITINITIALS:
                 new_fit = afw.AEFitInfoWidget(len(self.__fitInfoWidgets), self.shift_data, item[1])
                 self.__add_fiw(new_fit)
+            if item[0] == pfw.polyFitInfoWidget.FITINITIALS:
+                new_fit = pfw.polyFitInfoWidget(len(self.__fitInfoWidgets), self.shift_data, item[1])
+                self.__add_fiw(new_fit)
+
 
     def fit_loaded_fits(self, fit_strings):
         for fiw_i in self.__fitInfoWidgets:

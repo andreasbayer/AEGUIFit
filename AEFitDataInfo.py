@@ -17,16 +17,9 @@ class AEFitDataInfo(fitDataInfo):
         self._fittedFWHM = 0
         self._FWHM = 0
         self._shift = 0
-        self._weighted = True
-    
-    def is_initialized(self):
-        return (self._AETo == fli.max)
 
-    def is_weighted(self):
-        return self._weighted
-
-    def set_weighted(self, value):
-        self._weighted = value
+    #def is_initialized(self):
+    #    return self._AETo == fli.max
 
     # get-set-block
     def getFWHM(self):
@@ -34,13 +27,13 @@ class AEFitDataInfo(fitDataInfo):
     
     def setFWHM(self, FWHM):
         self._FWHM = FWHM
-    
+
     def getMinspan(self):
         return self._minspan
     
     def setMinspan(self, minspan):
         self._minspan = minspan
-    
+
     def getAEFrom(self):
         return self._AEFrom
     
@@ -173,7 +166,7 @@ class AEFitDataInfo(fitDataInfo):
             self._msg = self.SUCCESS
         except:
             self._setFitData(None)
-            self._msg = "Error while fitting."
+            self._msg = self.FAILURE
         
         return self._msg
     

@@ -1,6 +1,6 @@
-from PyQt5.QtWidgets import QLabel, QWidget, QPushButton, QHBoxLayout, QVBoxLayout, QGroupBox, QSpacerItem,\
+from PyQt5.QtWidgets import QLabel, QWidget, QPushButton, QHBoxLayout, QVBoxLayout, QGroupBox, QGridLayout,\
     QDoubleSpinBox, QPlainTextEdit
-from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtCore import pyqtSignal, Qt
 from sys import float_info as fli
 import dataDisplay as dd
 import helplib as hl
@@ -16,7 +16,7 @@ class ZoomButtonWidget(QGroupBox):
     fig_size_changed = pyqtSignal(tuple)
     annotation_changed = pyqtSignal(str)
     annotation_font_size_changed = pyqtSignal(float)
-    
+
     def __init__(self):
         QWidget.__init__(self)
         
@@ -57,11 +57,10 @@ class ZoomButtonWidget(QGroupBox):
         self.__dsbFigWidth.setSingleStep(0.1)
         self.__dsbFigWidth.setMaximumWidth(75)
 
-        self.__lblAnnotation = QLabel("Annotation:")
         self.__edtAnnotation = QPlainTextEdit("")
-        self.__edtAnnotation.setFixedHeight(100)
-        
-        self.__lblAnnotationFontSize = QLabel("Annotation Font size:")
+        self.__edtAnnotation.setFixedHeight(90)
+
+        self.__lblAnnotationFontSize = QLabel("Font size:")
         self.__dsbAnnotationFontSize = QDoubleSpinBox()
         self.__dsbAnnotationFontSize.setRange(1, fli.max)
         self.__dsbAnnotationFontSize.setSingleStep(0.5)
@@ -95,20 +94,40 @@ class ZoomButtonWidget(QGroupBox):
         hbox_zoom.addWidget(self.__cmdUDZoom)
         hbox_zoom.addWidget(self.__cmdUUZoom)
         
-        hbox_fig_sizes.addWidget(self.__lblFigWidth)
-        hbox_fig_sizes.addWidget(self.__dsbFigWidth)
-        hbox_fig_sizes.addWidget(self.__lblFigHeight)
-        hbox_fig_sizes.addWidget(self.__dsbFigHeight)
+        self.__figSizeGroupBox = QGroupBox("Figure Size (in inches)")
+        self.__figSizeGroupBox.setCheckable(True)
+        self.__figSizeGroupBox.clicked.connect(self.__fig_size_enabled)
 
-        hbox_fig_sizes.addWidget(self.__lblLabelFontSize)
-        hbox_fig_sizes.addWidget(self.__dsbLabelFontSize)
-        hbox_fig_sizes.addWidget(self.__lblScaleFontSize)
-        hbox_fig_sizes.addWidget(self.__dsbScaleFontSize)
-        hbox_fig_sizes.addWidget(self.__lblAnnotationFontSize)
-        hbox_fig_sizes.addWidget(self.__dsbAnnotationFontSize)
+        self.__figSizeLayout = QGridLayout()
+        self.__figSizeGroupBox.setLayout(self.__figSizeLayout)
 
-        hbox_annotation.addWidget(self.__lblAnnotation)
-        hbox_annotation.addWidget(self.__edtAnnotation)
+        self.__figSizeLayout.addWidget(self.__lblFigWidth, 0, 0)
+        self.__figSizeLayout.addWidget(self.__dsbFigWidth, 0, 1)
+        self.__figSizeLayout.addWidget(self.__lblFigHeight, 1, 0)
+        self.__figSizeLayout.addWidget(self.__dsbFigHeight, 1, 1)
+
+        hbox_fig_sizes.addWidget(self.__figSizeGroupBox)
+
+        self.__labelSizeGroupBox = QGroupBox("Label Size")
+        self.__labelSizeLayout = QGridLayout()
+        self.__labelSizeGroupBox.setLayout(self.__labelSizeLayout)
+
+        self.__labelSizeLayout.addWidget(self.__lblLabelFontSize, 0, 0)
+        self.__labelSizeLayout.addWidget(self.__dsbLabelFontSize, 0, 1)
+        self.__labelSizeLayout.addWidget(self.__lblScaleFontSize, 1, 0)
+        self.__labelSizeLayout.addWidget(self.__dsbScaleFontSize, 1, 1)
+
+        hbox_fig_sizes.addWidget(self.__labelSizeGroupBox)
+
+        self.__annotationGroupBox = QGroupBox("Annotation")
+        self.__annotationLayout = QGridLayout()
+        self.__annotationGroupBox.setLayout(self.__annotationLayout)
+
+        self.__annotationLayout.addWidget(self.__edtAnnotation, 0, 0, -1, 1)
+        self.__annotationLayout.addWidget(self.__lblAnnotationFontSize, 0, 1, 1, 1)
+        self.__annotationLayout.addWidget(self.__dsbAnnotationFontSize, 1, 1, 1, 1)
+
+        hbox_fig_sizes.addWidget(self.__annotationGroupBox)
 
         v_box = QVBoxLayout()
         v_box.addLayout(hbox_fig_sizes)
@@ -116,9 +135,10 @@ class ZoomButtonWidget(QGroupBox):
 
         hbox_main.addLayout(v_box)
         hbox_main.addLayout(hbox_annotation)
+        hbox_main.setAlignment(Qt.AlignTop)
 
         self.setLayout(hbox_main)
-        self.setTitle("Figure")
+        self.setTitle("Figure Settings")
         
         self.__cmdLUZoom.pressed.connect(self.on_cmdLUZoom_pressed)
         self.__cmdLDZoom.pressed.connect(self.on_cmdLDZoom_pressed)
@@ -177,6 +197,13 @@ class ZoomButtonWidget(QGroupBox):
 
     def on_dsbFigHeight_changed(self):
         self.fig_size_changed.emit((self.__dsbFigWidth.value(), self.__dsbFigHeight.value()))
+
+    def __fig_size_enabled(self, enabled):
+        if enabled:
+            self.fig_size_changed.emit((self.__dsbFigWidth.value(), self.__dsbFigHeight.value()))
+        else:
+            self.fig_size_changed.emit((None, None))
+
 
     def on_annotation_changed(self):
         self.annotation_changed.emit(self.__edtAnnotation.toPlainText())

@@ -1,9 +1,9 @@
-from PyQt5.QtWidgets import QLabel, QWidget, QVBoxLayout, QCheckBox, QDoubleSpinBox
-from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtWidgets import QLabel, QWidget, QGridLayout, QCheckBox, QDoubleSpinBox, QGroupBox
+from PyQt5.QtCore import pyqtSignal, Qt
 import helplib as hl
 
 
-class dataControlWidget(QWidget):
+class dataControlWidget(QGroupBox):
     showErrorBars_changed = pyqtSignal(bool)
     data_changed = pyqtSignal(bool)
     data_shift = pyqtSignal(float)
@@ -16,22 +16,25 @@ class dataControlWidget(QWidget):
     
     def __init__(self):
         QWidget.__init__(self)
-        
+
+        self.setTitle('Data Settings')
+
         self.__lblEnergyShift = QLabel("Energy Shift:")
         self.__dsbEnergyShift = QDoubleSpinBox()
-        self.__dsbEnergyShift.valueChanged.connect(self.__energyShiftChanged)
+        self.__dsbEnergyShift.editingFinished.connect(self.__energyShiftChanged)
         self.__dsbEnergyShift.setSingleStep(0.01)
         
         self.__chkShowErrorBars = QCheckBox(self.SHOW_ERROR_BARS_NOT_LOADED)
         self.__chkShowErrorBars.stateChanged.connect(self.__chkShowErrorBars_changed)
         
-        self.__mainLayout = QVBoxLayout()
+        self.__mainLayout = QGridLayout()
         self.setLayout(self.__mainLayout)
+        self.__mainLayout.setAlignment(Qt.AlignTop)
 
-        self.__mainLayout.addWidget(self.__lblEnergyShift)
-        self.__mainLayout.addWidget(self.__dsbEnergyShift)
+        self.__mainLayout.addWidget(self.__lblEnergyShift, 0, 0)
+        self.__mainLayout.addWidget(self.__dsbEnergyShift, 0, 1)
 
-        self.__mainLayout.addWidget(self.__chkShowErrorBars)
+        self.__mainLayout.addWidget(self.__chkShowErrorBars, 1, 0, 1, 2)
         
         self.reset(False)
     
@@ -54,7 +57,10 @@ class dataControlWidget(QWidget):
         
         self.showErrorBars_changed.emit(self.getShowErrorBars())
     
-    def __energyShiftChanged(self, energyShift):
+    def __energyShiftChanged(self):
+
+        energyShift = self.__dsbEnergyShift.value()
+
         increment = energyShift - self.__prevShift
         self.__prevShift = energyShift
         

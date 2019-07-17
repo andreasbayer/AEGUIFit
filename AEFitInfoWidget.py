@@ -8,7 +8,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import dia_goodness_of_minspan as gom
 
-FITINITIALS = "aef"
+
 AEFOUNDAT = "Found AE at {:.2f} eV"
 STDDEVAT = "with a stdDev of {:.2f} eV"
 
@@ -17,6 +17,8 @@ AEUNIT = "eV"
 
 
 class AEFitInfoWidget(fiw.fitInfoWidget):
+    FITINITIALS = "aef"
+
     AEFrom_changed = pyqtSignal()
     AETo_changed = pyqtSignal()
     minspan_changed = pyqtSignal()
@@ -60,7 +62,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
                     self.setWeighted(False)
             
     def get_fit_string(self):
-        return FITINITIALS + ':' + \
+        return self.FITINITIALS + ':' + \
                'aef=' + str(round(self.getAEFrom(), 5)) + ',' +\
                'aet=' + str(round(self.getAETo(), 5)) + ',' +\
                'fwh=' + str(round(self.getFWHM(), 5)) + ',' +\
@@ -82,17 +84,17 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         #todo: reset parameter values and std-devs
     
     def __connectSignals(self):
-        self.__dsbAEFrom.valueChanged.connect(self.__spbAEFrom_changed)
-        self.__dsbAETo.valueChanged.connect(self.__spbAETo_changed)
-        self.__dsbFWHM.valueChanged.connect(self.__dsbFWHM_changed)
-        self.__dsbMinSpan.valueChanged.connect(self.__dsbMinSpan_changed)
+        self.__dsbAEFrom.editingFinished.connect(self.__AEFrom_changed)
+        self.__dsbAETo.editingFinished.connect(self.__AETo_changed)
+        self.__dsbFWHM.editingFinished.connect(self.__FWHM_changed)
+        self.__dsbMinSpan.editingFinished.connect(self.__MinSpan_changed)
         self.__cmdFit.clicked.connect(self.__cmdFit_clicked)
         self.__cmdZoomToFitArea.clicked.connect(self.__cmdZoomToFitArea_clicked)
         self.__chkDisableFit.stateChanged.connect(self.__chkDisableFit_stateChanged)
         self.__chkWeightFit.stateChanged.connect(self.__chkWeightFit_stateChanged)
         self.__cmdRemoveFit.clicked.connect(self.__cmdRemoveFit_clicked)
         self.__cmdGoodnessOfMinSpan.clicked.connect(self.__cmdGoodnessOfMinSpan_clicked)
-    
+
     def emitProgressUpdate(self, relation, p):
         self.progressUpdate.emit(relation, p)
     
@@ -204,8 +206,8 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         
         #self.__mainLayout.addRow(self.__lblFoundAE, self.__lblStdDev)
         self.__mainLayout.addRow(self.__chkWeightFit, self.__cmdFit)
-        self.__mainLayout.addRow(self.__cmdZoomToFitArea)
-        self.__mainLayout.addRow(self.__dsbGoodnessOfMinSpan_steps, self.__cmdGoodnessOfMinSpan)
+        self.__mainLayout.addRow(self.__cmdZoomToFitArea, self.__cmdGoodnessOfMinSpan)
+        #self.__mainLayout.addRow(self.__dsbGoodnessOfMinSpan_steps, self.__cmdGoodnessOfMinSpan)
         self.__mainLayout.addRow(self.__chkDisableFit, self.__cmdRemoveFit)
         
         self.setEnabled(True)
@@ -222,12 +224,14 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
     
     def setAEFrom(self, value):
         self.__dsbAEFrom.setValue(float(value))
+        self.__AEFrom_changed()
     
     def getAETo(self):
         return self.__AEFitDataInfo.getAETo()
     
     def setAETo(self, value):
         self.__dsbAETo.setValue(float(value))
+        self.__AETo_changed()
     
     def getFWHM(self):
         return self.__dsbFWHM.value()
@@ -235,12 +239,14 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
     def setFWHM(self, value):
         self.__dsbFWHM.setValue(float(value))
         self.__AEFitDataInfo.setFWHM(value)
-    
+        self.__FWHM_changed()
+
     def getMinSpan(self):
         return self.__dsbMinSpan.value()
     
     def setMinSpan(self, value):
         self.__dsbMinSpan.setValue(float(value))
+        self.__MinSpan_changed()
 
     def setWeighted(self, value):
         self.__chkWeightFit.setChecked(value)
@@ -263,12 +269,13 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
     
     def _on_set_data(self, data, std_err):
         self.__AEFitDataInfo.setData(data)
+
         self.__AEFitDataInfo.setStdErr(std_err)
         
-        if self.__AEFitDataInfo.is_initialized():
+        if self.__AEFitDataInfo.is_initialized() or True:
             self.setAEFrom(data[0][0])
             self.setAETo(data[-1][0])
-    
+
             self.__dsbAEFrom.setMinimum(data[0][0])
             self.__dsbAEFrom.setMaximum(data[-1][0])
     
@@ -294,19 +301,19 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
     def get_fit_index(self):
         return self.__AEFitDataInfo.get_fit_index()
         
-    def __spbAEFrom_changed(self):
+    def __AEFrom_changed(self):
         self.__AEFitDataInfo.setAEFrom(self.__dsbAEFrom.value())
         self.AEFrom_changed.emit()
     
-    def __spbAETo_changed(self):
+    def __AETo_changed(self):
         self.__AEFitDataInfo.setAETo(self.__dsbAETo.value())
         self.AETo_changed.emit()
     
-    def __dsbFWHM_changed(self):
+    def __FWHM_changed(self):
         self.__AEFitDataInfo.setFWHM(self.getFWHM())
         self.FWHM_changed.emit()
     
-    def __dsbMinSpan_changed(self):
+    def __MinSpan_changed(self):
         self.__AEFitDataInfo.setMinspan(self.getMinSpan())
         self.minspan_changed.emit()
     

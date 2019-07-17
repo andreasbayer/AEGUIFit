@@ -6,6 +6,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from PyQt5.QtCore import pyqtSignal, Qt
 #import matplotlib.pyplot as plt
 import fitDataInfo as fdi
+import AEFitDataInfo as adi
 
 class DataDisplay(FigureCanvas):
 
@@ -18,7 +19,7 @@ class DataDisplay(FigureCanvas):
     statusbar_update = pyqtSignal(str)
     is_loaded_changed = pyqtSignal(bool)
 
-    mark_default_text = 'Click on figure to show energy value.'
+    mark_default_text = 'Click with scroll wheel on figure key to show energy value.'
 
     def __init__(self, parent=None):
         self.__fig, self.__ax = plt.subplots(1, 1, tight_layout=True)
@@ -62,22 +63,24 @@ class DataDisplay(FigureCanvas):
     def draw_event(self, renderer):
         self.__inv = self.__ax.transData.inverted()
  
-    def set_fig_size(self, figsize):
-        self.__fig.figsize = figsize
-
     def set_fig_size(self, new_fig_size, forward=True):
+
         if self.isLoaded():
-            if new_fig_size[0] > 0 and new_fig_size[1] > 0:
+            if new_fig_size is not None and len(new_fig_size) == 2 and new_fig_size[0] is not None and \
+                    new_fig_size[1] is not None and new_fig_size[0] > 0 and new_fig_size[1] > 0:
                try:
                    self.__fig.set_size_inches(new_fig_size, forward=True)
-                   #pass
                except Exception as error:
                    print(error)
+            else:
+                # self.__fig.set_size_inches(None)
+                # have the size adapt to the width of the canvas
+                pass
 
     def isLoaded(self):
         # if this changes, the trigger for is_loaded_changed has also be changed!
         return self.__data is not None
-        
+
     def mousePressEvent(self, event):
         super().mousePressEvent(event)
 
@@ -105,18 +108,6 @@ class DataDisplay(FigureCanvas):
                     self.__clickmark = None
                     #self.update_clickmark()
                     self.refresh()
-
-
-#    def drawEvent(self, a):
-#        super().drawEvent(a)
-#        print("resizeEvent")
-#        print(a)
-
-#    def draw_event(self, a):
-#        print("resize_event")
-#        super().draw_event(self)
-
-        #self.getwidthheight()
 
     def refresh(self, data=None, stdErrors=None, showErrorBars=None):
         if data is not None:
@@ -155,7 +146,7 @@ class DataDisplay(FigureCanvas):
             
             self.update_clickmark()
             self.update_annotations()
-            
+
             self.draw()
             
     def update_clickmark(self):
@@ -407,8 +398,9 @@ class DataDisplay(FigureCanvas):
                            linestyle=self.__ls, color=self.__fc, linewidth=self.__lw)
             
             for fdiCurrent in self.__fdiFits:
-                if fdiCurrent.isFitted() and fdiCurrent.isDisabled() != True:
-                    self.__mark_ae_data_in_plot(fdiCurrent)
+                if type(fdiCurrent) is adi.AEFitDataInfo:
+                    if fdiCurrent.isFitted() and fdiCurrent.isDisabled() != True:
+                        self.__mark_ae_data_in_plot(fdiCurrent)
     
     def __combined_fit_exists(self):
         return self.__combined_fit_data is not None and len(self.__combined_fit_data) > 0
