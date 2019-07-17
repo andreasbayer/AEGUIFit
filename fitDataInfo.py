@@ -1,5 +1,6 @@
 class fitDataInfo():
     SUCCESS = "Fit succeeded."
+    FAILURE = "Fit failed."
     
     def __init__(self, index):
         self._fitData = None
@@ -12,7 +13,11 @@ class fitDataInfo():
         self._fitFunction = None
         self._fit_index = index
         self._isDisabled = False
-        
+        self._weighted = True
+
+    def is_initialized(self):
+        return self._data is not None
+
     def progressUpdate(self, relation, info):
         pass
         
@@ -27,6 +32,12 @@ class fitDataInfo():
         
     def isFitted(self):
         return (self._getFitData() is not None)
+
+    def is_weighted(self):
+        return self._weighted
+
+    def set_weighted(self, value):
+        self._weighted = value
         
     def get_fit_index(self):
         return self._fit_index

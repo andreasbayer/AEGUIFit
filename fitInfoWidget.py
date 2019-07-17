@@ -72,7 +72,7 @@ class fitInfoWidget(QGroupBox):
         self._on_set_data(data, std_err)
         self.__data = data
         self.__std_err = std_err
-    
+
     def _on_set_data(self, data, std_err):
         pass
     

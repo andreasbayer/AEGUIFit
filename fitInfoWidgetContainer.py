@@ -40,6 +40,8 @@ class fitInfoWidgetContainer(QGroupBox):
         self.__cbxFits.addItem("Polynomial Fit")
         self.__cbxFits.addItem("Custom Function")
         self.__cbxFits.setVisible(True)
+
+        self.setTitle('Fit Settings')
         
         self.__mainLayout.stretch(100)
         
