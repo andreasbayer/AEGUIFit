@@ -64,6 +64,9 @@ class fitInfoWidget(QGroupBox):
     
     def getData(self):
         return self.__data
+
+    def isWeighted(self):
+        pass
     
     def is_initialized(self):
         return (self.__data is None)

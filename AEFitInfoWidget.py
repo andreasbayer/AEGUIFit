@@ -8,7 +8,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import dia_goodness_of_minspan as gom
 
-FITINITIALS = "aef"
+
 AEFOUNDAT = "Found AE at {:.2f} eV"
 STDDEVAT = "with a stdDev of {:.2f} eV"
 
@@ -17,6 +17,8 @@ AEUNIT = "eV"
 
 
 class AEFitInfoWidget(fiw.fitInfoWidget):
+    FITINITIALS = "aef"
+
     AEFrom_changed = pyqtSignal()
     AETo_changed = pyqtSignal()
     minspan_changed = pyqtSignal()
@@ -60,7 +62,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
                     self.setWeighted(False)
             
     def get_fit_string(self):
-        return FITINITIALS + ':' + \
+        return self.FITINITIALS + ':' + \
                'aef=' + str(round(self.getAEFrom(), 5)) + ',' +\
                'aet=' + str(round(self.getAETo(), 5)) + ',' +\
                'fwh=' + str(round(self.getFWHM(), 5)) + ',' +\

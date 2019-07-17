@@ -6,6 +6,7 @@ import fitInfoWidget as fiw
 import sys
 
 class polyFitInfoWidget(fiw.fitInfoWidget):
+    FITINITIALS = "pyf"
 
     FitFrom_changed = pyqtSignal()
     FitTo_changed = pyqtSignal()
@@ -28,6 +29,45 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
         self.__initialized = True
 
         self.__connectSignals()
+
+        if parameters is not None:
+            self.init_from_parameters(parameters)
+
+    def init_from_parameters(self, parameters):
+        ps = parameters.split(",")
+
+        for parameter in ps:
+            (short, value) = parameter.split('=')
+            if short == 'ffr':
+                self.setFitFrom(float(value))
+            elif short == 'fto':
+                self.setFitTo(float(value))
+            elif short == 'efr':
+                self.setExtendFrom(float(value))
+            elif short == 'eto':
+                self.setExtendTo(float(value))
+            elif short == 'deg':
+                self.setDegree(float(value))
+            elif short == 'wgt':
+                if value == '1' or value == 'True':
+                    self.setWeighted(True)
+                else:
+                    self.setWeighted(False)
+
+    def get_fit_string(self):
+        return self.FITINITIALS + ':' + \
+               'ffr=' + str(round(self.getFitFrom(), 5)) + ',' +\
+               'fto=' + str(round(self.getFitTo(), 5)) + ',' +\
+               'efr=' + str(round(self.getExtendFrom(), 5)) + ',' +\
+               'eto=' + str(round(self.getExtendTo(), 5)) + ',' +\
+               'deg=' + str(self.getDegree()) + ',' +\
+               'wgt=' + str(self.isWeighted())
+
+    def isWeighted(self):
+        return self.__chkWeightFit.isChecked()
+
+    def setWeighted(self, value):
+        self.__chkWeightFit.setChecked(value)
 
     def reset(self, enable):
       self.setEnabled(enable)

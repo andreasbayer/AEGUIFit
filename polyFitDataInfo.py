@@ -63,6 +63,8 @@ class polyFitDataInfo(fitDataInfo):
 
         weights = None
 
+        self.progressUpdate(0, '')
+
         if self.is_weighted():
             weights = self.get_std_err()
 
@@ -77,6 +79,8 @@ class polyFitDataInfo(fitDataInfo):
 
             appendval = 0
 
+            self.progressUpdate(0.5, '')
+
             for point in full_fitdata:
                 if self.getExtendFrom() <= point[0] <= self.getExtendTo():
                     fitdata.append(point)
@@ -86,17 +90,23 @@ class polyFitDataInfo(fitDataInfo):
 
             fitdata = np.array(fitdata)
 
+            self.progressUpdate(0.75, '')
+
             self._setFitData(fitdata)
             self._msg = self.SUCCESS
+
+            self.progressUpdate(1, '')
         except:
             self._setFitData(None)
             self._msg = self.FAILURE
+
+            self.progressUpdate(0, '')
 
         return self._msg
     
     def progressUpdate(self, relation, info):
         if self._passProgressUpdate is not None:
-            self._passProgressUpdate(relation, info.tolist())
+            self._passProgressUpdate(relation, info)
     
     def shift_fit(self, increment):
         #fitDataInfo.shift_fit(increment)
