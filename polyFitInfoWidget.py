@@ -15,6 +15,7 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
     ExtendTo_changed = pyqtSignal()
 
 
+
     def __init__(self, index, shift_function, parameters=None):
         fiw.fitInfoWidget.__init__(self)
 
@@ -49,6 +50,7 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
             elif short == 'deg':
                 self.setDegree(float(value))
             elif short == 'wgt':
+                print('wgt', value)
                 if value == '1' or value == 'True':
                     self.setWeighted(True)
                 else:
@@ -68,6 +70,7 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
 
     def setWeighted(self, value):
         self.__chkWeightFit.setChecked(value)
+        print('setWeighted', value)
 
     def reset(self, enable):
       self.setEnabled(enable)
@@ -81,7 +84,11 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
       self.setExtendFrom(0)
       self.setExtendTo(sys.float_info.max)
 
+      self.setWeighted(True)
+
       self.__cmdZoomToFitArea.setEnabled(False)
+
+      self.setPostFitFunctionsEnabled(False)
 
     def getDegree(self):
       return self.__dsbDegree.value()
@@ -184,6 +191,8 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
         self.__cmdZoomToFitArea = QPushButton("Zoom To Fit")
         self.__cmdZoomToFitArea.setFixedWidth(75)
 
+        self.__mainLayout.addRow(self.__cmdZoomToFitArea)
+
         self.__chkDisableFit = QCheckBox("Disable")
         self.__cmdRemoveFit = QPushButton("Remove")
 
@@ -213,6 +222,13 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
     def __cmdRemoveFit_clicked(self):
         self.remove_fit.emit(self.getFitDataInfo())
 
+    def __cmdZoomToFitArea_clicked(self):
+        if self.getFitDataInfo().isFitted():
+            lb = self.getFitDataInfo().getFitFrom()
+            ub = self.getFitDataInfo().getFitTo()
+
+            self.zoom_to_fit.emit(lb, ub, self.getFitDataInfo().get_fit_index())
+
     def _on_set_data(self, data, stderr):
         if self.__polyFitDataInfo.is_initialized() is False:
             self.__polyFitDataInfo.setData(data)
@@ -240,12 +256,8 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
     def __cmdFit_clicked(self):
         self.fitToFunction()
 
-    def __cmdZoomToFitArea_clicked(self):
-        if self.__polyFitDataInfo.isFitted():
-          lb = fh.find_ev_position(self.__polyFitDataInfo.getFitData(), self.__polyFitDataInfo.getFitFrom())
-          ub = fh.find_ev_position(self.__polyFitDataInfo.getFitData(), self.__polyFitDataInfo.getFitTo())
-
-          self.zoom_to_fit.emit(lb, ub, self.__polyFitDataInfo.get_fit_index())
+    def setPostFitFunctionsEnabled(self, enabled):
+        self.__cmdZoomToFitArea.setEnabled(enabled)
 
     def getName(self):
         return self.__polyFitDataInfo.getName()
@@ -291,13 +303,14 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
         self.Post_Fit.emit(self.__polyFitDataInfo, msg)
 
         if msg == self.__polyFitDataInfo.SUCCESS:
-          #self.__lblFoundAE.setText(self.AEFOUNDAT.format(self.__polyFitDataInfo.getFoundAE()))
-          #self.__lblStdDev.setText(self.STDDEVAT.format(self.__polyFitDataInfo.getStdDeviation()))
-          #self.__dsbFWHM.setValue(self.__polyFitDataInfo.getFittedFWHM())
-          #self.__edtFitFunc.setText(self.__polyFitDataInfo.getFitFunc())
-          #self.__cmdZoomToFitArea.setEnabled(True)
-          print("success")
+            #self.__lblFoundAE.setText(self.AEFOUNDAT.format(self.__polyFitDataInfo.getFoundAE()))
+            #self.__lblStdDev.setText(self.STDDEVAT.format(self.__polyFitDataInfo.getStdDeviation()))
+            #self.__dsbFWHM.setValue(self.__polyFitDataInfo.getFittedFWHM())
+            #self.__edtFitFunc.setText(self.__polyFitDataInfo.getFitFunc())
+            #self.__cmdZoomToFitArea.setEnabled(True)
+            print("success")
+            self.setPostFitFunctionsEnabled(True)
         else:
-          self.__cmdZoomToFitArea.setEnabled(False)
+            self.setPostFitFunctionsEnabled(False)
 
         return msg, self.__polyFitDataInfo

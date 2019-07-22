@@ -8,7 +8,6 @@ class dataControlWidget(QGroupBox):
     data_changed = pyqtSignal(bool)
     data_shift = pyqtSignal(float)
     load_fits = pyqtSignal(list)
-    fit_loaded_fits = pyqtSignal(list)
     load_view = pyqtSignal(str)
     
     SHOW_ERROR_BARS = "Show error bars"
@@ -129,8 +128,7 @@ class dataControlWidget(QGroupBox):
         self.load_from_data_string(data_string)
         self.load_fits.emit(fit_strings)
         self.load_view.emit(view_string)
-        self.fit_loaded_fits.emit(fit_strings)
-        
+
     def load_from_data_string(self, data_string):
         if data_string is not None:
             split_string = data_string.split(',')

@@ -7,6 +7,7 @@ from PyQt5.QtCore import pyqtSignal, Qt
 #import matplotlib.pyplot as plt
 import fitDataInfo as fdi
 import AEFitDataInfo as adi
+import polyFitDataInfo as pdi
 
 class DataDisplay(FigureCanvas):
 
@@ -19,7 +20,7 @@ class DataDisplay(FigureCanvas):
     statusbar_update = pyqtSignal(str)
     is_loaded_changed = pyqtSignal(bool)
 
-    mark_default_text = 'Click with scroll wheel on figure key to show energy value.'
+    mark_default_text = 'Click with scroll wheel on figure to show energy value.'
 
     def __init__(self, parent=None):
         self.__fig, self.__ax = plt.subplots(1, 1, tight_layout=True)
@@ -152,8 +153,8 @@ class DataDisplay(FigureCanvas):
                     
                     if self.current_fdi().isFitted():
                         self.__plotFit(self.current_fdi())
-                except Exception:
-                    print("e")
+                except Exception as e:
+                    print(e)
             
             self.update_clickmark()
             self.update_annotations()
@@ -161,13 +162,14 @@ class DataDisplay(FigureCanvas):
             self.draw()
 
             if not forgetZoomFrame:
-                #self.__ax.set_xlim(xlim)
-                #self.__ax.set_ylim(ylim)
+                #if (self.__ax.get_xlim(), self.__ax.get_ylim()) != (xlim, ylim):
+                    #self.__ax.set_xlim(xlim)
+                    #self.__ax.set_ylim(ylim)
 
-                #self.__ax.margins(x=xmar, y=ymar)
+                    #self.__ax.margins(x=xmar, y=ymar)
 
-                #print(self.__ax.get_xlim(), self.__ax.get_ylim())
-                #print(self.__ax.margins())
+                    #print(self.__ax.get_xlim(), self.__ax.get_ylim())
+                    #print(self.__ax.margins())
 
                 self._zoom_to_bounds(xlim, ylim)
             else:
@@ -176,7 +178,8 @@ class DataDisplay(FigureCanvas):
     def update_clickmark(self):
         if self.__clickmark is not None:
             #if self.__data[self.__lowerZoom, 0] <= self.__clickmark <= self.__data[self.__upperZoom, 0]:
-                self.__ax.plot([self.__clickmark], [0], 'g^')
+            self.__ax.axvline(x=[self.__clickmark], color='g', linestyle='-.', linewidth='1')
+                #self.__ax.plot([self.__clickmark], [0], 'g^')
 
     def update_annotations(self):
         #trigger on_zoom or find another way
@@ -256,9 +259,7 @@ class DataDisplay(FigureCanvas):
         
         self.__ax.set_ylabel('Counts (1/s)', fontdict=self.__label_font)
         self.__ax.set_xlabel('Energy (eV)', fontdict=self.__label_font)
-        
-        
-        
+
         for tick in self.__ax.xaxis.get_major_ticks():
             tick.label.set_size(self.__scale_font['size'])
         
@@ -286,8 +287,11 @@ class DataDisplay(FigureCanvas):
     
     def ZoomShowAll(self):
         if self.isLoaded():
-            self.__ax.set_xlim(self.__data[0, 0], self.__data[-1, 0])
-            self.__ax.set_ylim(self.__data[0:-1, 1].min(), self.__data[0:-1, 1].max())
+
+            self._zoom_to_xbounds(self.__data[0, 0], self.__data[-1, 0])
+
+            #self.__ax.set_xlim(self.__data[0, 0], self.__data[-1, 0])
+            #self.__ax.set_ylim(self.__data[0:-1, 1].min(), self.__data[0:-1, 1].max())
             self.draw()
     
     def ZoomToFit(self, x_lb, x_ub, fit_index):
@@ -315,14 +319,12 @@ class DataDisplay(FigureCanvas):
             #self.__ax.set_ylim(y_lb, y_ub)
             self.draw()
 
-    def _zoom_to_bounds(self, xbounds, ybounds):
-        (x_margin, y_margin) = self.__ax.margins()
-
+    def _zoom_to_bounds(self, xbounds, ybounds, x_margin=0, y_margin=0):
         (x_lb, x_ub) = xbounds
         (y_lb, y_ub) = ybounds
 
-        x_dev = (x_ub - x_lb) * x_margin / 2
-        y_dev = (y_ub - y_lb) * y_margin / 2
+        x_dev = 0#(x_ub - x_lb) * x_margin / 2
+        y_dev = 0#(y_ub - y_lb) * y_margin / 2
 
         self.__ax.set_xlim(x_lb - x_dev, x_ub + x_dev)
         self.__ax.set_ylim(y_lb - y_dev, y_ub + y_dev)
@@ -423,7 +425,7 @@ class DataDisplay(FigureCanvas):
         
         self.__ax.plot(fitData[:, 0], fitData[:, 1],
                        linestyle=self.__ls, color=self.__fc, linewidth=self.__lw)
-        self.__mark_ae_data_in_plot(fdiCurrent)
+        self.__mark_fit_data_in_plot(fdiCurrent)
         
     def __plot_combined_fit(self):
         if self.__combined_fit_exists():
@@ -433,46 +435,56 @@ class DataDisplay(FigureCanvas):
                            linestyle=self.__ls, color=self.__fc, linewidth=self.__lw)
             
             for fdiCurrent in self.__fdiFits:
-                if type(fdiCurrent) is adi.AEFitDataInfo:
-                    if fdiCurrent.isFitted() and fdiCurrent.isDisabled() != True:
-                        self.__mark_ae_data_in_plot(fdiCurrent)
+                if fdiCurrent.isFitted() and fdiCurrent.isDisabled() != True:
+                    self.__mark_fit_data_in_plot(fdiCurrent)
     
     def __combined_fit_exists(self):
         return self.__combined_fit_data is not None and len(self.__combined_fit_data) > 0
     
-    def __mark_ae_data_in_plot(self, fdiCurrent: fdi.fitDataInfo):
-        
+    def __mark_fit_data_in_plot(self, fdiCurrent: fdi.fitDataInfo):
+
+        lowerFitBound = -1
+        upperFitBound = -1
+
         aec = 'black'
         fitareac = '#EFEFEF'
         aeareac = '#ABABAB'
 
-        lowerFitBound = fdiCurrent.getFitRelFrom()
-        upperFitBound = fdiCurrent.getFitRelTo()
-        fwhm = fdiCurrent.getFWHM()
-        p = fdiCurrent.getParameters()
+        if type(fdiCurrent) is adi.AEFitDataInfo:
+
+            lowerFitBound = fdiCurrent.getFitRelFrom()
+            upperFitBound = fdiCurrent.getFitRelTo()
+            fwhm = fdiCurrent.getFWHM()
+            p = fdiCurrent.getParameters()
+
+            self.__ax.axvline(x=p[1], color=aec, linestyle='-', linewidth='1')
+
+            x_min = self.__ax.viewLim.intervalx[0]
+            x_max = self.__ax.viewLim.intervalx[1]
+
+            lb_fwhm = p[1] - 0.5 * fwhm
+            ub_fwhm = p[1] + 0.5 * fwhm
+
+            if lb_fwhm < x_min:
+                lb_fwhm = x_min
+
+            if ub_fwhm > x_max:
+                ub_fwhm = x_max
+
+            if ub_fwhm - lb_fwhm > 0:
+                self.__ax.axvspan(lb_fwhm, ub_fwhm, facecolor=aeareac, alpha=0.5)
+
+        elif type(fdiCurrent) is pdi.polyFitDataInfo:
+
+            lowerFitBound = fdiCurrent.getFitFrom()
+            upperFitBound = fdiCurrent.getFitTo()
+            print(lowerFitBound, upperFitBound)
 
 
-        self.__ax.axvline(x=p[1], color=aec, linestyle='-', linewidth='1')
-        
-        x_min = self.__ax.viewLim.intervalx[0]
-        x_max = self.__ax.viewLim.intervalx[1]
-        
-        lb_fwhm = p[1] - 0.5 * fwhm
-        ub_fwhm = p[1] + 0.5 * fwhm
-
-        if lb_fwhm < x_min:
-            lb_fwhm = x_min
-        
-        if ub_fwhm > x_max:
-            ub_fwhm = x_max
-        
         # mark relevant fit area
-        
         if lowerFitBound != -1 and upperFitBound != -1:
             self.__ax.axvspan(lowerFitBound, upperFitBound, facecolor=fitareac, alpha=0.5)
-        
-        if ub_fwhm-lb_fwhm > 0:
-            self.__ax.axvspan(lb_fwhm, ub_fwhm, facecolor=aeareac, alpha=0.5)
-    
+
+
     def getFigure(self):
         return self.__fig

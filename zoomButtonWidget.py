@@ -66,7 +66,7 @@ class ZoomButtonWidget(QGroupBox):
         self.__dsbAnnotationFontSize.setSingleStep(0.5)
         self.__dsbAnnotationFontSize.setMaximumWidth(75)
         
-        self.setFixedHeight(135)
+        #self.setFixedHeight(50)
 
         repeat_delay = 0
         
@@ -131,7 +131,7 @@ class ZoomButtonWidget(QGroupBox):
 
         v_box = QVBoxLayout()
         v_box.addLayout(hbox_fig_sizes)
-        v_box.addLayout(hbox_zoom)
+        #v_box.addLayout(hbox_zoom)
 
         hbox_main.addLayout(v_box)
         hbox_main.addLayout(hbox_annotation)

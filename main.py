@@ -22,7 +22,7 @@ class App(QMainWindow):
         self.top = 50
         self.width = 1280
         self.height = 900
-        self.bottom = 180
+        self.bottom = 155
         self.right = 240
         self.initUI()
         self.menuInit()
@@ -146,7 +146,6 @@ class App(QMainWindow):
         self.dcwData.data_changed.connect(self.dcwData_changed)
         self.dcwData.data_shift.connect(self.ddMain.shiftData)
         self.dcwData.load_fits.connect(self.ficFits.load_fits)
-        self.dcwData.fit_loaded_fits.connect(self.ficFits.fit_loaded_fits)
         self.dcwData.load_view.connect(self.zbwMain.load_from_view_string)
 
         self.dcwData.data_shift.connect(self.ficFits.shift_data)
@@ -157,7 +156,6 @@ class App(QMainWindow):
 
         # self.zbwMain.lower_down.connect(self.)
         self.zbwMain.zoom_by_increment.connect(self.zoom_by_increment)
-        self.zbwMain.show_all.connect(self.zoom_show_all)
         self.zbwMain.scale_font_size_changed.connect(self.scale_font_size_changed)
         self.zbwMain.label_font_size_changed.connect(self.label_font_size_changed)
         self.zbwMain.fig_size_changed.connect(self.fig_size_changed)
@@ -183,6 +181,7 @@ class App(QMainWindow):
         self.ddGbox.addWidget(self.tabFits)
         self.ddGbox.addWidget(self.ddMain)
         self.dtToolbar = dt.displayToolbar(self.ddMain, self)
+        self.dtToolbar.show_all.connect(self.zoom_show_all)
         self.ddGbox.addWidget(self.dtToolbar)
 
         self.grid_layout.addItem(self.ddGbox, 0, 0)
@@ -229,7 +228,8 @@ class App(QMainWindow):
 
     def loadData(self, fileName):
         self.dcwData.loadFile(fileName)
-    
+        self.ddMain.ZoomShowAll()
+
     def saveData(self, fileName):
         
         data_string = self.dcwData.get_data_string()
@@ -489,6 +489,7 @@ class App(QMainWindow):
         self.ddMain.reset()
         self.tabFits.reset()
         self.zbwMain.reset(enable)
+        self.dtToolbar.reset(enable)
         self.resetMenuBar(self.ddMain.isLoaded())
 
         self.progressBar.reset()
@@ -530,6 +531,7 @@ class App(QMainWindow):
             self.ddMain.update_fit(current_fdi)
             self.ddMain.update_combined_fit_data(combined_fit_data)
             self.ddMain.refresh()
+            self.ddMain.ZoomShowAll()
         else:
             QMessageBox.information(self, "Fit failed", msg, QMessageBox.Ok, QMessageBox.Ok)
 

@@ -93,10 +93,6 @@ class fitInfoWidgetContainer(QGroupBox):
                 new_fit.fitToFunction()
 
 
-    def fit_loaded_fits(self, fit_strings):
-        for fiw_i in self.__fitInfoWidgets:
-            fiw_i.fitToFunction()
-    
     def get_fit_strings(self):
         fit_strings = list()
         
@@ -222,6 +218,8 @@ class fitInfoWidgetContainer(QGroupBox):
                         
                         if fit_data[i][1] != None:
                             diff_data[i][1] = diff_data[i][1] - fit_data[i][1]
+
+                    #print('Fitdata was just updated at', fiw_i.get_fit_index())
                  
     
     def reset(self, enable):
