@@ -3,231 +3,235 @@ from PyQt5.QtCore import pyqtSignal, Qt
 import customFitDataInfo as cfd
 import fitHelper as fh
 import fitInfoWidget as fiw
-
+import sys
 
 class customFitInfoWidget(fiw.fitInfoWidget):
+    FITINITIALS = "cus"
 
-  def __init__(self, index, shift_function, parameters=None):
-    fiw.fitInfoWidget.__init__(self)
+    DomainFrom_changed = pyqtSignal()
+    DomainTo_changed = pyqtSignal()
+    FunctionStr_changed = pyqtSignal()
 
-    self.__customFitDataInfo = cfd.customFitDataInfo(index)
-    self.__customFitDataInfo.setProgressUpdateFunction(self.emitProgressUpdate)
-    shift_function.connect(self.shiftData)
+    def __init__(self, index, shift_function, parameters=None):
+        fiw.fitInfoWidget.__init__(self)
 
-    self.__initLayout()
+        self.__customFitDataInfo = cfd.customFitDataInfo(index)
+        self.__customFitDataInfo.setProgressUpdateFunction(self.emitProgressUpdate)
+        shift_function.connect(self.shiftData)
 
-    #self.reset(True)
+        self.__initLayout()
 
-    #self.__connectSignals()
+        self.reset(True)
 
-    #if parameters is not None:
-    #  self.init_from_parameters(parameters)
+        self.__initialized = True
 
-  # def init_from_parameters(self, parameters):
-  #   #p = parameters.split("p")
-  #
-  #   #if len(p) == 4:
-  #     self.setAEFrom(float(p[0]))
-  #     self.setAETo(float(p[1]))
-  #     self.setFWHM(float(p[2]))
-  #
-  #     self.setMinSpan(float(p[3]))
-  #
-  #     str = self.get_fit_string()
-  #     print(str)
-  #
-  # def get_fit_string(self):
-  #   return str(round(self.getAEFrom(), 2)) + "p" + \
-  #          str(round(self.getAETo(), 2)) + "p" + \
-  #          str(round(self.getFWHM(), 2)) + "p" + \
-  #          str(round(self.getMinSpan(), 2))
+        self.__connectSignals()
 
-  def reset(self, enable):
-    pass
-    #
-    # self.setEnabled(enable)
-    #
-    # self.__AEFitDataInfo.reset()
-    #
-    # self.setFWHM(0.3)
-    # self.setMinSpan(3)
-    #
-    # self.__cmdZoomToFitArea.setEnabled(False)
+        if parameters is not None:
+            self.init_from_parameters(parameters)
 
-  def __connectSignals(self):
-    pass
-    # self.__dsbAEFrom.valueChanged.connect(self.__spbAEFrom_changed)
-    # self.__dsbAETo.valueChanged.connect(self.__spbAETo_changed)
-    # self.__dsbFWHM.valueChanged.connect(self.__dsbFWHM_changed)
-    # self.__dsbMinSpan.valueChanged.connect(self.__dsbMinSpan_changed)
-    # self.__cmdFit.clicked.connect(self.__cmdFit_clicked)
-    # self.__cmdZoomToFitArea.clicked.connect(self.__cmdZoomToFitArea_clicked)
-    # self.__chkDisableFit.stateChanged.connect(self.__chkDisableFit_stateChanged)
-    # self.__cmdRemoveFit.clicked.connect(self.__cmdRemoveFit_clicked)
+    def initialize_from_parameters(self, parameters):
+        ps = parameters.split(",")
 
-  def emitProgressUpdate(self, relation, p):
-    pass
-    # self.progressUpdate.emit(relation, p)
+        for parameter in ps:
+            (short, value) = parameter.split('=')
+            if short == 'rfr':
+                self.setDomainFrom(float(value))
+            elif short == 'rto':
+                self.setDomainTo(float(value))
+            elif short == 'fst':
+                self.setFunctionStr(float(value))
 
-  def __initLayout(self):
-    pass
-    # self.setCheckable(False)
-    # self.setChecked(True)
-    # self.setTitle(self.__AEFitDataInfo.getName())
-    #
-    # self.__mainLayout = QFormLayout()
-    #
-    # self.__lblAEFrom = QLabel("AE from ")
-    # self.__dsbAEFrom = QDoubleSpinBox()
-    # self.__dsbAEFrom.setRange(0, sys.float_info.max)
-    # self.__dsbAEFrom.setValue(0)
-    # self.__dsbAEFrom.setSingleStep(0.1)
-    #
-    # self.__lblAETo = QLabel(" to ")
-    # self.__dsbAETo = QDoubleSpinBox()
-    # self.__dsbAETo.setSingleStep(0.1)
-    #
-    # self.__mainLayout.addRow(self.__lblAEFrom, self.__dsbAEFrom)
-    # self.__mainLayout.addRow(self.__lblAETo, self.__dsbAETo)
-    #
-    # self.__lblFWHM = QLabel("FWHM:")
-    # self.__dsbFWHM = QDoubleSpinBox()
-    # self.__dsbFWHM.setSingleStep(0.05)
-    # self.__dsbFWHM.setRange(0, sys.float_info.max)
-    #
-    # self.__lblMinSpan = QLabel("Min Span:")
-    # self.__dsbMinSpan = QDoubleSpinBox()
-    # self.__dsbMinSpan.setSingleStep(0.05)
-    # self.__dsbMinSpan.setRange(0, sys.float_info.max)
-    #
-    # self.__cmdFit = QPushButton("Fit")
-    # self.__cmdZoomToFitArea = QPushButton("Zoom To Fit")
-    #
-    # self.__mainLayout.addRow(self.__lblFWHM, self.__dsbFWHM)
-    # self.__mainLayout.addRow(self.__lblMinSpan, self.__dsbMinSpan)
-    #
-    # self.__lblFitFunc = QLabel("Fit-Funct:")
-    # self.__edtFitFunc = QLineEdit("")
-    # self.__edtFitFunc.setReadOnly(True)
-    #
-    # self.__lblFitFunc.setVisible(False)
-    # self.__edtFitFunc.setVisible(False)
-    #
-    # self.__mainLayout.addRow(self.__lblFitFunc, self.__edtFitFunc)
-    #
-    # self.__lblFoundAE = QLabel(self.AEFOUNDAT.format(0))
-    # self.__lblStdDev = QLabel(self.STDDEVAT.format(0))
-    #
-    # self.__chkDisableFit = QCheckBox("Disable")
-    # self.__cmdRemoveFit = QPushButton("Remove")
-    #
-    # self.__mainLayout.setRowWrapPolicy(QFormLayout.DontWrapRows)
+    def get_fit_string(self):
+        return self.FITINITIALS + ':' + \
+               'rfr=' + str(round(self.getDomainFrom(), 5)) + ',' +\
+               'rto=' + str(round(self.getDomainTo(), 5)) + ',' +\
+               'fst=' + self.getFunctionStr()
 
-    self.setLayout(self.__mainLayout)
+    def isWeighted(self):
+        return self.__chkWeightFit.isChecked()
 
-    # self.__mainLayout.addWidget(self.__lblAEFrom)
-    # self.__mainLayout.addWidget(self.__dsbAEFrom)
-    # self.__mainLayout.addWidget(self.__lblAETo)
-    # self.__mainLayout.addWidget(self.__dsbAETo)
+    def setWeighted(self, value):
+        self.__chkWeightFit.setChecked(value)
 
-    # self.__mainLayout.addWidget(self.__lblFWHM)
-    # self.__mainLayout.addWidget(self.__dsbFWHM)
+    def reset(self, enable):
+      self.setEnabled(enable)
 
-    # self.__mainLayout.addWidget(self.__lblMinSpan)
-    # self.__mainLayout.addWidget(self.__dsbMinSpan)
+      self.getFitDataInfo().reset()
 
-    # self.__mainLayout.addRow(self.__lblFoundAE, self.__lblStdDev)
-    # self.__mainLayout.addRow(self.__cmdZoomToFitArea, self.__cmdFit)
-    # self.__mainLayout.addRow(self.__chkDisableFit, self.__cmdRemoveFit)
+      self.setDomainFrom(0)
+      self.setDomainTo(sys.float_info.max)
 
-    self.setEnabled(True)
+      self.setFunctionStr('')
 
-  def isDisabled(self):
-    return self.getFitDataInfo().isDisabled()
-
-  # get-set-block
-  def isFitted(self):
-    pass
-    # return (self.__AEFitDataInfo is not None) and self.__AEFitDataInfo.isFitted()
-
-  def getFitDataInfo(self):
-    return self.__customFitDataInfo
-
-  def __chkDisableFit_stateChanged(self, state):
-
-    self.getFitDataInfo().setDisabled(state == Qt.Checked)
-
-    self.disable_fit.emit(self.getFitDataInfo(), (state == Qt.Checked))
-
-  def __cmdRemoveFit_clicked(self):
-    self.remove_fit.emit(self.getFitDataInfo())
-
-  def _on_set_data(self, data):
-    self.__AEFitDataInfo.setData(data)
-
-    if self.__AEFitDataInfo.is_initialized():
-      self.setAEFrom(data[0][0])
-      self.setAETo(data[-1][0])
-
-      self.__dsbAEFrom.setMinimum(data[0][0])
-      self.__dsbAEFrom.setMaximum(data[-1][0])
-
-      self.__dsbAETo.setMinimum(data[0][0])
-      self.__dsbAETo.setMaximum(data[-1][0])
-
-  def __cmdFit_clicked(self):
-    self.fitToFunction()
-
-  def __cmdZoomToFitArea_clicked(self):
-    if self.__AEFitDataInfo.isFitted():
-      lb = fh.find_ev_position(self.__AEFitDataInfo.getFitData(), self.__AEFitDataInfo.getFitRelFrom())
-      ub = fh.find_ev_position(self.__AEFitDataInfo.getFitData(), self.__AEFitDataInfo.getFitRelTo())
-
-      self.zoom_to_fit.emit(lb, ub, self.__AEFitDataInfo.get_fit_index())
-
-  def getName(self):
-    return self.__AEFitDataInfo.getName()
-
-  def get_fit_index(self):
-    return self.__AEFitDataInfo.get_fit_index()
-
-  def __spbAEFrom_changed(self):
-    self.__AEFitDataInfo.setAEFrom(self.getAEFrom())
-    self.AEFrom_changed.emit()
-
-  def __spbAETo_changed(self):
-    self.__AEFitDataInfo.setAETo(self.getAETo())
-    self.AETo_changed.emit()
-
-  def __dsbFWHM_changed(self):
-    self.__AEFitDataInfo.setFWHM(self.getFWHM())
-    self.FWHM_changed.emit()
-
-  def __dsbMinSpan_changed(self):
-    self.__AEFitDataInfo.setMinspan(self.getMinSpan())
-    self.minspan_changed.emit()
-
-  def resetFit(self):
-    self.__AEFitDataInfo.reset()
-
-  def shiftData(self, increment):
-    self.__AEFitDataInfo.shift_fit(increment)
-
-    self.setAEFrom(self.getAEFrom() + increment)
-    self.setAETo(self.getAETo() + increment)
-
-  def fitToFunction(self):
-    msg = self.__AEFitDataInfo.fitToFunction()
-
-    self.Post_Fit.emit(self.__AEFitDataInfo, msg)
-
-    if msg == self.__AEFitDataInfo.SUCCESS:
-      self.__lblFoundAE.setText(self.AEFOUNDAT.format(self.__AEFitDataInfo.getFoundAE()))
-      self.__lblStdDev.setText(self.STDDEVAT.format(self.__AEFitDataInfo.getStdDeviation()))
-      self.__dsbFWHM.setValue(self.__AEFitDataInfo.getFittedFWHM())
-      self.__edtFitFunc.setText(self.__AEFitDataInfo.getFitFunc())
-      self.__cmdZoomToFitArea.setEnabled(True)
-    else:
       self.__cmdZoomToFitArea.setEnabled(False)
 
-    return msg, self.__AEFitDataInfo
+    def getDomainFrom(self):
+        return self.__dsbDomainFrom.value()
+
+    def setDomainFrom(self, value):
+        self.__dsbDomainFrom.setValue(float(value))
+        self.__DomainFrom_changed()
+
+    def getDomainTo(self):
+        return self.__dsbDomainTo.value()
+
+    def setDomainTo(self, value):
+        self.__dsbDomainTo.setValue(float(value))
+        self.__DomainTo_changed()
+
+    def getFunctionStr(self):
+        return self.__edtFunctionStr.text()
+
+    def setFunctionStr(self, value):
+        self.__edtFunctionStr.setText(value)
+        self.__FunctionStr_changed()
+
+    def __connectSignals(self):
+        self.__dsbDomainFrom.editingFinished.connect(self.__DomainFrom_changed)
+        self.__dsbDomainTo.editingFinished.connect(self.__DomainTo_changed)
+        self.__edtFunctionStr.editingFinished.connect(self.__FunctionStr_changed)
+        self.__cmdFit.clicked.connect(self.__cmdFit_clicked)
+        self.__cmdZoomToFitArea.clicked.connect(self.__cmdZoomToFitArea_clicked)
+        self.__chkDisableFit.stateChanged.connect(self.__chkDisableFit_stateChanged)
+        self.__cmdRemoveFit.clicked.connect(self.__cmdRemoveFit_clicked)
+
+    def emitProgressUpdate(self, relation, p):
+        pass
+        # self.progressUpdate.emit(relation, p)
+
+    def __initLayout(self):
+        self.setCheckable(False)
+        self.setChecked(True)
+        self.setTitle(self.getFitDataInfo().getName())
+
+        self.__mainLayout = QFormLayout()
+
+        self.__lblDomainFrom = QLabel("Domain From ")
+        self.__dsbDomainFrom = QDoubleSpinBox()
+        self.__dsbDomainFrom.setRange(0, sys.float_info.max)
+        self.__dsbDomainFrom.setValue(0)
+        self.__dsbDomainFrom.setSingleStep(0.1)
+
+        self.__lblDomainTo = QLabel(" to ")
+        self.__dsbDomainTo = QDoubleSpinBox()
+        self.__dsbDomainTo.setSingleStep(0.1)
+
+        self.__mainLayout.addRow(self.__lblDomainFrom, self.__dsbDomainFrom)
+        self.__mainLayout.addRow(self.__lblDomainTo, self.__dsbDomainTo)
+
+        self.__lblFunctionStr = QLabel("Python function:")
+        self.__lblPreFuncStr = QLabel("x: ")
+        self.__edtFunctionStr = QLineEdit()
+
+        self.__mainLayout.addRow(self.__lblFunctionStr)
+        self.__mainLayout.addRow(self.__lblPreFuncStr, self.__edtFunctionStr)
+
+        self.__cmdFit = QPushButton("Fit")
+        self.__cmdFit.setFixedWidth(75)
+
+        self.__mainLayout.addRow(self.__cmdFit)
+
+        self.__cmdZoomToFitArea = QPushButton("Zoom To Domain Area")
+        self.__cmdZoomToFitArea.setFixedWidth(75)
+
+        self.__chkDisableFit = QCheckBox("Disable")
+        self.__cmdRemoveFit = QPushButton("Remove")
+
+        self.__mainLayout.addRow(self.__chkDisableFit, self.__cmdRemoveFit)
+        self.__mainLayout.setRowWrapPolicy(QFormLayout.DontWrapRows)
+
+        self.setLayout(self.__mainLayout)
+
+        self.setEnabled(True)
+
+    def isDisabled(self):
+        return self.getFitDataInfo().isDisabled()
+
+    # get-set-block
+    def isFitted(self):
+        return (self.__customFitDataInfo is not None) and self.__customFitDataInfo.isFitted()
+
+    def getFitDataInfo(self):
+        return self.__customFitDataInfo
+
+    def __chkDisableFit_stateChanged(self, state):
+
+        self.getFitDataInfo().setDisabled(state == Qt.Checked)
+
+        self.disable_fit.emit(self.getFitDataInfo(), (state == Qt.Checked))
+
+    def __cmdRemoveFit_clicked(self):
+        self.remove_fit.emit(self.getFitDataInfo())
+
+    def _on_set_data(self, data, stderr):
+        if self.__customFitDataInfo.is_initialized() is False:
+
+            self.getFitDataInfo().setData(data)
+            self.setDomainFrom(data[0][0])
+            self.setDomainTo(data[-1][0])
+
+            self.__dsbDomainFrom.setMinimum(data[0][0])
+            self.__dsbDomainFrom.setMaximum(data[-1][0])
+
+            self.__dsbDomainTo.setMinimum(data[0][0])
+            self.__dsbDomainTo.setMaximum(data[-1][0])
+
+    def __cmdFit_clicked(self):
+        self.fitToFunction()
+
+    def __cmdZoomToFitArea_clicked(self):
+        if self.getFitDataInfo().isFitted():
+          lb = fh.find_ev_position(self.getFitDataInfo().getFitData(), self.getFitDataInfo().getDomainFrom())
+          ub = fh.find_ev_position(self.getFitDataInfo().getFitData(), self.getFitDataInfo().getDomainTo())
+
+          self.zoom_to_fit.emit(lb, ub, self.getFitDataInfo().get_fit_index())
+
+    def getName(self):
+        return self.getFitDataInfo().getName()
+
+    def get_fit_index(self):
+        return self.getFitDataInfo().get_fit_index()
+
+    def __DomainTo_changed(self):
+        self.getFitDataInfo().setDomainTo(self.getDomainTo())
+        #self.AEFrom_changed.emit()
+
+    def __DomainFrom_changed(self):
+        self.getFitDataInfo().setDomainFrom(self.getDomainFrom())
+        #self.AETo_changed.emit()
+
+    def __FunctionStr_changed(self):
+        self.getFitDataInfo().setFunctionStr(self.getFunctionStr())
+        #self.Degree_changed.emit()
+
+    def __chkWeightFit_stateChanged(self, state):
+        # won't be relevant here as the custom function will not be fittet
+        self.getFitDataInfo().set_weighted(state == Qt.Checked)
+
+    def resetFit(self):
+        self.getFitDataInfo().reset()
+
+    def shiftData(self, increment):
+        self.getFitDataInfo().shift_fit(increment)
+
+        self.setDomainFrom(self.getDomainFrom() + increment)
+        self.setDomainTo(self.getDomainTo() + increment)
+
+    def fitToFunction(self):
+        # fit to function will just produce y-values to the datas x-values inside
+        msg = self.getFitDataInfo().fitToFunction()
+
+        self.Post_Fit.emit(self.getFitDataInfo(), msg)
+
+        if msg == self.getFitDataInfo().SUCCESS:
+          #self.__lblFoundAE.setText(self.AEFOUNDAT.format(self.getFitDataInfo().getFoundAE()))
+          #self.__lblStdDev.setText(self.STDDEVAT.format(self.getFitDataInfo().getStdDeviation()))
+          #self.__dsbFWHM.setValue(self.getFitDataInfo().getFittedFWHM())
+          #self.__edtFitFunc.setText(self.getFitDataInfo().getFitFunc())
+          #self.__cmdZoomToFitArea.setEnabled(True)
+          print("success")
+        else:
+          self.__cmdZoomToFitArea.setEnabled(False)
+
+        return msg, self.getFitDataInfo()

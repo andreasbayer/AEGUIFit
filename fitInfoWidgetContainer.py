@@ -77,11 +77,20 @@ class fitInfoWidgetContainer(QGroupBox):
         for fit_string in fit_strings:
             item = fit_string.split(':')
             if item[0] == afw.AEFitInfoWidget.FITINITIALS:
-                new_fit = afw.AEFitInfoWidget(len(self.__fitInfoWidgets), self.shift_data, item[1])
+                new_fit = afw.AEFitInfoWidget(len(self.__fitInfoWidgets), self.shift_data)
                 self.__add_fiw(new_fit)
-            if item[0] == pfw.polyFitInfoWidget.FITINITIALS:
-                new_fit = pfw.polyFitInfoWidget(len(self.__fitInfoWidgets), self.shift_data, item[1])
+                new_fit.initialize_from_parameters(item[1])
+                new_fit.fitToFunction()
+            elif item[0] == pfw.polyFitInfoWidget.FITINITIALS:
+                new_fit = pfw.polyFitInfoWidget(len(self.__fitInfoWidgets), self.shift_data)
                 self.__add_fiw(new_fit)
+                new_fit.initialize_from_parameters(item[1])
+                new_fit.fitToFunction()
+            elif item[0] == cfw.customFitInfoWidget.FITINITIALS:
+                new_fit = cfw.customFitInfoWidget(len(self.__fitInfoWidgets), self.shift_data)
+                self.__add_fiw(new_fit)
+                new_fit.initialize_from_parameters(item[1])
+                new_fit.fitToFunction()
 
 
     def fit_loaded_fits(self, fit_strings):
@@ -116,8 +125,7 @@ class fitInfoWidgetContainer(QGroupBox):
             self.__add_fiw(pfw.polyFitInfoWidget(len(self.__fitInfoWidgets), self.shift_data))
         elif currentIndex == 2:
             # custom Function
-            #self.__add_fiw(cfw.customFitInfoWidget(len(self.__fitInfoWidgets), self.shift_data))
-            pass
+            self.__add_fiw(cfw.customFitInfoWidget(len(self.__fitInfoWidgets), self.shift_data))
 
     
     def __add_fiw(self, fiw):
@@ -191,7 +199,7 @@ class fitInfoWidgetContainer(QGroupBox):
                     #make new
                     self.__combined_fit_data = fiw_i.getFitDataInfo().getFitData().copy()
     
-    def __update_diff_data(self, i_starting = 0):
+    def __update_diff_data(self, i_starting=0):
         #i_starting: first fitInfoWidget to be updated
         
         if i_starting == 0:
@@ -206,11 +214,11 @@ class fitInfoWidgetContainer(QGroupBox):
                 if fiw_i.get_fit_index() >= i_starting:
                     fiw_i.setData(diff_data.copy(), self.__std_err)
                 
-                if fiw_i.isFitted() and fiw_i.isDisabled() != True and fiw_i.get_fit_index() < len(self.__fitInfoWidgets)-1:
+                if fiw_i.isFitted() and fiw_i.isDisabled() is not True and fiw_i.get_fit_index() < len(self.__fitInfoWidgets)-1:
                     
                     fit_data = fiw_i.getFitDataInfo().getFitData()
                     
-                    for i in range (0, len(fit_data)):
+                    for i in range(0, len(fit_data)):
                         
                         if fit_data[i][1] != None:
                             diff_data[i][1] = diff_data[i][1] - fit_data[i][1]

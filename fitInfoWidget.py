@@ -70,6 +70,9 @@ class fitInfoWidget(QGroupBox):
     
     def is_initialized(self):
         return (self.__data is None)
+
+    def initialize_from_parameters(self, parameters):
+        pass
     
     def setData(self, data, std_err):
         self._on_set_data(data, std_err)

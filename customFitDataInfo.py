@@ -1,118 +1,113 @@
 import sys
 from fitDataInfo import fitDataInfo
-import fitHelper as fh
+import numpy as np
 
 
 class customFitDataInfo(fitDataInfo):
 
     def __init__(self, index):
         fitDataInfo.__init__(self, index)
-        
-        self._minspan = 3.0
-        self._AEFrom = 0.0
-        self._AETo = sys.float_info.max
-        self._p = [] * 4
-        self._fitRelBounds = [0.0] * 2
-        self._fittedFWHM = 0
-        self._FWHM = 0
-    
-    def is_initialized(self):
-        return (self._AETo == sys.float_info.max)
-    
+
+        self._function_str = ''
+        self._function = None
+        self._domainTo = sys.float_info.max
+        self._domainFrom = 0
+
+    # def is_initialized(self):
+    #    return (self._FitTo == sys.float_info.max)
+
     # get-set-block
-    def getFWHM(self):
-        return self._FWHM
-    
-    def setFWHM(self, FWHM):
-        self._FWHM = FWHM
-    
-    def getMinspan(self):
-        return self._minspan
-    
-    def setMinspan(self, minspan):
-        self._minspan = minspan
-    
-    def getAEFrom(self):
-        return self._AEFrom
-    
-    def setAEFrom(self, AEFrom):
-        self._AEFrom = AEFrom
-    
-    def getAETo(self):
-        return self._AETo
-    
-    def setAETo(self, AETo):
-        self._AETo = AETo
-    
-    def getFitRelFrom(self):
-        return self._fitRelBounds[0]
-    
-    def setFitRelFrom(self, fitRelFrom):
-        self._fitRelBounds[0] = fitRelFrom
-    
-    def getFitRelTo(self):
-        return self._fitRelBounds[1]
-    
-    def setFitRelTo(self, fitRelTo):
-        self._fitRelBounds[1] = fitRelTo
-    
-    def getParameters(self):
-        return self._p
-    
-    def setParameters(self, value):
-        self._p = value
-    
-    def getFoundAE(self):
-        return round(self._p[1],2)
-    
-    def getFittedFWHM(self):
-        return self._fittedFWHM
-    
+
+    def getDomainTo(self):
+        return self._domainTo
+
+    def setDomainTo(self, value):
+        self._domainTo = value
+
+    def getDomainFrom(self):
+        return self._domainFrom
+
+    def setDomainFrom(self, value):
+        self._domainFrom = value
+
+    def setFunctionStr(self, value):
+        self._function_str = value
+
+    def getFunctionStr(self):
+        return self._function_str
+
     def getFitFunc(self):
-        return fh.str_fit_func(self._p, self._FWHM)
-    
-    def getName(self):
-        name = "Fit #" + str(self.get_fit_index() + 1)
-        
-        if self.isFitted():
-            name += "( = " + str(self.getFoundAE()) + ")"
-        return "Fit #" + str(self.get_fit_index() + 1)
-    
-    def fitToFunction(self):
-        
-        self._p = [0.0] * 4
-        self._p[1] = (self._AEFrom + self._AETo) / 2
-        
+        return self.getFunctionStr()
+
+    def evaluateFunction(self):
         try:
-            self._p, self._stdDev, self._fitRelBounds[0], self._fitRelBounds[
-                1], self._fittedFWHM, self._fitFunction \
-                = fh.find_best_fit(self._data, self._p, self._FWHM, self._minspan, [self._AEFrom, self._AETo],
-                     self.progressUpdate)
-            
-            self._setFitData(fh.data_from_fit_and_parameters(self._data, self._fitFunction, self._p, self._FWHM,
-                                                             continuation=True))
-            
+            self._function = eval('lambda x: ' + self._function_str)
+            return 1
+        except:
+            return 0
+
+    def getFunction(self):
+        return self._function
+
+    def callFunction(self, data, domain):
+        x = data[:, 0]
+        space = list()
+
+        if self._function is not None:
+            try:
+                y = self._function(x)
+
+                for i in range(0, len(x)):
+
+                    if domain is None or domain[0] <= x[i] <= domain[1]:
+                        space.append([x[i], y[i]])
+                    else:
+                        space.append([x[i], 0])
+            except:
+                print("calling function failed.")
+
+        else:
+            print("custom function not set.")
+
+        return np.array(space)
+
+
+    def getName(self):
+        return "Function #" + str(self.get_fit_index() + 1)
+
+    def fitToFunction(self):
+        data = self.get_data()
+
+        self.progressUpdate(0, '')
+
+        try:
+            self.evaluateFunction()
+
+            self._setFitData(self.callFunction(data, (self.getDomainFrom(), self.getDomainTo())))
+
             self._msg = self.SUCCESS
+            self.progressUpdate(1, '')
+
         except:
             self._setFitData(None)
-            self._msg = "Error while fitting."
-        
+            self._msg = self.FAILURE
+
+            self.progressUpdate(0, '')
+
         return self._msg
-    
+
     def progressUpdate(self, relation, info):
         if self._passProgressUpdate is not None:
-            self._passProgressUpdate(relation, info.tolist())
-    
+            self._passProgressUpdate(relation, info)
+
     def shift_fit(self, increment):
-        #fitDataInfo.shift_fit(increment)
+        # fitDataInfo.shift_fit(increment)
         if self.isFitted():
             for set in self._fitData:
                 set[0] += increment
 
-            self._p[1] += increment
-            self._fitRelBounds[0] += increment
-            self._fitRelBounds[1] += increment
+            self._domainFrom += increment
+            self._domainTo += increment
 
         for set in self._data:
             set[0] += increment
-            

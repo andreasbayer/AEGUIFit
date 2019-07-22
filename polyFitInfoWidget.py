@@ -33,7 +33,7 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
         if parameters is not None:
             self.init_from_parameters(parameters)
 
-    def init_from_parameters(self, parameters):
+    def initialize_from_parameters(self, parameters):
         ps = parameters.split(",")
 
         for parameter in ps:
@@ -154,7 +154,7 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
         self.__mainLayout.addRow(self.__lblFitFrom, self.__dsbFitFrom)
         self.__mainLayout.addRow(self.__lblFitTo, self.__dsbFitTo)
 
-        self.__lblExtendFrom = QLabel("Relevant From ")
+        self.__lblExtendFrom = QLabel("Extend From ")
         self.__dsbExtendFrom = QDoubleSpinBox()
         self.__dsbExtendFrom.setRange(0, sys.float_info.max)
         self.__dsbExtendFrom.setValue(0)
@@ -199,7 +199,7 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
 
     # get-set-block
     def isFitted(self):
-        return (self.__polyFitDataInfo is not None) and self.__polyFitDataInfo.isFitted()
+        return (self.getFitDataInfo() is not None) and self.getFitDataInfo().isFitted()
 
     def getFitDataInfo(self):
         return self.__polyFitDataInfo
@@ -214,9 +214,11 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
         self.remove_fit.emit(self.getFitDataInfo())
 
     def _on_set_data(self, data, stderr):
-        self.__polyFitDataInfo.setData(data)
+        if self.__polyFitDataInfo.is_initialized() is False:
+            self.__polyFitDataInfo.setData(data)
 
-        if self.__polyFitDataInfo.is_initialized():
+            self.__polyFitDataInfo.setStdErr(stderr)
+
             self.setFitFrom(data[0][0])
             self.setFitTo(data[-1][0])
 
@@ -240,8 +242,8 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
 
     def __cmdZoomToFitArea_clicked(self):
         if self.__polyFitDataInfo.isFitted():
-          lb = fh.find_ev_position(self.__polyFitDataInfo.getFitData(), self.__polyFitDataInfo.getFitRelFrom())
-          ub = fh.find_ev_position(self.__polyFitDataInfo.getFitData(), self.__polyFitDataInfo.getFitRelTo())
+          lb = fh.find_ev_position(self.__polyFitDataInfo.getFitData(), self.__polyFitDataInfo.getFitFrom())
+          ub = fh.find_ev_position(self.__polyFitDataInfo.getFitData(), self.__polyFitDataInfo.getFitTo())
 
           self.zoom_to_fit.emit(lb, ub, self.__polyFitDataInfo.get_fit_index())
 

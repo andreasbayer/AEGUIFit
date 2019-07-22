@@ -19,7 +19,7 @@ class AEFitDataInfo(fitDataInfo):
         self._shift = 0
 
     #def is_initialized(self):
-    #    return self._AETo == fli.max
+    #    return self._AETo != fli.max
 
     # get-set-block
     def getFWHM(self):
@@ -37,8 +37,8 @@ class AEFitDataInfo(fitDataInfo):
     def getAEFrom(self):
         return self._AEFrom
     
-    
     def setAEFrom(self, AEFrom):
+        print(self._AEFrom, '=', AEFrom)
         self._AEFrom = AEFrom
     
     def getAETo(self):

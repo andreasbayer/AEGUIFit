@@ -49,13 +49,9 @@ class polyFitDataInfo(fitDataInfo):
         self._ExtendFrom = value
     
     def getFitFunc(self):
-        return fh.str_fit_func(self._p, self._FWHM)
+        return "Poly Func" #fh.str_fit_func(self._p, self._FWHM)
     
     def getName(self):
-        name = "Poly-Fit #" + str(self.get_fit_index() + 1)
-        
-        if self.isFitted():
-            name += "( = " + str(self.getFoundAE()) + ")"
         return "Poly-Fit #" + str(self.get_fit_index() + 1)
 
     def fitToFunction(self):
@@ -66,11 +62,14 @@ class polyFitDataInfo(fitDataInfo):
         self.progressUpdate(0, '')
 
         if self.is_weighted():
-            weights = self.get_std_err()
-
-        try:
+            weights = fh.fix_std_errs(self.get_std_err())
+            cut_data, weights = fh.cutarray2(data=data, lowerlim=self.getFitFrom(), upperlim=self.getFitTo(),
+                                             data2=weights)
+        else:
             cut_data = fh.cutarray2(data=data, lowerlim=self.getFitFrom(), upperlim=self.getFitTo())
 
+
+        try:
             p, arr, deg, arr2, val = \
                 np.polyfit(cut_data[:, 0], cut_data[:, 1], self.getDegree(), w=weights, full=True, cov=True)
 
@@ -114,9 +113,10 @@ class polyFitDataInfo(fitDataInfo):
             for set in self._fitData:
                 set[0] += increment
 
-            self._p[1] += increment
-            self._fitRelBounds[0] += increment
-            self._fitRelBounds[1] += increment
+            self._FitTo += increment
+            self._FitFrom += increment
+            self._ExtendFrom += increment
+            self._ExtendFrom += increment
 
         for set in self._data:
             set[0] += increment

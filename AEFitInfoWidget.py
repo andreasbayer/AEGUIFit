@@ -42,7 +42,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         if parameters is not None:
             self.init_from_parameters(parameters)
     
-    def init_from_parameters(self, parameters):
+    def initialize_from_parameters(self, parameters):
         ps = parameters.split(",")
 
         for parameter in ps:
@@ -268,20 +268,20 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         self.remove_fit.emit(self.getFitDataInfo())
     
     def _on_set_data(self, data, std_err):
-        self.__AEFitDataInfo.setData(data)
+        if self.__AEFitDataInfo.is_initialized() is False:
+            self.__AEFitDataInfo.setData(data)
 
-        self.__AEFitDataInfo.setStdErr(std_err)
-        
-        if self.__AEFitDataInfo.is_initialized() or True:
+            self.__AEFitDataInfo.setStdErr(std_err)
+
             self.setAEFrom(data[0][0])
             self.setAETo(data[-1][0])
 
             self.__dsbAEFrom.setMinimum(data[0][0])
             self.__dsbAEFrom.setMaximum(data[-1][0])
-    
+
             self.__dsbAETo.setMinimum(data[0][0])
             self.__dsbAETo.setMaximum(data[-1][0])
-    
+
     def __cmdFit_clicked(self):
         self.fitToFunction()
 

@@ -109,7 +109,18 @@ class DataDisplay(FigureCanvas):
                     #self.update_clickmark()
                     self.refresh()
 
-    def refresh(self, data=None, stdErrors=None, showErrorBars=None):
+    def refresh(self, data=None, stdErrors=None, showErrorBars=None, forgetZoomFrame=False):
+
+        xlim = None
+        ylim = None
+
+        if not forgetZoomFrame:
+            xlim = self.__ax.get_xlim()
+            ylim = self.__ax.get_ylim()
+
+            (xmar, ymar) = self.__ax.margins()
+
+
         if data is not None:
             self.setData(data)
             
@@ -148,7 +159,20 @@ class DataDisplay(FigureCanvas):
             self.update_annotations()
 
             self.draw()
-            
+
+            if not forgetZoomFrame:
+                #self.__ax.set_xlim(xlim)
+                #self.__ax.set_ylim(ylim)
+
+                #self.__ax.margins(x=xmar, y=ymar)
+
+                #print(self.__ax.get_xlim(), self.__ax.get_ylim())
+                #print(self.__ax.margins())
+
+                self._zoom_to_bounds(xlim, ylim)
+            else:
+                set_breakpoint = True
+
     def update_clickmark(self):
         if self.__clickmark is not None:
             #if self.__data[self.__lowerZoom, 0] <= self.__clickmark <= self.__data[self.__upperZoom, 0]:
@@ -157,11 +181,11 @@ class DataDisplay(FigureCanvas):
     def update_annotations(self):
         #trigger on_zoom or find another way
         if self.__annotations is not None and len(self.__annotations) > 0:
-            (xmin, xmax) = self.__ax.get_xlim()
-            (ymin, ymax) = self.__ax.get_ylim()
+            #(xmin, xmax) = self.__ax.get_xlim()
+            #(ymin, ymax) = self.__ax.get_ylim()
 
-            xpos = xmin + 0.01 * (xmax - xmin)
-            ypos = ymax - 0.01 * (ymax - ymin)
+            #+xpos = xmin + 0.01 * (xmax - xmin)
+            #ypos = ymax - 0.01 * (ymax - ymin)
             
             xpos = 0.02
             ypos = 0.98
@@ -189,7 +213,6 @@ class DataDisplay(FigureCanvas):
             return self.__data
         else:
             return self.current_fdi().get_data()
-
 
     def getAllData(self):
         return self.__data
@@ -292,6 +315,22 @@ class DataDisplay(FigureCanvas):
             #self.__ax.set_ylim(y_lb, y_ub)
             self.draw()
 
+    def _zoom_to_bounds(self, xbounds, ybounds):
+        (x_margin, y_margin) = self.__ax.margins()
+
+        (x_lb, x_ub) = xbounds
+        (y_lb, y_ub) = ybounds
+
+        x_dev = (x_ub - x_lb) * x_margin / 2
+        y_dev = (y_ub - y_lb) * y_margin / 2
+
+        self.__ax.set_xlim(x_lb - x_dev, x_ub + x_dev)
+        self.__ax.set_ylim(y_lb - y_dev, y_ub + y_dev)
+
+        # self.__ax.set_xlim(x_lb, x_ub)
+        # self.__ax.set_ylim(y_lb, y_ub)
+        self.draw()
+
     def _find_y_max_between(self, xmin, xmax, data, errors):
         y_max = None
         error = 0
@@ -323,10 +362,6 @@ class DataDisplay(FigureCanvas):
                     y_min = y - error
     
         return y_min
-
-    def ZoomWithMouse(self):
-        #do a drag and drop zoom, because those increments stink
-        pass
 
     def set_label_font_size(self, value):
         if value > 0:
