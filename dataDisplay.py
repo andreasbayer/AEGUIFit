@@ -9,6 +9,9 @@ import fitDataInfo as fdi
 import AEFitDataInfo as adi
 import polyFitDataInfo as pdi
 
+import traceback
+import fitHelper as fh
+
 class DataDisplay(FigureCanvas):
 
     std_fig_width = 6.40
@@ -23,7 +26,8 @@ class DataDisplay(FigureCanvas):
     mark_default_text = 'Click with scroll wheel on figure to show energy value.'
 
     def __init__(self, parent=None):
-        self.__fig, self.__ax = plt.subplots(1, 1, tight_layout=True)
+        self.__fig, self.__ax = plt.subplots(tight_layout=True)
+
 #        FigureCanvas.__init__(self, self.__fig)
         super(FigureCanvas, self).__init__(self.__fig)
 
@@ -35,7 +39,11 @@ class DataDisplay(FigureCanvas):
             self.__inv = None
 
         self.setParent(parent)
+
+        self.DisableRefresh(False)
+        self.setResizingEnabled(True)
         self.reset()
+
         
     def reset(self):
         self.__dc = 'black'
@@ -58,8 +66,8 @@ class DataDisplay(FigureCanvas):
         self.__annotation_font = {'size': self.std_ann_font_size}
 
         self.__ax.clear()
-        self.refresh()
-        self.set_fig_size([self.std_fig_width, self.std_fig_height], False)
+        #self.refresh()
+        #self.set_fig_size([self.std_fig_width, self.std_fig_height], False)
 
     def draw_event(self, renderer):
         self.__inv = self.__ax.transData.inverted()
@@ -67,12 +75,20 @@ class DataDisplay(FigureCanvas):
     def set_fig_size(self, new_fig_size, forward=True):
 
         if self.isLoaded():
-            if new_fig_size is not None and len(new_fig_size) == 2 and new_fig_size[0] is not None and \
-                    new_fig_size[1] is not None and new_fig_size[0] > 0 and new_fig_size[1] > 0:
-               try:
-                   self.__fig.set_size_inches(new_fig_size, forward=True)
-               except Exception as error:
-                   print(error)
+            if new_fig_size is not None:
+                if new_fig_size[0] is not None and new_fig_size[1] is not None:
+                    if len(new_fig_size) == 2 and new_fig_size[0] > 0 and new_fig_size[1] > 0:
+                        try:
+                            self.__fig.set_size_inches(new_fig_size, forward=True)
+                        except Exception as error:
+                            print(error)
+                else:
+                    try:
+                        # setting it to same size won't update, therefore resize it to one pixel less. resizing window
+                        # will adapt it and otherwise 1px is not noticeable
+                        self.resize(self.parent().width()-1, self.parent().height()-1)
+                    except Exception as e:
+                        print(e)
             else:
                 # self.__fig.set_size_inches(None)
                 # have the size adapt to the width of the canvas
@@ -110,70 +126,82 @@ class DataDisplay(FigureCanvas):
                     #self.update_clickmark()
                     self.refresh()
 
+    def isRefreshDisabled(self):
+        return self.__refreshDisabled
+
+    def DisableRefresh(self, disable):
+        self.__refreshDisabled = disable
+
+        print('refresh disabled', self.__refreshDisabled)
+
     def refresh(self, data=None, stdErrors=None, showErrorBars=None, forgetZoomFrame=False):
 
         xlim = None
         ylim = None
 
-        if not forgetZoomFrame:
-            xlim = self.__ax.get_xlim()
-            ylim = self.__ax.get_ylim()
-
-            (xmar, ymar) = self.__ax.margins()
-
-
         if data is not None:
             self.setData(data)
-            
+
         if showErrorBars is not None:
             self.__showErrorBars = showErrorBars
-        
-        if self.isLoaded():
-            if self.__showErrorBars == False:
-                stdErrors = None
-            else:
-                if stdErrors is not None:
-                    self.__stdErrors = stdErrors
-                
-                if self.__stdErrors is not None:
-                    stdErrors = self.__stdErrors[:]
-                else:
-                    stdErrors = None
-                
-            self.__ax.clear()
 
-            #plot data only here:
-            
-            if self.show_all_fits():
-                self.__plot_data(self.__data, stdErrors)
-                self.__plot_combined_fit()
-            else:
-                try:
-                    self.__plot_data(self.current_fdi().get_data(), stdErrors)
-                    
-                    if self.current_fdi().isFitted():
-                        self.__plotFit(self.current_fdi())
-                except Exception as e:
-                    print(e)
-            
-            self.update_clickmark()
-            self.update_annotations()
+        if self.isRefreshDisabled() is False:
 
-            self.draw()
+            print(*traceback.format_stack()[1:-1])
 
             if not forgetZoomFrame:
-                #if (self.__ax.get_xlim(), self.__ax.get_ylim()) != (xlim, ylim):
-                    #self.__ax.set_xlim(xlim)
-                    #self.__ax.set_ylim(ylim)
+                xlim = self.__ax.get_xlim()
+                ylim = self.__ax.get_ylim()
 
-                    #self.__ax.margins(x=xmar, y=ymar)
+                (xmar, ymar) = self.__ax.margins()
 
-                    #print(self.__ax.get_xlim(), self.__ax.get_ylim())
-                    #print(self.__ax.margins())
+            if self.isLoaded():
+                if self.__showErrorBars == False:
+                    stdErrors = None
+                else:
+                    if stdErrors is not None:
+                        self.__stdErrors = stdErrors
 
-                self._zoom_to_bounds(xlim, ylim)
-            else:
-                set_breakpoint = True
+                    if self.__stdErrors is not None:
+                        stdErrors = self.__stdErrors[:]
+                    else:
+                        stdErrors = None
+
+                self.__ax.clear()
+
+                #plot data only here:
+
+                if self.show_all_fits():
+                    self.__plot_data(self.__data, stdErrors)
+                    self.__plot_combined_fit()
+                else:
+                    try:
+                        self.__plot_data(self.current_fdi().get_data(), stdErrors)
+
+                        if self.current_fdi().isFitted():
+                            self.__plotFit(self.current_fdi())
+                    except Exception as e:
+                        print('refresh', e)
+
+                self.update_clickmark()
+                self.update_annotations()
+
+                self.draw()
+
+                if not forgetZoomFrame:
+                    #if (self.__ax.get_xlim(), self.__ax.get_ylim()) != (xlim, ylim):
+                        #self.__ax.set_xlim(xlim)
+                        #self.__ax.set_ylim(ylim)
+
+                        #self.__ax.margins(x=xmar, y=ymar)
+
+                        #print(self.__ax.get_xlim(), self.__ax.get_ylim())
+                        #print(self.__ax.margins())
+
+                    self._zoom_to_bounds(xlim, ylim)
+                else:
+                    set_breakpoint = True
+        return (xlim, ylim)
 
     def update_clickmark(self):
         if self.__clickmark is not None:
@@ -206,6 +234,8 @@ class DataDisplay(FigureCanvas):
                                    fontsize=self.__annotation_font['size'])
 
     def current_fdi(self):
+        print(self.__fitIndex)
+        print(len(self.__fdiFits))
         return self.__fdiFits[self.__fitIndex]
     
     def show_all_fits(self):
@@ -271,6 +301,10 @@ class DataDisplay(FigureCanvas):
             for set in self.__data:
                 set[0] += increment
 
+            xlim = self.__ax.get_xlim()
+            ylim = self.__ax.get_ylim()
+            self._zoom_to_bounds((xlim[0]+increment, xlim[1]+increment), ylim)
+
     def update_combined_fit_data(self, combined_fit_data):
         self.__combined_fit_data = combined_fit_data
         
@@ -287,27 +321,28 @@ class DataDisplay(FigureCanvas):
     
     def ZoomShowAll(self):
         if self.isLoaded():
+            self._zoom_to_xbounds(self.__data[0, 0], self.__data[-1, 0], *self.__ax.margins())
 
-            self._zoom_to_xbounds(self.__data[0, 0], self.__data[-1, 0])
-
-            #self.__ax.set_xlim(self.__data[0, 0], self.__data[-1, 0])
-            #self.__ax.set_ylim(self.__data[0:-1, 1].min(), self.__data[0:-1, 1].max())
-            self.draw()
-    
     def ZoomToFit(self, x_lb, x_ub, fit_index):
         if self.isLoaded():
-            self._zoom_to_xbounds(x_lb, x_ub)
+            self._zoom_to_xbounds(x_lb, x_ub, *self.__ax.margins())
 
-    def _zoom_to_xbounds(self, x_lb, x_ub):
-            (x_margin, y_margin) = self.__ax.margins()
+    def _zoom_to_xbounds(self, x_lb, x_ub, x_margin=0, y_margin=0):
+            print(x_lb, x_ub)
+
+            #(x_margin, y_margin) = self.__ax.margins()
+
             y_lb = self._find_y_min_between(x_lb, x_ub, self.getCurrentData(), self.getStdErrors())
             #y_lb = self._find_y_min_between(x_lb, x_ub, self.getCurrentData(), None)
-            
-            if y_lb > 0:
+
+            if y_lb is None and y_lb > 0:
                 y_lb = 0
             
             y_ub = self._find_y_max_between(x_lb, x_ub, self.getCurrentData(), self.getStdErrors())
             #y_ub = self._find_y_max_between(x_lb, x_ub, self.getCurrentData(), None)
+
+            if y_ub is None:
+                y_ub = 1
 
             x_dev = (x_ub-x_lb) * x_margin/2
             y_dev = (y_ub - y_lb) * y_margin / 2
@@ -323,8 +358,8 @@ class DataDisplay(FigureCanvas):
         (x_lb, x_ub) = xbounds
         (y_lb, y_ub) = ybounds
 
-        x_dev = 0#(x_ub - x_lb) * x_margin / 2
-        y_dev = 0#(y_ub - y_lb) * y_margin / 2
+        x_dev = (x_ub - x_lb) * x_margin / 2
+        y_dev = (y_ub - y_lb) * y_margin / 2
 
         self.__ax.set_xlim(x_lb - x_dev, x_ub + x_dev)
         self.__ax.set_ylim(y_lb - y_dev, y_ub + y_dev)
@@ -351,8 +386,10 @@ class DataDisplay(FigureCanvas):
         return y_max
 
     def _find_y_min_between(self, xmin, xmax, data, errors):
+
         y_min = None
         error = 0
+
         for i in range(1, len(data)):
             (x, y) = data[i]
             
@@ -410,9 +447,14 @@ class DataDisplay(FigureCanvas):
         self.__fitIndex = -1
     
     def fit_index_changed(self, index):
-        self.__fitIndex = index
-        
-        self.refresh()
+        if self.isLoaded():
+            self.__fitIndex = index
+
+            (xlim, ylim) = self.refresh()
+
+            print('xlim, ylim', xlim, ylim)
+
+            self._zoom_to_bounds(xlim, ylim)
     
     def clearFits(self):
         self.__fdiFits.clear()
@@ -440,7 +482,18 @@ class DataDisplay(FigureCanvas):
     
     def __combined_fit_exists(self):
         return self.__combined_fit_data is not None and len(self.__combined_fit_data) > 0
-    
+
+    def isResizingEnabled(self):
+        return self.__isResizing
+
+    def setResizingEnabled(self, enabled):
+        self.__isResizing = enabled
+
+    def resizeEvent(self, event):
+        if self.isResizingEnabled():
+            super().resizeEvent(event)
+        #print(event.)
+
     def __mark_fit_data_in_plot(self, fdiCurrent: fdi.fitDataInfo):
 
         lowerFitBound = -1

@@ -72,6 +72,8 @@ def saveFilewithMetaData(fileName, data, metadata):
     fit_strings = metadata[0]
     view_string = metadata[1]
     data_string = metadata[2]
+    meta_string = metadata[3]
+    print(meta_string)
     
     try:
         f = openfile(fileName, "w+")
@@ -81,6 +83,7 @@ def saveFilewithMetaData(fileName, data, metadata):
     #write metadata
     f.write('#view:' + view_string + '\n')
     f.write('#data:' + data_string + '\n')
+    f.write('#meta:' + meta_string + '\n')
     
     for fit_string in fit_strings:
         f.write('#fits:' + fit_string + '\n')
@@ -104,6 +107,7 @@ def readFileForFitsDataAndStdErrorAndMetaData(filename, tolerate_spaces=False, x
     fit_p_strings = list()
     view_p_string = None
     data_p_string = None
+    meta_p_string = None
     ignored_columns = list()  # test data?
     
     try:
@@ -150,6 +154,8 @@ def readFileForFitsDataAndStdErrorAndMetaData(filename, tolerate_spaces=False, x
                 #ignored_columns.append(i)
             elif line_data.startswith("data:"):
                 data_p_string = line_data.lstrip("data:")
+            elif line_data.startswith("meta:"):
+                meta_p_string = line_data.lstrip("meta:")
     
     # convert list a to float array
     data = array(a, dtype=float)
@@ -160,7 +166,7 @@ def readFileForFitsDataAndStdErrorAndMetaData(filename, tolerate_spaces=False, x
     # close file
     f.close()
     
-    return data, calc_std_errors(data), (fit_p_strings, view_p_string, data_p_string)
+    return data, calc_std_errors(data), (fit_p_strings, view_p_string, data_p_string, meta_p_string)
 
 
 def readFileForDataAndStdError(filename, tolerate_spaces=False):

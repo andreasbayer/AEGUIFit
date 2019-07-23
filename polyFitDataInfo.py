@@ -11,8 +11,6 @@ class polyFitDataInfo(fitDataInfo):
         self._n = 0
         self._FitTo = sys.float_info.max
         self._FitFrom = 0
-        self._ExtendTo = sys.float_info.max
-        self._ExtendFrom = 0
 
     #def is_initialized(self):
     #    return (self._FitTo == sys.float_info.max)
@@ -36,18 +34,6 @@ class polyFitDataInfo(fitDataInfo):
     def setFitFrom(self, value):
         self._FitFrom = value
 
-    def getExtendTo(self):
-        return self._ExtendTo
-
-    def setExtendTo(self, value):
-        self._ExtendTo = value
-
-    def getExtendFrom(self):
-        return self._ExtendFrom
-
-    def setExtendFrom(self, value):
-        self._ExtendFrom = value
-    
     def getFitFunc(self):
         return "Poly Func" #fh.str_fit_func(self._p, self._FWHM)
     
@@ -81,7 +67,7 @@ class polyFitDataInfo(fitDataInfo):
             self.progressUpdate(0.5, '')
 
             for point in full_fitdata:
-                if self.getExtendFrom() <= point[0] <= self.getExtendTo():
+                if self.getFitFrom() <= point[0] <= self.getFitTo():
                     fitdata.append(point)
                     appendval = point[1]
                 else:
@@ -115,8 +101,6 @@ class polyFitDataInfo(fitDataInfo):
 
             self._FitTo += increment
             self._FitFrom += increment
-            self._ExtendFrom += increment
-            self._ExtendFrom += increment
 
         for set in self._data:
             set[0] += increment

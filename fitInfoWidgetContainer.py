@@ -168,7 +168,6 @@ class fitInfoWidgetContainer(QGroupBox):
                 break
     
     def __post_fit(self, fdi_Info, msg):
-        
         self.__update_combined_fit_data()
         self.__update_diff_data(fdi_Info.get_fit_index()+1)
         self.Post_Fit.emit(msg, fdi_Info, self.__combined_fit_data)

@@ -321,6 +321,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         self.__AEFitDataInfo.reset()
     
     def shiftData(self, increment):
+        print('shiftdata increment:', increment)
         self.__AEFitDataInfo.shift_fit(increment)
         
         new_AEFrom = self.getAEFrom() + increment

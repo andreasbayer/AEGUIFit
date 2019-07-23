@@ -11,10 +11,6 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
     FitFrom_changed = pyqtSignal()
     FitTo_changed = pyqtSignal()
     Degree_changed = pyqtSignal()
-    ExtendFrom_changed = pyqtSignal()
-    ExtendTo_changed = pyqtSignal()
-
-
 
     def __init__(self, index, shift_function, parameters=None):
         fiw.fitInfoWidget.__init__(self)
@@ -43,10 +39,6 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
                 self.setFitFrom(float(value))
             elif short == 'fto':
                 self.setFitTo(float(value))
-            elif short == 'efr':
-                self.setExtendFrom(float(value))
-            elif short == 'eto':
-                self.setExtendTo(float(value))
             elif short == 'deg':
                 self.setDegree(float(value))
             elif short == 'wgt':
@@ -60,8 +52,6 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
         return self.FITINITIALS + ':' + \
                'ffr=' + str(round(self.getFitFrom(), 5)) + ',' +\
                'fto=' + str(round(self.getFitTo(), 5)) + ',' +\
-               'efr=' + str(round(self.getExtendFrom(), 5)) + ',' +\
-               'eto=' + str(round(self.getExtendTo(), 5)) + ',' +\
                'deg=' + str(self.getDegree()) + ',' +\
                'wgt=' + str(self.isWeighted())
 
@@ -80,9 +70,6 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
       self.setDegree(2)
       self.setFitFrom(0)
       self.setFitTo(sys.float_info.max)
-
-      self.setExtendFrom(0)
-      self.setExtendTo(sys.float_info.max)
 
       self.setWeighted(True)
 
@@ -111,25 +98,9 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
     def getFitTo(self):
       return self.__dsbFitTo.value()
 
-    def getExtendFrom(self):
-        return self.__dsbExtendFrom.value()
-
-    def setExtendFrom(self, value):
-        self.__dsbExtendFrom.setValue(float(value))
-        self.__ExtendFrom_changed()
-
-    def getExtendTo(self):
-        return self.__dsbExtendTo.value()
-
-    def setExtendTo(self, value):
-        self.__dsbExtendTo.setValue(float(value))
-        self.__ExtendTo_changed()
-
     def __connectSignals(self):
         self.__dsbFitFrom.editingFinished.connect(self.__FitFrom_changed)
         self.__dsbFitTo.editingFinished.connect(self.__FitTo_changed)
-        self.__dsbExtendFrom.editingFinished.connect(self.__ExtendFrom_changed)
-        self.__dsbExtendTo.editingFinished.connect(self.__ExtendTo_changed)
         self.__dsbDegree.editingFinished.connect(self.__Degree_changed)
         self.__cmdFit.clicked.connect(self.__cmdFit_clicked)
         self.__cmdZoomToFitArea.clicked.connect(self.__cmdZoomToFitArea_clicked)
@@ -160,19 +131,6 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
 
         self.__mainLayout.addRow(self.__lblFitFrom, self.__dsbFitFrom)
         self.__mainLayout.addRow(self.__lblFitTo, self.__dsbFitTo)
-
-        self.__lblExtendFrom = QLabel("Extend From ")
-        self.__dsbExtendFrom = QDoubleSpinBox()
-        self.__dsbExtendFrom.setRange(0, sys.float_info.max)
-        self.__dsbExtendFrom.setValue(0)
-        self.__dsbExtendFrom.setSingleStep(0.1)
-
-        self.__lblExtendTo = QLabel(" to ")
-        self.__dsbExtendTo = QDoubleSpinBox()
-        self.__dsbExtendTo.setSingleStep(0.1)
-
-        self.__mainLayout.addRow(self.__lblExtendFrom, self.__dsbExtendFrom)
-        self.__mainLayout.addRow(self.__lblExtendTo, self.__dsbExtendTo)
 
         self.__lblDegree = QLabel("n:")
         self.__dsbDegree = QDoubleSpinBox()
@@ -238,20 +196,11 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
             self.setFitFrom(data[0][0])
             self.setFitTo(data[-1][0])
 
-            self.setExtendFrom(data[0][0])
-            self.setExtendTo(data[-1][0])
-
             self.__dsbFitFrom.setMinimum(data[0][0])
             self.__dsbFitFrom.setMaximum(data[-1][0])
 
             self.__dsbFitTo.setMinimum(data[0][0])
             self.__dsbFitTo.setMaximum(data[-1][0])
-
-            self.__dsbExtendFrom.setMinimum(data[0][0])
-            self.__dsbExtendFrom.setMaximum(data[-1][0])
-
-            self.__dsbExtendTo.setMinimum(data[0][0])
-            self.__dsbExtendTo.setMaximum(data[-1][0])
 
     def __cmdFit_clicked(self):
         self.fitToFunction()
@@ -271,14 +220,6 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
 
     def __FitFrom_changed(self):
         self.__polyFitDataInfo.setFitFrom(self.getFitFrom())
-        #self.AETo_changed.emit()
-
-    def __ExtendTo_changed(self):
-        self.__polyFitDataInfo.setExtendTo(self.getExtendTo())
-        #self.AEFrom_changed.emit()
-
-    def __ExtendFrom_changed(self):
-        self.__polyFitDataInfo.setExtendFrom(self.getFitFrom())
         #self.AETo_changed.emit()
 
     def __Degree_changed(self):

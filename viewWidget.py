@@ -8,7 +8,7 @@ import fitDataInfo as fdi
 import numpy as np
 
 
-class ZoomButtonWidget(QGroupBox):
+class viewWidget(QGroupBox):
     show_all = pyqtSignal()
     zoom_by_increment = pyqtSignal(str, int)
     scale_font_size_changed = pyqtSignal(float)
@@ -16,6 +16,7 @@ class ZoomButtonWidget(QGroupBox):
     fig_size_changed = pyqtSignal(tuple)
     annotation_changed = pyqtSignal(str)
     annotation_font_size_changed = pyqtSignal(float)
+    resizing_changed = pyqtSignal(bool)
 
     def __init__(self):
         QWidget.__init__(self)
@@ -62,10 +63,12 @@ class ZoomButtonWidget(QGroupBox):
 
         self.__lblAnnotationFontSize = QLabel("Font size:")
         self.__dsbAnnotationFontSize = QDoubleSpinBox()
+        self.__cmdRefreshAnnotation = QPushButton('Apply')
+
         self.__dsbAnnotationFontSize.setRange(1, fli.max)
         self.__dsbAnnotationFontSize.setSingleStep(0.5)
         self.__dsbAnnotationFontSize.setMaximumWidth(75)
-        
+
         #self.setFixedHeight(50)
 
         repeat_delay = 0
@@ -126,6 +129,7 @@ class ZoomButtonWidget(QGroupBox):
         self.__annotationLayout.addWidget(self.__edtAnnotation, 0, 0, -1, 1)
         self.__annotationLayout.addWidget(self.__lblAnnotationFontSize, 0, 1, 1, 1)
         self.__annotationLayout.addWidget(self.__dsbAnnotationFontSize, 1, 1, 1, 1)
+        self.__annotationLayout.addWidget(self.__cmdRefreshAnnotation, 2, 1, 1, 1)
 
         hbox_fig_sizes.addWidget(self.__annotationGroupBox)
 
@@ -145,19 +149,23 @@ class ZoomButtonWidget(QGroupBox):
         self.__cmdUUZoom.pressed.connect(self.on_cmdUUZoom_pressed)
         self.__cmdUDZoom.pressed.connect(self.on_cmdUDZoom_pressed)
         self.__cmdShowAll.pressed.connect(self.on_cmdShowAll_pressed)
-        
-        self.__dsbLabelFontSize.valueChanged.connect(self.on_dsb_label_font_size_changed)
-        self.__dsbScaleFontSize.valueChanged.connect(self.on_dsb_scale_font_size_changed)
-        self.__dsbAnnotationFontSize.valueChanged.connect(self.on_dsb_annotation_font_size_changed)
 
-        self.__dsbFigWidth.valueChanged.connect(self.on_dsbFigWidth_changed)
-        self.__dsbFigHeight.valueChanged.connect(self.on_dsbFigHeight_changed)
+        self.__dsbFigHeight.editingFinished.connect(self.apply_fig_size)
+        self.__dsbFigWidth.editingFinished.connect(self.apply_fig_size)
 
-        self.__edtAnnotation.textChanged.connect(self.on_annotation_changed)
+        self.__dsbLabelFontSize.editingFinished.connect(self.on_dsb_label_font_size_changed)
+        self.__dsbScaleFontSize.editingFinished.connect(self.on_dsb_scale_font_size_changed)
+        self.__dsbAnnotationFontSize.editingFinished.connect(self.on_dsb_annotation_font_size_changed)
+
+        #self.__dsbFigWidth.editingFinished.connect(self.on_dsbFigWidth_changed)
+        #self.__dsbFigHeight.editingFinished.connect(self.on_dsbFigHeight_changed)
+
+        self.__cmdRefreshAnnotation.pressed.connect(self.on_annotation_changed)
         
         self.setEnabled(False)
 
     def reset(self, enabled=True):
+        self.__figSizeGroupBox.setChecked(False)
         self.set_fig_size((dd.DataDisplay.std_fig_width, dd.DataDisplay.std_fig_height))
 
         self.set_label_font_size(dd.DataDisplay.std_label_font_size)
@@ -192,18 +200,23 @@ class ZoomButtonWidget(QGroupBox):
     def on_dsb_annotation_font_size_changed(self):
         self.annotation_font_size_changed.emit(self.get_annotation_font_size())
 
-    def on_dsbFigWidth_changed(self):
-        self.fig_size_changed.emit((self.__dsbFigWidth.value(), self.__dsbFigHeight.value()))
+    #def on_dsbFigWidth_changed(self):
+    #    self.fig_size_changed.emit((self.__dsbFigWidth.value(), self.__dsbFigHeight.value()))
 
-    def on_dsbFigHeight_changed(self):
-        self.fig_size_changed.emit((self.__dsbFigWidth.value(), self.__dsbFigHeight.value()))
+    #def on_dsbFigHeight_changed(self):
+    #    self.fig_size_changed.emit((self.__dsbFigWidth.value(), self.__dsbFigHeight.value()))
 
-    def __fig_size_enabled(self, enabled):
+    def apply_fig_size(self, enabled=True):
         if enabled:
             self.fig_size_changed.emit((self.__dsbFigWidth.value(), self.__dsbFigHeight.value()))
         else:
             self.fig_size_changed.emit((None, None))
 
+    def __fig_size_enabled(self, enabled):
+
+        #if checkbox is checked resizing is not enabled and vice versa
+        self.resizing_changed.emit(not enabled)
+        self.apply_fig_size(enabled)
 
     def on_annotation_changed(self):
         self.annotation_changed.emit(self.__edtAnnotation.toPlainText())

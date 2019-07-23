@@ -28,6 +28,7 @@ class tabFits(QTabWidget):
     def removeFit(self, fit_index):
         self.removeTab(fit_index+1)
     
-        
     def current_changed(self, p_int):
-        self.fit_index_changed.emit(p_int-1)
+        print('tab count', p_int)
+        if self.count() >= 1:
+            self.fit_index_changed.emit(p_int-1)

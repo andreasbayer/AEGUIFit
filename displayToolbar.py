@@ -13,16 +13,17 @@ class displayToolbar(NavigationToolbar):
 
     def __init__(self, canvas_, parent_):
 
-        # self.toolitems = (
-        #     ('Home', 'Show all data', 'home', 'home'),
-        #     # ('Back', 'consectetuer adipiscing elit', 'back', 'back'),
-        #     # ('Forward', 'sed diam nonummy nibh euismod', 'forward', 'forward'),
-        #     # (None, None, None, None),
-        #     ('Pan', 'Pan axes with', 'move', 'pan'),
-        #     ('Zoom', 'dolore magna aliquam', 'zoom_to_rect', 'zoom'),
-        #     (None, None, None, None),
-        #     ('Subplots', 'putamus parum claram', 'subplots', 'configure_subplots'),
-        #     ('Save', 'sollemnes in futurum', 'filesaver', 'save_figurea'))
+        self.toolitems = (
+            #('Home', 'Reset original view', 'home', 'home')
+            ('Home', 'Show all data', 'home', 'home'),
+            ('Back', 'Back to previous view', 'back', 'back'),
+            ('Forward', 'Forward to next view', 'forward', 'forward'),
+            (None, None, None, None),
+            ('Pan', 'Pan axes with left mouse, zoom with right', 'move', 'pan'),
+            ('Zoom', 'Zoom to rectangle', 'zoom_to_rect', 'zoom'),
+            ('Subplots', 'Configure subplots', 'subplots', 'configure_subplots'),
+            (None, None, None, None),
+            ('Save', 'Save the figure as shown (including dimensions)', 'filesave', 'save_figure'))
 
         NavigationToolbar.__init__(self, canvas_, parent_)
 
@@ -37,16 +38,13 @@ class displayToolbar(NavigationToolbar):
         print(args)
 
 
-    def save_figurea(self, *args):
-        pass
+#    def save_figurea(self, *args):
+#        pass
 
     def home(self, *args):
         self.show_all.emit()
 
-    #def drag_zoom(self, event):
-    #    pass
-
-    def release_zoom(self, event):
-        print(event)
-        e = super().release_zoom(event)
-        print(e)
+#    def release_zoom(self, event):
+#        print(event)
+#        e = super().release_zoom(event)
+#        print(e)

@@ -9,6 +9,7 @@ class dataControlWidget(QGroupBox):
     data_shift = pyqtSignal(float)
     load_fits = pyqtSignal(list)
     load_view = pyqtSignal(str)
+    load_meta = pyqtSignal(str)
     
     SHOW_ERROR_BARS = "Show error bars"
     SHOW_ERROR_BARS_NOT_LOADED = "Show error bars (could not be calculated)"
@@ -53,11 +54,9 @@ class dataControlWidget(QGroupBox):
     
     def __chkShowErrorBars_changed(self, state):
         self.__chkShowErrorBars.setCheckState(state)
-        
         self.showErrorBars_changed.emit(self.getShowErrorBars())
     
     def __energyShiftChanged(self):
-
         energyShift = self.__dsbEnergyShift.value()
 
         increment = energyShift - self.__prevShift
@@ -65,7 +64,6 @@ class dataControlWidget(QGroupBox):
         
         self.setEnergyShift(energyShift)
         
-        self.data_shift.emit(increment)
         self.data_changed.emit(self.getShowErrorBars())
     
     #  def setData(self, data):
@@ -78,7 +76,10 @@ class dataControlWidget(QGroupBox):
         return (self.__dsbEnergyShift.value())
     
     def setEnergyShift(self, value):
+        increment = self.__dsbEnergyShift.value() - value
         self.__dsbEnergyShift.setValue(value)
+
+        self.data_shift.emit(increment)
     
     def getStdErrors(self):
         return self.__stdErrors
@@ -105,7 +106,7 @@ class dataControlWidget(QGroupBox):
         self.__chkShowErrorBars.setChecked(value)
     
     def loadFile(self, fileName):
-        self.__all_data, self.__stdErrors, (fit_strings, view_string, data_string) =\
+        self.__all_data, self.__stdErrors, (fit_strings, view_string, data_string, meta_string) =\
             hl.readFileForFitsDataAndStdErrorAndMetaData(fileName)
 
         #we need a copy to not save any altered data!
@@ -125,9 +126,10 @@ class dataControlWidget(QGroupBox):
         self.__chkShowErrorBars.setChecked(check)
         
         self.data_changed.emit(check)
-        self.load_from_data_string(data_string)
         self.load_fits.emit(fit_strings)
         self.load_view.emit(view_string)
+        self.load_meta.emit(meta_string)
+        self.load_from_data_string(data_string)
 
     def load_from_data_string(self, data_string):
         if data_string is not None:
@@ -148,5 +150,5 @@ class dataControlWidget(QGroupBox):
     def get_data_string(self):
         return 'egs=' + str(self.getEnergyShift()) + ',seb=' + str(self.getShowErrorBars())
     
-    def saveFile(self, fileName, fit_strings, view_string, data_string):
-        hl.saveFilewithMetaData(fileName, self.__all_data, (fit_strings, view_string, data_string))
+    def saveFile(self, fileName, fit_strings, view_string, data_string, meta_string):
+        hl.saveFilewithMetaData(fileName, self.__all_data, (fit_strings, view_string, data_string, meta_string))

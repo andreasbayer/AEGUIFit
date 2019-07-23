@@ -1,14 +1,15 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QGridLayout, QMessageBox, QAction, QGroupBox, QFileDialog, QSizePolicy, QProgressBar, QLabel, QPushButton
+from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QGridLayout, QMessageBox, QAction, QGroupBox, QFileDialog, QSizePolicy, QProgressBar, QLabel, QPushButton, QScrollArea, QFrame
 import flSaveFileDialog as fsd
 
 import dataDisplay as dd
 import dataControlWidget as dcw
 import fitDataInfo as fdi
-import zoomButtonWidget as zbw
+import viewWidget as viw
 import fitInfoWidgetContainer as fic
 import displayToolbar as dt
 import tabFits as tft
+import metaInfoWidget as mdi
 from numpy import empty
 
 TITLE = "AEGUIFit 2.02 - "
@@ -23,7 +24,7 @@ class App(QMainWindow):
         self.width = 1280
         self.height = 900
         self.bottom = 155
-        self.right = 240
+        self.right = 250
         self.initUI()
         self.menuInit()
 
@@ -127,12 +128,13 @@ class App(QMainWindow):
         self.horizontalGroupBox = QGroupBox("Grid")
         self.grid_layout = QGridLayout()
         # layout.setRowStretch(0, 50)
-        #layout.setColumnStretch(0, 80)
+        # layout.setColumnStretch(0, 80)
         # layout.setRowStretch(1, 50)
 
         self.ficFits = fic.fitInfoWidgetContainer()
         self.dcwData = dcw.dataControlWidget()
-        self.zbwMain = zbw.ZoomButtonWidget()
+        self.viwView = viw.viewWidget()
+        self.mdiMeta = mdi.metaInfoWidget()
         
         self.ficFits.Post_Fit.connect(self.PostFit)  # self.ddMain.addFit(self.ficFits.getFitDataInfo())
         self.ficFits.Combined_Fit_Data_Updated.connect(self.Combined_Fit_Data_Updated)
@@ -145,8 +147,10 @@ class App(QMainWindow):
         self.dcwData.showErrorBars_changed.connect(self.showErrorBars_changed)
         self.dcwData.data_changed.connect(self.dcwData_changed)
         self.dcwData.data_shift.connect(self.ddMain.shiftData)
+        #self.dcwData.data_shift.connect(self.ficFits.shiftData)
         self.dcwData.load_fits.connect(self.ficFits.load_fits)
-        self.dcwData.load_view.connect(self.zbwMain.load_from_view_string)
+        self.dcwData.load_view.connect(self.viwView.load_from_view_string)
+        self.dcwData.load_meta.connect(self.mdiMeta.load_from_meta_string)
 
         self.dcwData.data_shift.connect(self.ficFits.shift_data)
         # has to be generalized for multiple fiw
@@ -154,14 +158,15 @@ class App(QMainWindow):
         self.ficFits.zoom_to_fit.connect(self.zoom_to_fit)
         # generalize
 
-        # self.zbwMain.lower_down.connect(self.)
-        self.zbwMain.zoom_by_increment.connect(self.zoom_by_increment)
-        self.zbwMain.scale_font_size_changed.connect(self.scale_font_size_changed)
-        self.zbwMain.label_font_size_changed.connect(self.label_font_size_changed)
-        self.zbwMain.fig_size_changed.connect(self.fig_size_changed)
-        self.zbwMain.annotation_changed.connect(self.annotation_changed)
-        self.zbwMain.annotation_font_size_changed.connect(self.annotation_font_size_changed)
-        self.zbwMain.setSizePolicy(QSizePolicy.Expanding,
+        # self.viwView.lower_down.connect(self.)
+        self.viwView.zoom_by_increment.connect(self.zoom_by_increment)
+        self.viwView.scale_font_size_changed.connect(self.scale_font_size_changed)
+        self.viwView.label_font_size_changed.connect(self.label_font_size_changed)
+        self.viwView.fig_size_changed.connect(self.fig_size_changed)
+        self.viwView.resizing_changed.connect(self.resizing_changed)
+        self.viwView.annotation_changed.connect(self.annotation_changed)
+        self.viwView.annotation_font_size_changed.connect(self.annotation_font_size_changed)
+        self.viwView.setSizePolicy(QSizePolicy.Expanding,
                                    QSizePolicy.Expanding)
 
         self.tabFits = tft.tabFits()
@@ -169,25 +174,22 @@ class App(QMainWindow):
         self.ficFits.fit_added.connect(self.ddMain.addFit)
         self.tabFits.fit_index_changed.connect(self.ddMain.fit_index_changed)
 
-        # change fit index after remove_fit, when and where and whos responsible for that anyway
-
-        #self.ddVbox = QVBoxLayout()
-        #self.ddVbox.addWidget(self.tabFits)
-        #self.ddVbox.addWidget(self.ddMain)
-
-        #layout.addItem(self.ddVbox, 0, 0)
+        self.ddScrollArea = QScrollArea(self)
+        self.ddScrollArea.setWidgetResizable(True)
+        self.ddScrollArea.setWidget(self.ddMain)
 
         self.ddGbox = QGridLayout()
         self.ddGbox.addWidget(self.tabFits)
-        self.ddGbox.addWidget(self.ddMain)
+        self.ddGbox.addWidget(self.ddScrollArea)
         self.dtToolbar = dt.displayToolbar(self.ddMain, self)
         self.dtToolbar.show_all.connect(self.zoom_show_all)
         self.ddGbox.addWidget(self.dtToolbar)
 
-        self.grid_layout.addItem(self.ddGbox, 0, 0)
-        self.grid_layout.addWidget(self.ficFits, 0, 1)
-        self.grid_layout.addWidget(self.zbwMain, 1, 0)
-        self.grid_layout.addWidget(self.dcwData, 1, 1)
+        self.grid_layout.addItem(self.ddGbox, 0, 0, 1, 2)
+        self.grid_layout.addWidget(self.ficFits, 0, 2)
+        self.grid_layout.addWidget(self.viwView, 1, 0)
+        self.grid_layout.addWidget(self.mdiMeta, 1, 1)
+        self.grid_layout.addWidget(self.dcwData, 1, 2)
 
         self.horizontalGroupBox.setLayout(self.grid_layout)
 
@@ -199,7 +201,8 @@ class App(QMainWindow):
 
     def set_dims(self):
         self.dcwData.setFixedHeight(self.bottom)
-        self.zbwMain.setFixedHeight(self.bottom)
+        self.viwView.setFixedHeight(self.bottom)
+        self.mdiMeta.setFixedHeight(self.bottom)
         
         self.ficFits.setFixedWidth(self.right)
         self.dcwData.setFixedWidth(self.right)
@@ -227,16 +230,21 @@ class App(QMainWindow):
         self.resetMenuBar(is_loaded)
 
     def loadData(self, fileName):
+
+        self.ddMain.DisableRefresh(True)
         self.dcwData.loadFile(fileName)
         self.ddMain.ZoomShowAll()
+        self.ddMain.DisableRefresh(False)
+        self.ddMain.refresh()
 
     def saveData(self, fileName):
         
         data_string = self.dcwData.get_data_string()
-        view_string = self.zbwMain.get_view_string()
+        view_string = self.viwView.get_view_string()
         fit_strings = self.ficFits.get_fit_strings()
-        
-        self.dcwData.saveFile(fileName, fit_strings, view_string, data_string)
+        meta_string = self.mdiMeta.get_meta_string()
+        print('savedata', meta_string)
+        self.dcwData.saveFile(fileName, fit_strings, view_string, data_string, meta_string)
 
     def dcwData_changed(self, showErrorBars):
         data = self.dcwData.getData()
@@ -259,7 +267,7 @@ class App(QMainWindow):
     def zoom_show_all(self):
         try:
             self.ddMain.ZoomShowAll()
-            self.ddMain.refresh()
+            #self.ddMain.refresh()
 
             self.set_display_msg('')
         except:
@@ -295,11 +303,19 @@ class App(QMainWindow):
     def fig_size_changed(self, new_fig_size):
         try:
             self.ddMain.set_fig_size(new_fig_size)
-            self.ddMain.refresh()  # necessary?
+            #self.ddMain.refresh()
+            self.ddMain.draw()
 
             self.set_display_msg('')
         except:
             self.set_display_msg('changing figure size failed.')
+
+    def resizing_changed(self, enabled):
+        try:
+            self.ddMain.setResizingEnabled(enabled)
+            self.set_display_msg('')
+        except:
+            self.set_display_msg('changing resizing failed.')
 
     def annotation_changed(self, annotation):
         try:
@@ -461,7 +477,8 @@ class App(QMainWindow):
                 self.loadData(fileName)
 
                 self.setWindowTitle(TITLE + fileName)
-            except:
+            except Exception as e:
+                print(e)
                 self.reset(False)
                 QMessageBox.critical(self, "Open file failed!", "Error while opening " + fileName, QMessageBox.Ok,
                                      QMessageBox.Ok)
@@ -484,15 +501,19 @@ class App(QMainWindow):
         self.reset(enable=False)
 
     def reset(self, enable):
+
+        self.ddMain.DisableRefresh(True)
         self.ficFits.reset(enable)
         self.dcwData.reset(enable)
         self.ddMain.reset()
         self.tabFits.reset()
-        self.zbwMain.reset(enable)
+        self.viwView.reset(enable)
+        self.mdiMeta.reset(enable)
         self.dtToolbar.reset(enable)
         self.resetMenuBar(self.ddMain.isLoaded())
-
         self.progressBar.reset()
+
+        self.ddMain.DisableRefresh(False)
 
     def showErrorBars_changed(self, showErrorBars):
         try:
