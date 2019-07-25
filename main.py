@@ -462,7 +462,8 @@ class App(QMainWindow):
             self.writeAllDataToFile(name)
 
             self.set_display_msg('Exporting All Data was successful.')
-        except:
+        except Exception as e:
+            print(e)
             QMessageBox.critical(self, "Exporting all data failed!", "Please contact developers for further information.",
                                  QMessageBox.Ok, QMessageBox.Ok)
 
