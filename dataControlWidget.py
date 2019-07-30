@@ -59,8 +59,11 @@ class dataControlWidget(QGroupBox):
     def __energyShiftChanged(self):
         energyShift = self.__dsbEnergyShift.value()
 
+        wtf = (energyShift is self.__prevShift)
+
+
         increment = energyShift - self.__prevShift
-        self.__prevShift = energyShift
+        self.__prevShift = float(energyShift)
         
         self.setEnergyShift(energyShift)
         

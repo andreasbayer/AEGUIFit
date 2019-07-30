@@ -11,6 +11,8 @@ class polyFitDataInfo(fitDataInfo):
         self._n = 0
         self._FitTo = sys.float_info.max
         self._FitFrom = 0
+        self._p = []
+        self._residuals = []
 
     #def is_initialized(self):
     #    return (self._FitTo == sys.float_info.max)
@@ -40,6 +42,12 @@ class polyFitDataInfo(fitDataInfo):
     def getName(self):
         return "Poly-Fit #" + str(self.get_fit_index() + 1)
 
+    def getParameters(self):
+        return self._p
+
+    def getResiduals(self):
+        return self._residuals
+
     def fitToFunction(self):
         data = self.get_data()
 
@@ -54,12 +62,11 @@ class polyFitDataInfo(fitDataInfo):
         else:
             cut_data = fh.cutarray2(data=data, lowerlim=self.getFitFrom(), upperlim=self.getFitTo())
 
-
         try:
-            p, arr, deg, arr2, val = \
+            self._p, arr1, deg, self._residuals, val = \
                 np.polyfit(cut_data[:, 0], cut_data[:, 1], self.getDegree(), w=weights, full=True, cov=True)
 
-            full_fitdata = np.array([data[:, 0], np.polyval(p, data[:, 0])]).transpose()
+            full_fitdata = np.array([data[:, 0], np.polyval(self._p, data[:, 0])]).transpose()
             fitdata = list()
 
             appendval = 0

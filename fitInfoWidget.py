@@ -1,6 +1,8 @@
 from PyQt5.QtWidgets import QWidget, QGroupBox
 from PyQt5.QtCore import pyqtSignal
 import fitDataInfo as fdi
+import traceback
+
 
 class fitInfoWidget(QGroupBox):
     
@@ -49,7 +51,7 @@ class fitInfoWidget(QGroupBox):
         pass
     
     def get_fit_index(self):
-        pass
+        return self.getFitDataInfo().get_fit_index()
     
     # get-set-block
     def isFitted(self):
@@ -77,6 +79,7 @@ class fitInfoWidget(QGroupBox):
     def setData(self, data, std_err):
         self._on_set_data(data, std_err)
         self.__data = data
+        self.getFitDataInfo().setData(data)
         self.__std_err = std_err
 
     def _on_set_data(self, data, std_err):

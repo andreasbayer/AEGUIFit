@@ -3,8 +3,7 @@ from scipy.special import *
 
 from scipy import optimize
 
-from math import sqrt
-from math import log
+from math import sqrt, log, log10, floor
 
 import numpy as np
 
@@ -404,6 +403,42 @@ def fit_continuation(data, p, fwhm):
             break
     
     return data
+
+def magnitude(value):
+    mag = 0
+
+    if value != 0:
+        mag = math.floor(log10(abs(value)))
+
+    return mag
+
+
+def roundToError(value, error, digits_of_error=1):
+    m_val = magnitude(value)
+    m_err = magnitude(error)
+
+    r_val = round(value*10**(-m_err+digits_of_error-1))*10**(m_err-digits_of_error+1)
+    r_err = round(error*10**(-m_err+digits_of_error-1))*10**(m_err-digits_of_error+1)
+
+    return r_val, r_err, m_val, m_err
+
+def roundToErrorStrings(value, error, digits_of_error=1):
+
+    r_par, r_err, m_par, m_err = roundToError(value, error, digits_of_error)
+
+    n_digits = -m_err + digits_of_error - 1
+    if n_digits < 0:
+        n_digits = 0
+
+    par_str = '{0:.' + str(n_digits) + 'f}'
+    par_str = par_str.format(r_par)
+    err_str = '{0:.' + str(n_digits) + 'f}'
+    err_str = err_str.format(r_err)
+
+    return par_str, err_str
+
+
+
 
 def cutarray2(data, lowerlim=None, upperlim=None, data2=None, returnIndexes=False):
     # this function cuts an array and returns it

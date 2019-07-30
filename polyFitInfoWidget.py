@@ -140,6 +140,13 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
 
         self.__mainLayout.addRow(self.__lblDegree, self.__dsbDegree)
 
+        self.__lblFitParameters = QLabel("Fit parameters:")
+        self.__lblFitParValues = QLabel("")
+
+        self.__mainLayout.addRow(self.__lblFitParameters)
+        self.__mainLayout.addRow(self.__lblFitParValues)
+
+
         self.__cmdFit = QPushButton("Fit")
         self.__cmdFit.setFixedWidth(75)
         self.__chkWeightFit = QCheckBox("Weighted")
@@ -189,8 +196,6 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
 
     def _on_set_data(self, data, stderr):
         if self.__polyFitDataInfo.is_initialized() is False:
-            self.__polyFitDataInfo.setData(data)
-
             self.__polyFitDataInfo.setStdErr(stderr)
 
             self.setFitFrom(data[0][0])
@@ -235,8 +240,8 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
     def shiftData(self, increment):
         self.__polyFitDataInfo.shift_fit(increment)
 
-        self.setAEFrom(self.getAEFrom() + increment)
-        self.setAETo(self.getAETo() + increment)
+        self.setFitFrom(self.getFitFrom() + increment)
+        self.setFitTo(self.getFitTo() + increment)
 
     def fitToFunction(self):
         msg = self.__polyFitDataInfo.fitToFunction()
@@ -244,14 +249,26 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
         self.Post_Fit.emit(self.__polyFitDataInfo, msg)
 
         if msg == self.__polyFitDataInfo.SUCCESS:
-            #self.__lblFoundAE.setText(self.AEFOUNDAT.format(self.__polyFitDataInfo.getFoundAE()))
-            #self.__lblStdDev.setText(self.STDDEVAT.format(self.__polyFitDataInfo.getStdDeviation()))
-            #self.__dsbFWHM.setValue(self.__polyFitDataInfo.getFittedFWHM())
-            #self.__edtFitFunc.setText(self.__polyFitDataInfo.getFitFunc())
-            #self.__cmdZoomToFitArea.setEnabled(True)
             print("success")
+
+            parstring = ""
+            p = self.getFitDataInfo().getParameters()
+            residuals = self.getFitDataInfo().getResiduals()
+            for i in reversed(range(0, len(p))):
+                digits_of_error = 2
+
+                par_str, err_str = fh.roundToErrorStrings(p[i], residuals[i], digits_of_error)
+
+                parstring += 'a<sub>' + str(round(i)) + '</sub>: ' + par_str + ' &plusmn; ' + err_str
+                if i >= 0:
+                    parstring += '<br>'
+
+            self.__lblFitParValues.setText(parstring)
+
             self.setPostFitFunctionsEnabled(True)
         else:
+
+            self.__lblFitParValues.setText('')
             self.setPostFitFunctionsEnabled(False)
 
         return msg, self.__polyFitDataInfo

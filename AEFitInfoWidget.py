@@ -9,11 +9,11 @@ import matplotlib.pyplot as plt
 import dia_goodness_of_minspan as gom
 
 
-AEFOUNDAT = "Found AE at {:.2f} eV"
-STDDEVAT = "with a stdDev of {:.2f} eV"
+AEFOUNDAT = "Found AE at {:f} eV"
+STDDEVAT = "with a stdDev of {:f} eV"
 
-VALSTRING = r'{:.3f} ' + u'\u00B1' + r' {:.3f}'
-AEUNIT = "eV"
+PM = u' \u00B1 '
+AEUNIT = "" #"eV"
 
 
 class AEFitInfoWidget(fiw.fitInfoWidget):
@@ -269,8 +269,6 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
     
     def _on_set_data(self, data, std_err):
         if self.__AEFitDataInfo.is_initialized() is False:
-            self.__AEFitDataInfo.setData(data)
-
             self.__AEFitDataInfo.setStdErr(std_err)
 
             self.setAEFrom(data[0][0])
@@ -298,9 +296,6 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
     def getName(self):
         return self.__AEFitDataInfo.getName()
             
-    def get_fit_index(self):
-        return self.__AEFitDataInfo.get_fit_index()
-        
     def __AEFrom_changed(self):
         self.__AEFitDataInfo.setAEFrom(self.__dsbAEFrom.value())
         self.AEFrom_changed.emit()
@@ -345,17 +340,27 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
             #self.__lblFoundAE.setText(AEFOUNDAT.format(self.__AEFitDataInfo.getFoundAE()))
             #self.__lblStdDev.setText(STDDEVAT.format(self.__AEFitDataInfo.getStdDeviation()))
 
-            self.__lblAEVal.setText(VALSTRING.format(self.__AEFitDataInfo.getFoundAE(),
-                                                          self.__AEFitDataInfo.getFoundAE_dev()) + " " + AEUNIT)
+            #how many digits to show of the error (Digits Of Error)
+            doe = 2
 
-            self.__lblAlphaVal.setText(VALSTRING.format(self.__AEFitDataInfo.getAlpha(),
-                                                             self.__AEFitDataInfo.getAlpha_dev()))
+            val, err = fh.roundToErrorStrings(self.__AEFitDataInfo.getFoundAE(), self.__AEFitDataInfo.getFoundAE_dev(),
+                                              doe)
 
-            self.__lblScaleVal.setText(VALSTRING.format(self.__AEFitDataInfo.getScaleFactor(),
-                                                             self.__AEFitDataInfo.getScaleFactor_dev()))
+            self.__lblAEVal.setText(val + PM + err + AEUNIT)
 
-            self.__lblYOffsetVal.setText(VALSTRING.format(self.__AEFitDataInfo.getYOffset(),
-                                                               self.__AEFitDataInfo.getYOffset_dev()))
+            val, err = fh.roundToErrorStrings(self.__AEFitDataInfo.getAlpha(), self.__AEFitDataInfo.getAlpha_dev(), doe)
+
+            self.__lblAlphaVal.setText(val + PM + err)
+
+            val, err = fh.roundToErrorStrings(self.__AEFitDataInfo.getScaleFactor(),
+                                              self.__AEFitDataInfo.getScaleFactor_dev(), doe)
+
+            self.__lblScaleVal.setText(val + PM + err)
+
+            val, err = fh.roundToErrorStrings(self.__AEFitDataInfo.getYOffset(), self.__AEFitDataInfo.getYOffset_dev(),
+                                              doe)
+
+            self.__lblYOffsetVal.setText(val + PM + err)
 
             #todo: set fitparameter values and errors
 

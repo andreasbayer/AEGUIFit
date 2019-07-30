@@ -418,7 +418,7 @@ class DataDisplay(FigureCanvas):
         self.__data = data
 
         self.is_loaded_changed.emit(self.isLoaded())
-            
+
         #self.__upperZoom = len(data)-1
         #self.__lowerZoom = 0
     
@@ -451,8 +451,6 @@ class DataDisplay(FigureCanvas):
             self.__fitIndex = index
 
             (xlim, ylim) = self.refresh()
-
-            print('xlim, ylim', xlim, ylim)
 
             self._zoom_to_bounds(xlim, ylim)
     

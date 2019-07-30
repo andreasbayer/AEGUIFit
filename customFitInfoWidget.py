@@ -166,8 +166,6 @@ class customFitInfoWidget(fiw.fitInfoWidget):
 
     def _on_set_data(self, data, stderr):
         if self.__customFitDataInfo.is_initialized() is False:
-
-            self.getFitDataInfo().setData(data)
             self.setDomainFrom(data[0][0])
             self.setDomainTo(data[-1][0])
 

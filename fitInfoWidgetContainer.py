@@ -187,8 +187,7 @@ class fitInfoWidgetContainer(QGroupBox):
                     fit_data = fiw_i.getFitDataInfo().getFitData()
                     
                     for i in range(0, len(fit_data)):
-                        
-                        if fit_data[i][1] != None:
+                        if fit_data[i][1] is not None:
                             self.__combined_fit_data[i][1] = self.__combined_fit_data[i][1] + fit_data[i][1]
                 else:
                     #make new
@@ -196,26 +195,29 @@ class fitInfoWidgetContainer(QGroupBox):
     
     def __update_diff_data(self, i_starting=0):
         #i_starting: first fitInfoWidget to be updated
-        
+        print("update diff data at " + str(i_starting))
+
         if i_starting == 0:
             diff_data = self.__data.copy()
         else:
             diff_data = self.__fitInfoWidgets[i_starting-1].getData().copy()
         
         for fiw_i in self.__fitInfoWidgets:
-            
+            print("looping at " + str(fiw_i.get_fit_index()))
+
             if fiw_i.get_fit_index() >= i_starting-1:
                 
                 if fiw_i.get_fit_index() >= i_starting:
                     fiw_i.setData(diff_data.copy(), self.__std_err)
-                
-                if fiw_i.isFitted() and fiw_i.isDisabled() is not True and fiw_i.get_fit_index() < len(self.__fitInfoWidgets)-1:
-                    
+                    print("updating for " + str(fiw_i.get_fit_index()))
+
+                if fiw_i.isFitted() and fiw_i.isDisabled() is not True and\
+                        fiw_i.get_fit_index() < len(self.__fitInfoWidgets)-1:
+                    print("fiw #" + str(fiw_i.get_fit_index()) + "is fittet and not disabled and fitindex is less than number of fiw -1")
                     fit_data = fiw_i.getFitDataInfo().getFitData()
                     
                     for i in range(0, len(fit_data)):
-                        
-                        if fit_data[i][1] != None:
+                        if fit_data[i][1] is not None:
                             diff_data[i][1] = diff_data[i][1] - fit_data[i][1]
 
                     #print('Fitdata was just updated at', fiw_i.get_fit_index())
