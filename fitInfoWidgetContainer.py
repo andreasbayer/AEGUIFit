@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QGroupBox, QPushButton, QComboBox, QVBoxLayout, QHBoxLayout, QScrollArea, QFrame
+from PyQt5.QtWidgets import QGroupBox, QPushButton, QComboBox, QVBoxLayout, QHBoxLayout, QScrollArea, QFrame, QGroupBox
 from PyQt5.QtCore import pyqtSignal, Qt
 #from PyQt5.Qt import ali
 import AEFitInfoWidget as afw

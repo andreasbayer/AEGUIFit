@@ -10,9 +10,18 @@ class AEFitDataInfo(fitDataInfo):
         fitDataInfo.__init__(self, index)
         
         self._minspan = 3.0
+
         self._AEFrom = 0.0
         self._AETo = fli.max
+        self._YFrom = -np.inf
+        self._YTo = np.inf
+        self._ScaleFrom = -np.inf
+        self._ScaleTo = np.inf
+        self._AlphaFrom = -np.inf
+        self._AlphaTo = np.inf
+
         self._p = [] * 4
+        #fit relevant bounds are the bounds for the energy interfal of the last fit that converged
         self._fitRelBounds = [0.0] * 2
         self._fittedFWHM = 0
         self._FWHM = 0
@@ -46,6 +55,42 @@ class AEFitDataInfo(fitDataInfo):
     
     def setAETo(self, AETo):
         self._AETo = AETo
+
+    def getYTo(self):
+        return self.YTo
+
+    def setYTo(self, YTo):
+        self._YTo = YTo
+
+    def getYFrom(self):
+        return self._YFrom
+
+    def setYFrom(self, YFrom):
+        self._YFrom = YFrom
+
+    def getScaleTo(self):
+        return self._ScaleTo
+
+    def setScaleTo(self, ScaleTo):
+        self._ScaleTo = ScaleTo
+
+    def getScaleFrom(self):
+        return self._ScaleFrom
+
+    def setScaleFrom(self, ScaleFrom):
+        self._ScaleFrom = ScaleFrom
+
+    def setAlphaFrom(self, AlphaFrom):
+        self._AlphaFrom = AlphaFrom
+
+    def getAlphaFrom(self):
+        return self._AlphaFrom
+
+    def setAlphaTo(self, AlphaTo):
+        self._AlphaTo = AlphaTo
+
+    def getAlphaTo(self):
+        return self._AlphaTo
     
     def getFitRelFrom(self):
         return self._fitRelBounds[0]
@@ -143,7 +188,30 @@ class AEFitDataInfo(fitDataInfo):
         if self.isFitted():
             name += "( = " + str(self.getFoundAE()) + ")"
         return "Fit #" + str(self.get_fit_index() + 1)
-    
+
+    # def getYBounds(self):
+    #     return 0, np.inf
+    #
+    # def getAEBounds(self):
+    #     return self.getAEFrom(), self.getAETo()
+    #
+    # def getScaleBounds(self):
+    #     return -np.inf, np.inf
+    #
+    # def getAlphaBounds(self):
+    #     return -np.inf, np.inf
+
+    def get_fit_bounds(self):
+        lower_bounds = [-np.inf] * 4
+        upper_bounds = [np.inf] * 4
+
+        lower_bounds[0], upper_bounds[0] = self.getYFrom(), self.getYTo()
+        lower_bounds[1], upper_bounds[1] = self.getAEFrom(), self.getAETo()
+        lower_bounds[2], upper_bounds[2] = self.getScaleFrom(), self.getScaleTo()
+        lower_bounds[3], upper_bounds[3] = self.getAlphaFrom(), self.getAlphaTo()
+
+        return lower_bounds, upper_bounds
+
     def fitToFunction(self):
         
         self._p = [0.0] * 4
@@ -157,7 +225,7 @@ class AEFitDataInfo(fitDataInfo):
         try:
             self._p, self._stdDev, self._fitRelBounds[0], self._fitRelBounds[
                 1], self._fittedFWHM, self._fitFunction \
-                = fh.find_best_fit(self._data, weights, self._p, self._FWHM, self._minspan, [self._AEFrom, self._AETo],
+                = fh.find_best_fit(self._data, weights, self._p, self._FWHM, self._minspan, *self.get_fit_bounds(),
                      self.progressUpdate)
             
             self._setFitData(fh.data_from_fit_and_parameters(self._data, self._fitFunction, self._p, self._FWHM,
@@ -199,7 +267,7 @@ class AEFitDataInfo(fitDataInfo):
             
             p, stdDev, fitRelBounds_x, fitRelBounds_y, fittedFWHM, fitfunc = \
                 fh.find_best_fit(self._data, weights, self._p, self._FWHM, test_minspan,
-                                 [self._AEFrom, self._AETo], self.progressUpdate)
+                                 *self.get_fit_bounds(), self.progressUpdate)
             
             y_offsets = np.append(y_offsets, p[0])
             y_offset_errs = np.append(y_offset_errs, stdDev[0])

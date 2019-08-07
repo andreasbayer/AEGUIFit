@@ -59,40 +59,46 @@ class dataControlWidget(QGroupBox):
     def __energyShiftChanged(self):
         energyShift = self.__dsbEnergyShift.value()
 
-        wtf = (energyShift is self.__prevShift)
-
-
         increment = energyShift - self.__prevShift
-        self.__prevShift = float(energyShift)
-        
+        self.__prevShift = energyShift
         self.setEnergyShift(energyShift)
-        
+
         self.data_changed.emit(self.getShowErrorBars())
-    
+
     #  def setData(self, data):
     #    self.__data = data
-    
+
     def getData(self):
         return self.__data
-    
+
     def getEnergyShift(self):
         return (self.__dsbEnergyShift.value())
-    
+
     def setEnergyShift(self, value):
         increment = self.__dsbEnergyShift.value() - value
         self.__dsbEnergyShift.setValue(value)
 
+        #self.__shiftData(increment)
         self.data_shift.emit(increment)
-    
+
+    def __shiftData(self, increment):
+        try:
+            if self.getData() is not None:
+                for set in self.getData():
+                    set[0] += increment
+        except Exception as e:
+            print(e)
+
+
     def getStdErrors(self):
         return self.__stdErrors
-    
+
     def getMax_Energy(self):
         if self.__data is not None:
             return self.__data[-1][0]
         else:
             return None
-    
+
     def getMin_Energy(self):
         if self.__data is not None:
             return self.__data[0][0]

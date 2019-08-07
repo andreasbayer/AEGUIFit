@@ -24,7 +24,7 @@ class App(QMainWindow):
         self.width = 1280
         self.height = 900
         self.bottom = 155
-        self.right = 250
+        self.right = 275
         self.initUI()
         self.menuInit()
 

@@ -335,7 +335,7 @@ class DataDisplay(FigureCanvas):
             y_lb = self._find_y_min_between(x_lb, x_ub, self.getCurrentData(), self.getStdErrors())
             #y_lb = self._find_y_min_between(x_lb, x_ub, self.getCurrentData(), None)
 
-            if y_lb is None and y_lb > 0:
+            if y_lb is None or y_lb > 0:
                 y_lb = 0
             
             y_ub = self._find_y_max_between(x_lb, x_ub, self.getCurrentData(), self.getStdErrors())

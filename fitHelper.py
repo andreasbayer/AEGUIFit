@@ -26,7 +26,7 @@ def find_ev_position(data, ev, lb=0, ub=-1):
     
     return e_pos
 
-def fit_function_to_data(data, p, fwhm, lb, ub, std_errs = None):
+def fit_function_to_data(data, p, fwhm, lbs, ubs, std_errs = None):
     # tighten sigma on the go (lasso sigma)
     
     base_func = eval_fit_function(fwhm)
@@ -40,7 +40,8 @@ def fit_function_to_data(data, p, fwhm, lb, ub, std_errs = None):
                              absolute_sigma=False,
                              #bounds=([0, lb, -np.inf, -np.inf], [0.1, ub, np.inf, np.inf]),
                              # todo upperbound for constant background is arbitrary
-                             bounds=([0, lb, -np.inf, -np.inf], [np.inf, ub, np.inf, np.inf]),
+                             #bounds=([0, lbs, -np.inf, -np.inf], [np.inf, ubs, np.inf, np.inf]),
+                             bounds=(lbs, ubs),
                              check_finite=True)
     
     # return initial_parameters and stddev for the parameters
@@ -134,7 +135,7 @@ def fix_std_errs(std_errs):
     
     return fit_std_errs
 
-def find_best_fit(data, std_errs, ip, fwhm, minspan, fit_bounds, update_function=None):
+def find_best_fit(data, std_errs, ip, fwhm, minspan, lower_bounds, upper_bounds, update_function=None):
     # data has to be a numpy array
     # fits the function to data[:,0] (as x) and data[:,1] (as y) using the initial_parameters
     # returns an array of parameters of the same size as initial_parameters in case of success
@@ -173,7 +174,7 @@ def find_best_fit(data, std_errs, ip, fwhm, minspan, fit_bounds, update_function
         # try to fit
         try:
             # c_p, c_stddev,  c_fit_function = fit_function_to_data(cutdata, c_p, fwhm, cutdata[0][0], cutdata[len(cutdata)-1, 0])
-            c_p, c_stddev, c_fit_function = fit_function_to_data(cutdata, c_p, fwhm, fit_bounds[0], fit_bounds[1], cutweights)
+            c_p, c_stddev, c_fit_function = fit_function_to_data(cutdata, c_p, fwhm, lower_bounds, upper_bounds, cutweights)
             message = 'fit succeeded.'
         except Exception as error:
             if type(error) is ValueError:
