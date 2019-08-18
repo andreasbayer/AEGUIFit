@@ -1,5 +1,4 @@
-from PyQt5.QtWidgets import QLabel, QWidget, QPushButton, QHBoxLayout, QVBoxLayout, QGroupBox, QGridLayout,\
-    QDoubleSpinBox, QPlainTextEdit
+from PyQt5.QtWidgets import QLabel, QWidget, QPushButton, QHBoxLayout, QVBoxLayout, QGroupBox, QPlainTextEdit
 from PyQt5.QtCore import pyqtSignal, Qt
 from sys import float_info as fli
 import dataDisplay as dd

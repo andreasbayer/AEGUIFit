@@ -30,7 +30,7 @@ class fitInfoWidget(QGroupBox):
         
         #self.__connectSignals()
         
-    def init_from_parameters(self):
+    def initialize_from_parameters(self):
         pass
     
     def get_fit_string(self):

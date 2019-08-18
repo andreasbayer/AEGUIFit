@@ -4,13 +4,12 @@ import matplotlib.pyplot as plt
 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from PyQt5.QtCore import pyqtSignal, Qt
-#import matplotlib.pyplot as plt
+
 import fitDataInfo as fdi
 import AEFitDataInfo as adi
 import polyFitDataInfo as pdi
 
 import traceback
-import fitHelper as fh
 
 class DataDisplay(FigureCanvas):
 

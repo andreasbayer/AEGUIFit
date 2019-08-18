@@ -1,8 +1,9 @@
 from PyQt5.QtWidgets import QLabel, QWidget, QPushButton, QHBoxLayout, QVBoxLayout, QGroupBox, QGridLayout,\
-    QDoubleSpinBox, QPlainTextEdit
+    QPlainTextEdit
 from PyQt5.QtCore import pyqtSignal, Qt
 from sys import float_info as fli
 import dataDisplay as dd
+from InftyDoubleSpinBox import InftyDoubleSpinBox
 import helplib as hl
 import fitDataInfo as fdi
 import numpy as np
@@ -33,28 +34,24 @@ class viewWidget(QGroupBox):
         self.__cmdShowAll = QPushButton("Show All")
 
         self.__lblLabelFontSize = QLabel("Label font size:")
-        self.__dsbLabelFontSize = QDoubleSpinBox()
-        self.__dsbLabelFontSize.setRange(1, fli.max)
+        self.__dsbLabelFontSize = InftyDoubleSpinBox(min=1)
         self.__dsbLabelFontSize.setSingleStep(0.5)
         self.__dsbLabelFontSize.setMaximumWidth(75)
         
         self.__lblScaleFontSize = QLabel("Scale font size:")
-        self.__dsbScaleFontSize = QDoubleSpinBox()
-        self.__dsbScaleFontSize.setRange(1, fli.max)
+        self.__dsbScaleFontSize = InftyDoubleSpinBox(min=1)
         self.__dsbScaleFontSize.setSingleStep(0.5)
         self.__dsbScaleFontSize.setMaximumWidth(75)
 
         self.__lblFigHeight = QLabel("Height: ")
         self.__lblFigWidth = QLabel("Width: ")
 
-        self.__dsbFigHeight = QDoubleSpinBox()
-        self.__dsbFigWidth = QDoubleSpinBox()
+        self.__dsbFigHeight = InftyDoubleSpinBox(min=1)
+        self.__dsbFigWidth = InftyDoubleSpinBox(min=1)
 
-        self.__dsbFigHeight.setRange(1, fli.max)
         self.__dsbFigHeight.setSingleStep(0.1)
         self.__dsbFigHeight.setMaximumWidth(75)
 
-        self.__dsbFigWidth.setRange(1, fli.max)
         self.__dsbFigWidth.setSingleStep(0.1)
         self.__dsbFigWidth.setMaximumWidth(75)
 
@@ -62,10 +59,9 @@ class viewWidget(QGroupBox):
         self.__edtAnnotation.setFixedHeight(90)
 
         self.__lblAnnotationFontSize = QLabel("Font size:")
-        self.__dsbAnnotationFontSize = QDoubleSpinBox()
+        self.__dsbAnnotationFontSize = InftyDoubleSpinBox(min=1)
         self.__cmdRefreshAnnotation = QPushButton('Apply')
 
-        self.__dsbAnnotationFontSize.setRange(1, fli.max)
         self.__dsbAnnotationFontSize.setSingleStep(0.5)
         self.__dsbAnnotationFontSize.setMaximumWidth(75)
 

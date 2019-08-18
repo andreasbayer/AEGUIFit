@@ -57,7 +57,7 @@ class AEFitDataInfo(fitDataInfo):
         self._AETo = AETo
 
     def getYTo(self):
-        return self.YTo
+        return self._YTo
 
     def setYTo(self, YTo):
         self._YTo = YTo
@@ -224,17 +224,22 @@ class AEFitDataInfo(fitDataInfo):
 
         try:
             self._p, self._stdDev, self._fitRelBounds[0], self._fitRelBounds[
-                1], self._fittedFWHM, self._fitFunction \
+                1], self._fittedFWHM, self._fitFunction, message \
                 = fh.find_best_fit(self._data, weights, self._p, self._FWHM, self._minspan, *self.get_fit_bounds(),
                      self.progressUpdate)
             
-            self._setFitData(fh.data_from_fit_and_parameters(self._data, self._fitFunction, self._p, self._FWHM,
-                                                             continuation=True))
-            
-            self._msg = self.SUCCESS
-        except:
+            if self._stdDev is not list and self._stdDev == -1:
+                self._msg = message
+                print(message)
+            else:
+                self._setFitData(fh.data_from_fit_and_parameters(self._data, self._fitFunction, self._p, self._FWHM,
+                                                                 continuation=True))
+                self._msg = self.SUCCESS
+        except Exception as e:
             self._setFitData(None)
             self._msg = self.FAILURE
+
+            print(e)
         
         return self._msg
     

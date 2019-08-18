@@ -1,6 +1,7 @@
-from PyQt5.QtWidgets import QLabel, QWidget, QGroupBox, QHBoxLayout, QPushButton, QDoubleSpinBox, QFormLayout
+from PyQt5.QtWidgets import QLabel, QWidget, QGroupBox, QHBoxLayout, QPushButton, QFormLayout
 from PyQt5.QtCore import pyqtSignal
 import AEFitDataInfo as fd
+from InftyDoubleSpinBox import InftyDoubleSpinBox
 import helplib as hl
 import sys
 
@@ -36,24 +37,21 @@ class fitButtonGrid(QWidget):
     self.__mainLayout = QFormLayout()
     
     self.__lblAEFrom = QLabel("Estimated AE from ")
-    self.__dsbAEFrom = QDoubleSpinBox()
-    self.__dsbAEFrom.setRange(0, sys.float_info.max)
+    self.__dsbAEFrom = InftyDoubleSpinBox(min=0)
     self.__dsbAEFrom.setValue(0)
     
     self.__lblAETo = QLabel(" to ")
-    self.__dsbAETo = QDoubleSpinBox()
+    self.__dsbAETo = InftyDoubleSpinBox()
     
     self.__mainLayout.addRow(self.__lblAEFrom, self.__dsbAEFrom)
     self.__mainLayout.addRow(self.__lblAETo, self.__dsbAETo)
     
     self.__lblFWHM = QLabel("FWHM:")
-    self.__dsbFWHM = QDoubleSpinBox()
+    self.__dsbFWHM = InftyDoubleSpinBox(min=0)
     self.__dsbFWHM.setSingleStep(0.05)
-    self.__dsbFWHM.setRange(0, sys.float_info.max)
-    
+
     self.__lblMinSpan = QLabel("Min Span:")
-    self.__dsbMinSpan = QDoubleSpinBox()
-    self.__dsbMinSpan.setRange(0, sys.float_info.max)
+    self.__dsbMinSpan = InftyDoubleSpinBox(min=0)
     self.__cmdFit = QPushButton("Fit")
     
     self.__mainLayout.addRow(self.__lblFWHM, self.__dsbFWHM)

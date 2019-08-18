@@ -1,5 +1,6 @@
-from PyQt5.QtWidgets import QLabel, QPushButton, QDoubleSpinBox, QFormLayout, QLineEdit, QCheckBox
+from PyQt5.QtWidgets import QLabel, QPushButton, QFormLayout, QLineEdit, QCheckBox
 from PyQt5.QtCore import pyqtSignal, Qt
+from InftyDoubleSpinBox import InftyDoubleSpinBox
 import polyFitDataInfo as pfd
 import fitHelper as fh
 import fitInfoWidget as fiw
@@ -28,7 +29,7 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
         self.__connectSignals()
 
         if parameters is not None:
-            self.init_from_parameters(parameters)
+            self.initialize_from_parameters(parameters)
 
     def initialize_from_parameters(self, parameters):
         ps = parameters.split(",")
@@ -120,22 +121,20 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
         self.__mainLayout = QFormLayout()
 
         self.__lblFitFrom = QLabel("Fit From ")
-        self.__dsbFitFrom = QDoubleSpinBox()
-        self.__dsbFitFrom.setRange(0, sys.float_info.max)
+        self.__dsbFitFrom = InftyDoubleSpinBox(min=0)
         self.__dsbFitFrom.setValue(0)
         self.__dsbFitFrom.setSingleStep(0.1)
 
         self.__lblFitTo = QLabel(" to ")
-        self.__dsbFitTo = QDoubleSpinBox()
+        self.__dsbFitTo = InftyDoubleSpinBox()
         self.__dsbFitTo.setSingleStep(0.1)
 
         self.__mainLayout.addRow(self.__lblFitFrom, self.__dsbFitFrom)
         self.__mainLayout.addRow(self.__lblFitTo, self.__dsbFitTo)
 
         self.__lblDegree = QLabel("n:")
-        self.__dsbDegree = QDoubleSpinBox()
+        self.__dsbDegree = InftyDoubleSpinBox(min=0, max=100)
         self.__dsbDegree.setSingleStep(1)
-        self.__dsbDegree.setRange(0, 100) #sys.float_info.max)
         self.__dsbDegree.setDecimals(0)
 
         self.__mainLayout.addRow(self.__lblDegree, self.__dsbDegree)

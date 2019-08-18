@@ -1,4 +1,5 @@
-from PyQt5.QtWidgets import QLabel, QWidget, QGridLayout, QCheckBox, QDoubleSpinBox, QGroupBox
+from PyQt5.QtWidgets import QLabel, QWidget, QGridLayout, QCheckBox, QGroupBox
+from InftyDoubleSpinBox import InftyDoubleSpinBox
 from PyQt5.QtCore import pyqtSignal, Qt
 import helplib as hl
 
@@ -20,7 +21,7 @@ class dataControlWidget(QGroupBox):
         self.setTitle('Data Settings')
 
         self.__lblEnergyShift = QLabel("Energy Shift:")
-        self.__dsbEnergyShift = QDoubleSpinBox()
+        self.__dsbEnergyShift = InftyDoubleSpinBox()
         self.__dsbEnergyShift.editingFinished.connect(self.__energyShiftChanged)
         self.__dsbEnergyShift.setSingleStep(0.01)
         

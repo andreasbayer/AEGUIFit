@@ -1,9 +1,10 @@
-from PyQt5.QtWidgets import QLabel, QPushButton, QDoubleSpinBox, QFormLayout, QLineEdit, QCheckBox
+from PyQt5.QtWidgets import QLabel, QPushButton, QFormLayout, QLineEdit, QCheckBox
 from PyQt5.QtCore import pyqtSignal, Qt
 import customFitDataInfo as cfd
 import fitHelper as fh
 import fitInfoWidget as fiw
 import sys
+from InftyDoubleSpinBox import InftyDoubleSpinBox
 
 class customFitInfoWidget(fiw.fitInfoWidget):
     FITINITIALS = "cus"
@@ -28,7 +29,7 @@ class customFitInfoWidget(fiw.fitInfoWidget):
         self.__connectSignals()
 
         if parameters is not None:
-            self.init_from_parameters(parameters)
+            self.initialize_from_parameters(parameters)
 
     def initialize_from_parameters(self, parameters):
         ps = parameters.split(",")
@@ -108,13 +109,13 @@ class customFitInfoWidget(fiw.fitInfoWidget):
         self.__mainLayout = QFormLayout()
 
         self.__lblDomainFrom = QLabel("Domain From ")
-        self.__dsbDomainFrom = QDoubleSpinBox()
+        self.__dsbDomainFrom = InftyDoubleSpinBox()
         self.__dsbDomainFrom.setRange(0, sys.float_info.max)
         self.__dsbDomainFrom.setValue(0)
         self.__dsbDomainFrom.setSingleStep(0.1)
 
         self.__lblDomainTo = QLabel(" to ")
-        self.__dsbDomainTo = QDoubleSpinBox()
+        self.__dsbDomainTo = InftyDoubleSpinBox()
         self.__dsbDomainTo.setSingleStep(0.1)
 
         self.__mainLayout.addRow(self.__lblDomainFrom, self.__dsbDomainFrom)

@@ -222,7 +222,7 @@ def find_best_fit(data, std_errs, ip, fwhm, minspan, lower_bounds, upper_bounds,
         if update_function is not None:
             update_function(float((iteration) / n), p)
     
-    return p, stddev, cutdata[0][0], cutdata[len(cutdata) - 1][0], r_fwhm, fit_function
+    return p, stddev, cutdata[0][0], cutdata[len(cutdata) - 1][0], r_fwhm, fit_function, message
 
 def cut_relatively_equal(cutdata, ae_pos, cutpercent):
     # cuts data down to cutpercent*100 % of its size, with EA in the middle
@@ -437,8 +437,6 @@ def roundToErrorStrings(value, error, digits_of_error=1):
     err_str = err_str.format(r_err)
 
     return par_str, err_str
-
-
 
 
 def cutarray2(data, lowerlim=None, upperlim=None, data2=None, returnIndexes=False):
