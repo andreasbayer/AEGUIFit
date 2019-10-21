@@ -1,2 +1,0 @@
-# Energy shift = 1.0
-# Y-offset = 0.0002+-0.0002 AE = 6.1412+-0.0158 Scale Factor = 1.2568+-0.0341 Alpha = 1.3561+-0.0359

@@ -82,13 +82,13 @@ class App(QMainWindow):
         self.mbtExportAllData.setStatusTip('Export all data, errors, combined and individual fits, as well as their parameters and the engergy shift in a .txt file.')
         self.mbtExportAllData.triggered.connect(self.exportAllData)
         self.mnuExport.addAction(self.mbtExportAllData)
-        self.mbtExportAllData.setVisible(False)
 
         self.mbtExportVisibleData = QAction('Export Visible Data Range...', self)
         self.mbtExportVisibleData.setShortcut('Ctrl+D')
         self.mbtExportVisibleData.setStatusTip('Export all visible data in a .txt file.')
         self.mbtExportVisibleData.triggered.connect(self.exportData)
         self.mnuExport.addAction(self.mbtExportVisibleData)
+        self.mbtExportVisibleData.setVisible(False)
 
         self.mbtAbout = QAction('About', self)
         self.mbtAbout.setShortcut("F1")

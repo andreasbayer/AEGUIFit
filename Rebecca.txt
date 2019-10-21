@@ -1,3 +1,0 @@
-fehler abschätzen bei verschiedenen minspans
-
-automatisieren?

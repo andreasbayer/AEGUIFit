@@ -36,7 +36,7 @@ class fitInfoWidgetContainer(QGroupBox):
         self.__scrollArea = QScrollArea(self)
 
         self.__cbxFits = QComboBox()
-        self.__cbxFits.addItem("Mannier Fit")
+        self.__cbxFits.addItem("Wannier Fit")
         self.__cbxFits.addItem("Polynomial Fit")
         self.__cbxFits.addItem("Custom Function")
         self.__cbxFits.setVisible(True)
