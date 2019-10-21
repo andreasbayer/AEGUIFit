@@ -38,9 +38,6 @@ def fit_function_to_data(data, p, fwhm, lbs, ubs, std_errs = None):
                              sigma=std_errs,
                              method='trf',
                              absolute_sigma=False,
-                             #bounds=([0, lb, -np.inf, -np.inf], [0.1, ub, np.inf, np.inf]),
-                             # todo upperbound for constant background is arbitrary
-                             #bounds=([0, lbs, -np.inf, -np.inf], [np.inf, ubs, np.inf, np.inf]),
                              bounds=(lbs, ubs),
                              check_finite=True)
     
@@ -152,6 +149,8 @@ def find_best_fit(data, std_errs, ip, fwhm, minspan, lower_bounds, upper_bounds,
     
     cutdata = data
     cutweights = fit_weights
+
+    message = 'fit did not converge at any iteration.'
     
     
     starting_fwhm = fwhm * 3
@@ -181,13 +180,13 @@ def find_best_fit(data, std_errs, ip, fwhm, minspan, lower_bounds, upper_bounds,
                 if error.args[0] == 'Residuals are not finite in the initial point.':
                     message = 'fit doesn\'t converge.'
                 else:
-                    message = "unhandled error: " + error.args[0]
+                    message = "unhandled error: " + error.args[0] + ' iteration ' + str(iteration/n)
             elif type(error) is RuntimeError:
                 if error.args[
                     0] == 'Optimal parameters not found: The maximum number of function evaluations is exceeded.':
                     message = 'fit doesn\'t converge'
             else:
-                message = "unhandled error: " + error.args[0]
+                message = "unhandled error: " + error.args[0] + ' iteration ' + str(iteration/n)
         
         # get the position of EA in the data
         ae_pos = find_ev_position(data, c_p[1], cutdata[0, 0], cutdata[-1, 0])
@@ -309,7 +308,15 @@ def difference_data_from_fit_data(data, fit_data, p, fwhm, nonnegative):
     i = 0
     
     for datapoint in fit_data:
-        newpoint = [data[i][0], data[i][1] - fit_data[i][1]]
+
+        if data[i][1] is not None and fit_data[i][1] is not None:
+            newpoint = [data[i][0], data[i][1] - fit_data[i][1]]
+        #elif data[i] is not None and fit_data[i][1] is None:
+        #    newpoint = [data[i][0], data[i][1]]
+        else:
+            newpoint = [data[i][0], None]
+
+
         
         if nonnegative and newpoint[1] < 0:
             newpoint[1] = 0  # -newpoint[1]
@@ -319,9 +326,12 @@ def difference_data_from_fit_data(data, fit_data, p, fwhm, nonnegative):
     
     return np.array(newdata)
 
-def data_from_fit_and_parameters(data, fit_func, p, fwhm, continuation=False):
+def data_from_fit_and_parameters(data, fit_func, p, fwhm, domain_indexes=None, continuation=False):
+    # minimumpoints value is arbitrary, but very low. While testing, the amount of data never reached down to 20
     minimumpoints = 20
-    
+
+    continuation = True
+
     # check, whether there is a reasonable amount of points to plot:
     if len(data[:, 0]) > minimumpoints:
         # create empty float array in the size of data
@@ -347,14 +357,22 @@ def data_from_fit_and_parameters(data, fit_func, p, fwhm, continuation=False):
     else:
         for point in a:
             point[1] = 0
+
+    if domain_indexes is not None:
+        for i in range(len(a)):
+            if data[i][0] < data[domain_indexes[0]][0] or data[i][0] > data[domain_indexes[1]][0]:
+                a[i][1] = None
     return a
+
 
 def cutarray(data, lowerlim=None, upperlim=None):
     return cutarray2(data, lowerlim, upperlim)
 
+
 def fwhm_to_sigma(fwhm):
     sigma = fwhm / (2 * sqrt(2 * np.log(2)))
     return sigma
+
 
 def eval_fit_function(fwhm):
     # p[0] = y shift
@@ -442,6 +460,7 @@ def roundToErrorStrings(value, error, digits_of_error=1):
 def cutarray2(data, lowerlim=None, upperlim=None, data2=None, returnIndexes=False):
     # this function cuts an array and returns it
     # if lowerlim or upperlim are not defined, the minimum and maximum is assumed
+    # if returnIndexes is set to True, the indexes where the cuts were made - start and end - will be returned in a list
 
     i_from = -1
     i_to = -1
@@ -481,6 +500,6 @@ def cutarray2(data, lowerlim=None, upperlim=None, data2=None, returnIndexes=Fals
             return array(newdata, dtype=float)
     else:
         if returnIndexes:
-            return array(newdata, dtype=float), array(newdata2, dtype=float), (i_from , i_to)
+            return array(newdata, dtype=float), array(newdata2, dtype=float), (i_from, i_to)
         else:
             return array(newdata, dtype=float), array(newdata2, dtype=float)

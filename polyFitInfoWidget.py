@@ -32,7 +32,7 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
             self.initialize_from_parameters(parameters)
 
     def initialize_from_parameters(self, parameters):
-        ps = parameters.split(",")
+        ps = parameters.split('\t')
 
         for parameter in ps:
             (short, value) = parameter.split('=')
@@ -51,9 +51,9 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
 
     def get_fit_string(self):
         return self.FITINITIALS + ':' + \
-               'ffr=' + str(round(self.getFitFrom(), 5)) + ',' +\
-               'fto=' + str(round(self.getFitTo(), 5)) + ',' +\
-               'deg=' + str(self.getDegree()) + ',' +\
+               'ffr=' + str(round(self.getFitFrom(), 5)) + '\t' +\
+               'fto=' + str(round(self.getFitTo(), 5)) + '\t' +\
+               'deg=' + str(self.getDegree()) + '\t' +\
                'wgt=' + str(self.isWeighted())
 
     def isWeighted(self):

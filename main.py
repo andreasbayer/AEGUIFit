@@ -12,7 +12,11 @@ import tabFits as tft
 import metaInfoWidget as mdi
 from numpy import empty
 
-TITLE = "AEGUIFit 2.02 - "
+VERSION = "AEGUIFit 2.02"
+ID_STRING = "AEGUIFit"
+
+TITLE = VERSION + " - "
+
 
 class App(QMainWindow):
 
@@ -24,7 +28,7 @@ class App(QMainWindow):
         self.width = 1280
         self.height = 900
         self.bottom = 155
-        self.right = 275
+        self.right = 300
         self.initUI()
         self.menuInit()
 
@@ -42,11 +46,16 @@ class App(QMainWindow):
         self.mbtOpen.triggered.connect(self.openFile)
         self.mnuFile.addAction(self.mbtOpen)
 
-        self.mbtSave = QAction('Save...', self)
-        self.mbtSave.setShortcut('Ctrl+S')
+        self.mbtSave = QAction('Save', self)
         self.mbtSave.setStatusTip('Save all data with fit and fit parameters.')
         self.mbtSave.triggered.connect(self.saveFile)
+        self.mbtSave.setShortcut('Ctrl+S')
         self.mnuFile.addAction(self.mbtSave)
+
+        self.mbtSaveAs = QAction('Save As...', self)
+        self.mbtSaveAs.setStatusTip('Save all data with fit and fit parameters as ...')
+        self.mbtSaveAs.triggered.connect(self.saveFileAs)
+        self.mnuFile.addAction(self.mbtSaveAs)
 
         self.mbtClose = QAction('Close', self)
         #self.mbtClose.setShortcut('Ctrl+C')
@@ -73,8 +82,9 @@ class App(QMainWindow):
         self.mbtExportAllData.setStatusTip('Export all data, errors, combined and individual fits, as well as their parameters and the engergy shift in a .txt file.')
         self.mbtExportAllData.triggered.connect(self.exportAllData)
         self.mnuExport.addAction(self.mbtExportAllData)
+        self.mbtExportAllData.setVisible(False)
 
-        self.mbtExportVisibleData = QAction('Export Visible Data...', self)
+        self.mbtExportVisibleData = QAction('Export Visible Data Range...', self)
         self.mbtExportVisibleData.setShortcut('Ctrl+D')
         self.mbtExportVisibleData.setStatusTip('Export all visible data in a .txt file.')
         self.mbtExportVisibleData.triggered.connect(self.exportData)
@@ -91,7 +101,8 @@ class App(QMainWindow):
     def resetMenuBar(self, isLoaded):
         self.mnuExport.setDisabled(not isLoaded)
         self.mbtClose.setDisabled(not isLoaded)
-        self.mbtSave.setDisabled(not isLoaded)
+        self.mbtSaveAs.setDisabled(not isLoaded)
+        self.mbtSave.setDisabled(not (isLoaded and self.is_ae_file()))
 
     def initUI(self):
         self.setWindowTitle(self.title)
@@ -199,6 +210,19 @@ class App(QMainWindow):
 
         self.show()
 
+    def set_ae_file_flag(self, value):
+        self._is_aefit_file = value
+
+        if value is True:
+            self.resetMenuBar(self.ddMain.isLoaded())
+        else:
+            self.title = self.title + '*'
+
+
+    def is_ae_file(self):
+        return self._is_aefit_file
+
+
     def set_dims(self):
         self.dcwData.setFixedHeight(self.bottom)
         self.viwView.setFixedHeight(self.bottom)
@@ -206,7 +230,7 @@ class App(QMainWindow):
         
         self.ficFits.setFixedWidth(self.right)
         self.dcwData.setFixedWidth(self.right)
-        
+
     def resizeEvent(self, *args, **kwargs):
         self.set_dims()
 
@@ -218,7 +242,7 @@ class App(QMainWindow):
 
     def showAbout(self):
         QMessageBox.information(self, "Info",
-                                "AEGUIFit version 2.01\n\n" +
+                                VERSION + "\n\n" +
                                 "In case of unexpected behaviours, errors, crashes, improvements or general questions about the program, please feel free to send an e-mail to:\n\n" +
                                 "andreas.bayer@uibk.ac.at",
                                 QMessageBox.Ok, QMessageBox.Ok)
@@ -230,21 +254,21 @@ class App(QMainWindow):
         self.resetMenuBar(is_loaded)
 
     def loadData(self, fileName):
-
         self.ddMain.DisableRefresh(True)
-        self.dcwData.loadFile(fileName)
+        self.set_ae_file_flag(self.dcwData.loadFile(fileName, ID_STRING))
         self.ddMain.ZoomShowAll()
         self.ddMain.DisableRefresh(False)
         self.ddMain.refresh()
 
+        self.viwView.apply_all()
+
     def saveData(self, fileName):
-        
         data_string = self.dcwData.get_data_string()
         view_string = self.viwView.get_view_string()
         fit_strings = self.ficFits.get_fit_strings()
         meta_string = self.mdiMeta.get_meta_string()
         print('savedata', meta_string)
-        self.dcwData.saveFile(fileName, fit_strings, view_string, data_string, meta_string)
+        self.dcwData.saveFile(fileName, ID_STRING, fit_strings, view_string, data_string, meta_string)
 
     def dcwData_changed(self, showErrorBars):
         data = self.dcwData.getData()
@@ -350,19 +374,25 @@ class App(QMainWindow):
                                      QMessageBox.Ok)
 
     def writeFitDataToFile(self, filename, includeMeausredData=False):
-        file = open(filename, "w+")
-
         fitData = self.ddMain.getCurrentFitData()
         data = self.ddMain.getCurrentData()
 
-        for i in range(0, len(fitData)):
+        file = open(filename, "w+")
+        for i in range(0, len(data)):
             if includeMeausredData:
-                file.write(
-                    "%f\t%f\t%f\r\n" % (fitData[i][0], fitData[i][1], data[i][1]))
+                if fitData is not None:
+                    file.write(
+                        "%f\t%f\t%f\r\n" % (data[i][0], fitData[i][1], data[i][1]))
+                else:
+                    file.write(
+                        "%f\t%f\r\n" % (data[i][0], data[i][1]))
             else:
-                file.write("%f\t%f\r\n" % (fitData[i][0], fitData[i][1]))
-
+                if fitData is not None:
+                    file.write("%f\t%f\r\n" % (data[i][0], fitData[i][1]))
+                else:
+                    file.write("%f\t\r\n" % (data[i][0]))
         file.close()
+
 
     def writeAllDataToFile(self, filename):
         file = open(filename, "w+")
@@ -430,26 +460,36 @@ class App(QMainWindow):
 
         if name != '':
 
-            msgBox = QMessageBox()
-            msgBox.setIcon(QMessageBox.Question)
-            msgBox.setWindowTitle('Include measurement data?')
-            msgBox.setText('Would you like to include measurement data as well?')
-            msgBox.addButton(QPushButton('Include measurement data'), QMessageBox.YesRole)
-            msgBox.addButton(QPushButton('Write only fit data'), QMessageBox.NoRole)
-            msgBox.addButton(QPushButton('Cancel'), QMessageBox.RejectRole)
-            ret = msgBox.exec_()
+            #msgBox = QMessageBox()
+            #msgBox.setIcon(QMessageBox.Question)
+            #msgBox.setWindowTitle('Include measurement data?')
+            #msgBox.setText('Would you like to include measurement data as well?')
+            #msgBox.addButton(QPushButton('Include measurement data'), QMessageBox.YesRole)
+            #msgBox.addButton(QPushButton('Write only fit data'), QMessageBox.NoRole)
+            #msgBox.addButton(QPushButton('Cancel'), QMessageBox.RejectRole)
+            #ret = msgBox.exec_()
 
-            if ret != QMessageBox.DestructiveRole:
-                try:
-                    if ret == QMessageBox.AcceptRole:
-                        #   QMessageBox.information(self, "", "With M-Data", QMessageBox.Ok, QMessageBox.Ok)
-                        self.writeFitDataToFile(name, includeMeausredData=True)
-                    else:
-                        #    QMessageBox.information(self, "", "Without M-Data", QMessageBox.Ok, QMessageBox.Ok)
-                        self.writeFitDataToFile(name, includeMeausredData=False)
-                except:
-                    QMessageBox.critical(self, "Exporting data failed!", "Please contact developers for further information.",
-                                         QMessageBox.Ok, QMessageBox.Ok)
+            #if ret != QMessageBox.DestructiveRole:
+            #    try:
+            #        if ret == QMessageBox.AcceptRole:
+            #            #   QMessageBox.information(self, "", "With M-Data", QMessageBox.Ok, QMessageBox.Ok)
+            #            self.writeFitDataToFile(name, includeMeausredData=True)
+            #        else:
+            #            #    QMessageBox.information(self, "", "Without M-Data", QMessageBox.Ok, QMessageBox.Ok)
+            #            self.writeFitDataToFile(name, includeMeausredData=False)
+            #
+            #        self.set_display_msg('Exporting data was successful.')
+            #    except:
+            #        QMessageBox.critical(self, "Exporting data failed!", "Please contact developers for further information.",
+            #                             QMessageBox.Ok, QMessageBox.Ok)
+
+            try:
+                #   QMessageBox.information(self, "", "With M-Data", QMessageBox.Ok, QMessageBox.Ok)
+                self.writeFitDataToFile(name, includeMeausredData=True)
+                self.set_display_msg('Exporting data was successful.')
+            except:
+                QMessageBox.critical(self, "Exporting data failed!", "Please contact developers for further information.",
+                                     QMessageBox.Ok, QMessageBox.Ok)
 
 
     def exportAllData(self):
@@ -478,14 +518,17 @@ class App(QMainWindow):
                 self.loadData(fileName)
 
                 self.setWindowTitle(TITLE + fileName)
+                self.fileName = fileName
             except Exception as e:
                 print(e)
                 self.reset(False)
                 QMessageBox.critical(self, "Open file failed!", "Error while opening " + fileName, QMessageBox.Ok,
                                      QMessageBox.Ok)
-                self.setWindowTitle(TITLE)
 
-    def saveFile(self):
+                self.setWindowTitle(TITLE)
+                self.fileName = ""
+
+    def saveFileAs(self):
         saveDialog = fsd.flSaveFileDialog()
     
         # name, ext = fsd.flSaveFileDialog.getSaveFileName(self, "Save Fit Data", "", "*.txt")
@@ -494,15 +537,35 @@ class App(QMainWindow):
         if fileName is not '':  # todo check file validity
             try:
                 self.saveData(fileName)
+                self.set_ae_file_flag(True)
+
+                self.setWindowTitle(TITLE + fileName)
+                self.fileName = fileName
+
+                self.set_display_msg('File was saved successfully .')
             except:
                 QMessageBox.critical(self, "Saving file failed!", "Error while saving " + fileName, QMessageBox.Ok,
+                                     QMessageBox.Ok)
+                self.set_ae_file_flag(False)
+
+    def saveFile(self):
+        # name, ext = fsd.flSaveFileDialog.getSaveFileName(self, "Save Fit Data", "", "*.txt")
+        #fileName, ext = saveDialog.getSaveFileName(self, "Save File", "", "*.txt")
+
+        if self.fileName is not '' and self.is_ae_file():  # todo check file validity
+            try:
+                self.saveData(self.fileName)
+
+                self.set_display_msg('File was quick saved successfully.')
+            except:
+                QMessageBox.critical(self, "Saving file failed!", "Error while saving " + self.fileName, QMessageBox.Ok,
                                      QMessageBox.Ok)
 
     def closeFile(self):
         self.reset(enable=False)
 
     def reset(self, enable):
-
+        self.set_ae_file_flag(False)
         self.ddMain.DisableRefresh(True)
         self.ficFits.reset(enable)
         self.dcwData.reset(enable)
@@ -515,6 +578,7 @@ class App(QMainWindow):
         self.progressBar.reset()
 
         self.ddMain.DisableRefresh(False)
+        self.ddMain.draw()
 
     def showErrorBars_changed(self, showErrorBars):
         try:
@@ -530,7 +594,6 @@ class App(QMainWindow):
             self.set_display_msg('')
         except:
             self.set_display_msg('Disabling fit failed.')
-
 
     def remove_fit(self, p_FitDataInfo):
         try:

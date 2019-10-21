@@ -11,6 +11,21 @@ class InftyDoubleSpinBox(QDoubleSpinBox):
         self.setMaximum(max)
         self.setDefault(default)
 
+        self.setFocusPolicy(QtCore.Qt.StrongFocus)
+
+
+    # This is here to prevent value changes while scrolling through the configuration, as it removes the ability to
+    # alter values with the scroll wheel. If the code below the return was to be put in place of the mere return,
+    # it would be possible to still use the scroll wheel, however only, if the InftyDoubleSpinBox already has focus.
+    # This seems too complex to distinguish and unnecessary as a feature, which is the reasson it is removed altogether.
+
+    def wheelEvent(self, e: QtGui.QWheelEvent):
+        return
+
+        #if self.hasFocus():
+        #    return QDoubleSpinBox.wheelEvent(self, e)
+
+
     def default(self):
         return self.__default
 
@@ -25,9 +40,9 @@ class InftyDoubleSpinBox(QDoubleSpinBox):
 
     def keyPressEvent(self, e: QtGui.QKeyEvent):
         if e.key() == QtCore.Qt.Key_Home:
-            self.setValue(self.maximum())
-        elif e.key() == QtCore.Qt.Key_End:
             self.setValue(self.minimum())
+        elif e.key() == QtCore.Qt.Key_End:
+            self.setValue(self.maximum())
         elif self.__is_key_del(e.key()) and self.__is_set_inf():
             self.setValue(self.default())
         else:

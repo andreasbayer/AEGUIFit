@@ -43,7 +43,6 @@ class DataDisplay(FigureCanvas):
         self.setResizingEnabled(True)
         self.reset()
 
-        
     def reset(self):
         self.__dc = 'black'
         self.__fc = 'orange'
@@ -131,8 +130,6 @@ class DataDisplay(FigureCanvas):
     def DisableRefresh(self, disable):
         self.__refreshDisabled = disable
 
-        print('refresh disabled', self.__refreshDisabled)
-
     def refresh(self, data=None, stdErrors=None, showErrorBars=None, forgetZoomFrame=False):
 
         xlim = None
@@ -145,8 +142,6 @@ class DataDisplay(FigureCanvas):
             self.__showErrorBars = showErrorBars
 
         if self.isRefreshDisabled() is False:
-
-            print(*traceback.format_stack()[1:-1])
 
             if not forgetZoomFrame:
                 xlim = self.__ax.get_xlim()
@@ -302,7 +297,7 @@ class DataDisplay(FigureCanvas):
 
             xlim = self.__ax.get_xlim()
             ylim = self.__ax.get_ylim()
-            self._zoom_to_bounds((xlim[0]+increment, xlim[1]+increment), ylim)
+            self._zoom_to_bounds((xlim[0] + increment, xlim[1] + increment), ylim)
 
     def update_combined_fit_data(self, combined_fit_data):
         self.__combined_fit_data = combined_fit_data

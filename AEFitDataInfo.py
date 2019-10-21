@@ -12,13 +12,16 @@ class AEFitDataInfo(fitDataInfo):
         self._minspan = 3.0
 
         self._AEFrom = 0.0
-        self._AETo = fli.max
+        self._AETo = np.inf
         self._YFrom = -np.inf
         self._YTo = np.inf
         self._ScaleFrom = -np.inf
         self._ScaleTo = np.inf
         self._AlphaFrom = -np.inf
         self._AlphaTo = np.inf
+
+        self._DomainFrom = 0.0
+        self._DomainTo = np.inf
 
         self._p = [] * 4
         #fit relevant bounds are the bounds for the energy interfal of the last fit that converged
@@ -91,6 +94,19 @@ class AEFitDataInfo(fitDataInfo):
 
     def getAlphaTo(self):
         return self._AlphaTo
+
+    def getDomainFrom(self):
+        return self._DomainFrom
+
+    def setDomainFrom(self, DomainFrom):
+        print(self._DomainFrom, '=', DomainFrom)
+        self._DomainFrom = DomainFrom
+
+    def getDomainTo(self):
+        return self._DomainTo
+
+    def setDomainTo(self, DomainTo):
+        self._DomainTo = DomainTo
     
     def getFitRelFrom(self):
         return self._fitRelBounds[0]
@@ -110,67 +126,37 @@ class AEFitDataInfo(fitDataInfo):
     def setParameters(self, value):
         self._p = value
 
-    def getYOffset(self, digits=-1):
-        if digits == -1:
-            digits = 4
-
+    def getYOffset(self, digits=4):
         return round(self._p[0], digits)
 
-    def getYOffset_dev(self, digits=-1):
-
-        if digits == -1:
-            digits = 4
-            
+    def getYOffset_dev(self, digits=4):
         try:
             return round(self._stdDev[0], digits)
         except:
             return np.nan
 
-    def getFoundAE(self, digits=-1):
-
-        if digits == -1:
-            digits = 4
-
+    def getFoundAE(self, digits=4):
         return round(self._p[1], digits)
 
-    def getFoundAE_dev(self, digits=-1):
-
-        if digits == -1:
-            digits = 4
-
+    def getFoundAE_dev(self, digits=4):
         try:
             return round(self._stdDev[1], digits)
         except:
             return np.nan
 
-    def getScaleFactor(self, digits=-1):
-
-        if digits == -1:
-            digits = 4
-
+    def getScaleFactor(self, digits=4):
         return round(self._p[2], digits)
 
-    def getScaleFactor_dev(self, digits=-1):
-
-        if digits == -1:
-            digits = 4
+    def getScaleFactor_dev(self, digits=4):
         try:
             return round(self._stdDev[2], digits)
         except:
             return np.nan
 
-    def getAlpha(self, digits=-1):
-
-        if digits == -1:
-            digits = 4
-
+    def getAlpha(self, digits=4):
         return round(self._p[3], digits)
 
-    def getAlpha_dev(self, digits=-1):
-
-        if digits == -1:
-            digits = 4
-        
+    def getAlpha_dev(self, digits=4):
         try:
             return round(self._stdDev[3], digits)
         except:
@@ -181,25 +167,13 @@ class AEFitDataInfo(fitDataInfo):
 
     def getFitFunc(self):
         return fh.str_fit_func(self._p, self._FWHM)
-    
+
     def getName(self):
         name = "Fit #" + str(self.get_fit_index() + 1)
         
         if self.isFitted():
             name += "( = " + str(self.getFoundAE()) + ")"
         return "Fit #" + str(self.get_fit_index() + 1)
-
-    # def getYBounds(self):
-    #     return 0, np.inf
-    #
-    # def getAEBounds(self):
-    #     return self.getAEFrom(), self.getAETo()
-    #
-    # def getScaleBounds(self):
-    #     return -np.inf, np.inf
-    #
-    # def getAlphaBounds(self):
-    #     return -np.inf, np.inf
 
     def get_fit_bounds(self):
         lower_bounds = [-np.inf] * 4
@@ -223,27 +197,29 @@ class AEFitDataInfo(fitDataInfo):
             weights = self._stdErr
 
         try:
-            self._p, self._stdDev, self._fitRelBounds[0], self._fitRelBounds[
-                1], self._fittedFWHM, self._fitFunction, message \
-                = fh.find_best_fit(self._data, weights, self._p, self._FWHM, self._minspan, *self.get_fit_bounds(),
-                     self.progressUpdate)
+            data, weights, cut_indexes = fh.cutarray2(self.get_data(), self.getDomainFrom(), self.getDomainTo(),
+                                                      weights, returnIndexes=True)
+
+            self._p, self._stdDev, self._fitRelBounds[0], self._fitRelBounds[1], self._fittedFWHM, self._fitFunction,\
+                message \
+                = fh.find_best_fit(data, weights, self._p, self._FWHM, self._minspan, *self.get_fit_bounds(),
+                                   self.progressUpdate)
             
-            if self._stdDev is not list and self._stdDev == -1:
+            if type(self._stdDev) is not np.ndarray and self._stdDev == -1:
                 self._msg = message
                 print(message)
             else:
                 self._setFitData(fh.data_from_fit_and_parameters(self._data, self._fitFunction, self._p, self._FWHM,
-                                                                 continuation=True))
+                                                                 domain_indexes=cut_indexes))
                 self._msg = self.SUCCESS
         except Exception as e:
             self._setFitData(None)
-            self._msg = self.FAILURE
+            self._msg = self.FAILURE + '\n' + str(e)
 
             print(e)
         
         return self._msg
-    
-    
+
     def testGoodnessOfMinSpan(self):
         spacing = 0.1
         pm_range = 1
@@ -267,11 +243,13 @@ class AEFitDataInfo(fitDataInfo):
 
         if self.is_weighted():
             weights = self._stdErr
+
+        data, weights = fh.cutarray2(self.get_data(), self.getDomainFrom(), self.getDomainTo(), weights)
         
         while test_minspan <= self._minspan + pm_range:
             
-            p, stdDev, fitRelBounds_x, fitRelBounds_y, fittedFWHM, fitfunc = \
-                fh.find_best_fit(self._data, weights, self._p, self._FWHM, test_minspan,
+            p, stdDev, fitRelBounds_x, fitRelBounds_y, fittedFWHM, fitfunc, msg = \
+                fh.find_best_fit(data, weights, self._p, self._FWHM, test_minspan,
                                  *self.get_fit_bounds(), self.progressUpdate)
             
             y_offsets = np.append(y_offsets, p[0])
@@ -311,7 +289,6 @@ class AEFitDataInfo(fitDataInfo):
 
         for set in self._data:
             set[0] += increment
-
 
     def get_meta_string(self):
         metastring = ""

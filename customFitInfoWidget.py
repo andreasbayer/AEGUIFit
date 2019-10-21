@@ -32,7 +32,7 @@ class customFitInfoWidget(fiw.fitInfoWidget):
             self.initialize_from_parameters(parameters)
 
     def initialize_from_parameters(self, parameters):
-        ps = parameters.split(",")
+        ps = parameters.split('\t')
 
         for parameter in ps:
             (short, value) = parameter.split('=')
@@ -45,8 +45,8 @@ class customFitInfoWidget(fiw.fitInfoWidget):
 
     def get_fit_string(self):
         return self.FITINITIALS + ':' + \
-               'rfr=' + str(round(self.getDomainFrom(), 5)) + ',' +\
-               'rto=' + str(round(self.getDomainTo(), 5)) + ',' +\
+               'rfr=' + str(round(self.getDomainFrom(), 5)) + '\t' +\
+               'rto=' + str(round(self.getDomainTo(), 5)) + '\t' +\
                'fst=' + self.getFunctionStr()
 
     def isWeighted(self):

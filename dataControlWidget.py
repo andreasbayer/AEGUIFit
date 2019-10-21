@@ -3,7 +3,6 @@ from InftyDoubleSpinBox import InftyDoubleSpinBox
 from PyQt5.QtCore import pyqtSignal, Qt
 import helplib as hl
 
-
 class dataControlWidget(QGroupBox):
     showErrorBars_changed = pyqtSignal(bool)
     data_changed = pyqtSignal(bool)
@@ -62,7 +61,8 @@ class dataControlWidget(QGroupBox):
 
         increment = energyShift - self.__prevShift
         self.__prevShift = energyShift
-        self.setEnergyShift(energyShift)
+
+        self.data_shift.emit(increment)
 
         self.data_changed.emit(self.getShowErrorBars())
 
@@ -76,11 +76,12 @@ class dataControlWidget(QGroupBox):
         return (self.__dsbEnergyShift.value())
 
     def setEnergyShift(self, value):
-        increment = self.__dsbEnergyShift.value() - value
+        #increment = self.__dsbEnergyShift.value() - value
+        increment = value - self.__dsbEnergyShift.value()
         self.__dsbEnergyShift.setValue(value)
 
         #self.__shiftData(increment)
-        self.data_shift.emit(increment)
+        #self.data_shift.emit(increment)
 
     def __shiftData(self, increment):
         try:
@@ -115,9 +116,9 @@ class dataControlWidget(QGroupBox):
     def setShowErrorBars(self, value):
         self.__chkShowErrorBars.setChecked(value)
     
-    def loadFile(self, fileName):
-        self.__all_data, self.__stdErrors, (fit_strings, view_string, data_string, meta_string) =\
-            hl.readFileForFitsDataAndStdErrorAndMetaData(fileName)
+    def loadFile(self, fileName, id_string):
+        self.__all_data, self.__stdErrors, (fit_strings, view_string, data_string, meta_string), id_found =\
+            hl.readFileForFitsDataAndStdErrorAndMetaData(fileName, id_string)
 
         #we need a copy to not save any altered data!
         self.__data = (self.__all_data[:, 0:2]).copy()
@@ -141,9 +142,11 @@ class dataControlWidget(QGroupBox):
         self.load_meta.emit(meta_string)
         self.load_from_data_string(data_string)
 
+        return id_found
+
     def load_from_data_string(self, data_string):
         if data_string is not None:
-            split_string = data_string.split(',')
+            split_string = data_string.split('\t')
             
             for i in range(0, len(split_string)):
                 item = split_string[i].split('=')
@@ -158,7 +161,7 @@ class dataControlWidget(QGroupBox):
                             self.setShowErrorBars(False)
                     
     def get_data_string(self):
-        return 'egs=' + str(self.getEnergyShift()) + ',seb=' + str(self.getShowErrorBars())
+        return 'egs=' + str(self.getEnergyShift()) + '\t' + 'seb=' + str(self.getShowErrorBars())
     
-    def saveFile(self, fileName, fit_strings, view_string, data_string, meta_string):
-        hl.saveFilewithMetaData(fileName, self.__all_data, (fit_strings, view_string, data_string, meta_string))
+    def saveFile(self, fileName, id_string, fit_strings, view_string, data_string, meta_string):
+        hl.saveFilewithMetaData(id_string, fileName, self.__all_data, (fit_strings, view_string, data_string, meta_string))

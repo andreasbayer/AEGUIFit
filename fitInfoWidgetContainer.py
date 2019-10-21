@@ -36,7 +36,7 @@ class fitInfoWidgetContainer(QGroupBox):
         self.__scrollArea = QScrollArea(self)
 
         self.__cbxFits = QComboBox()
-        self.__cbxFits.addItem("Onset Fit")
+        self.__cbxFits.addItem("Mannier Fit")
         self.__cbxFits.addItem("Polynomial Fit")
         self.__cbxFits.addItem("Custom Function")
         self.__cbxFits.setVisible(True)
@@ -74,24 +74,26 @@ class fitInfoWidgetContainer(QGroupBox):
         self.reset(False)
         
     def load_fits(self, fit_strings):
-        for fit_string in fit_strings:
-            item = fit_string.split(':')
-            if item[0] == afw.AEFitInfoWidget.FITINITIALS:
-                new_fit = afw.AEFitInfoWidget(len(self.__fitInfoWidgets), self.shift_data)
-                self.__add_fiw(new_fit)
-                new_fit.initialize_from_parameters(item[1])
-                new_fit.fitToFunction()
-            elif item[0] == pfw.polyFitInfoWidget.FITINITIALS:
-                new_fit = pfw.polyFitInfoWidget(len(self.__fitInfoWidgets), self.shift_data)
-                self.__add_fiw(new_fit)
-                new_fit.initialize_from_parameters(item[1])
-                new_fit.fitToFunction()
-            elif item[0] == cfw.customFitInfoWidget.FITINITIALS:
-                new_fit = cfw.customFitInfoWidget(len(self.__fitInfoWidgets), self.shift_data)
-                self.__add_fiw(new_fit)
-                new_fit.initialize_from_parameters(item[1])
-                new_fit.fitToFunction()
-
+        try:
+            for fit_string in fit_strings:
+                item = fit_string.split(':')
+                if item[0] == afw.AEFitInfoWidget.FITINITIALS:
+                    new_fit = afw.AEFitInfoWidget(len(self.__fitInfoWidgets), self.shift_data)
+                    self.__add_fiw(new_fit)
+                    new_fit.initialize_from_parameters(item[1])
+                    new_fit.fitToFunction()
+                elif item[0] == pfw.polyFitInfoWidget.FITINITIALS:
+                    new_fit = pfw.polyFitInfoWidget(len(self.__fitInfoWidgets), self.shift_data)
+                    self.__add_fiw(new_fit)
+                    new_fit.initialize_from_parameters(item[1])
+                    new_fit.fitToFunction()
+                elif item[0] == cfw.customFitInfoWidget.FITINITIALS:
+                    new_fit = cfw.customFitInfoWidget(len(self.__fitInfoWidgets), self.shift_data)
+                    self.__add_fiw(new_fit)
+                    new_fit.initialize_from_parameters(item[1])
+                    new_fit.fitToFunction()
+        except:
+            return 'Meta data might be corrupted.'
 
     def get_fit_strings(self):
         fit_strings = list()
@@ -125,8 +127,6 @@ class fitInfoWidgetContainer(QGroupBox):
 
     
     def __add_fiw(self, fiw):
-        #self.__mainLayout.addWidget(fiw)
-
         self.__vbFitInfoWidgets.addWidget(fiw)
         self.__fitInfoWidgets.append(fiw)
         
@@ -137,6 +137,8 @@ class fitInfoWidgetContainer(QGroupBox):
         fiw.zoom_to_fit.connect(self.__zoom_to_fit)
         fiw.remove_fit.connect(self.__remove_fit)
         fiw.disable_fit.connect(self.__disable_fit)
+
+        fiw.setFixedWidth(self.__widgetFrame.width()-35)
         
         self.fit_added.emit(fiw.getFitDataInfo())
         
@@ -148,7 +150,6 @@ class fitInfoWidgetContainer(QGroupBox):
         self.disable_fit.emit(fdi_Info)
         
     def __remove_fit(self, fdi_Info):
-        
         for i_fiw in reversed(self.__fitInfoWidgets):
             if i_fiw.getFitDataInfo() != fdi_Info:
                 #update index

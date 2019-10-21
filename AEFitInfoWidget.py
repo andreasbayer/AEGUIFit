@@ -32,6 +32,8 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
     ScaleTo_changed = pyqtSignal()
     minspan_changed = pyqtSignal()
     FWHM_changed = pyqtSignal()
+    DomainTo_changed = pyqtSignal()
+    DomainFrom_changed = pyqtSignal()
     #zoom_to_fit = pyqtSignal(int, int)
     #progressUpdate = pyqtSignal(float, list)
     
@@ -50,7 +52,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
             self.initialize_from_parameters(parameters)
     
     def initialize_from_parameters(self, parameters):
-        ps = parameters.split(",")
+        ps = parameters.split('\t')
 
         for parameter in ps:
             (short, value) = parameter.split('=')
@@ -58,6 +60,22 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
                 self.setAEFrom(float(value))
             elif short == 'aet':
                 self.setAETo(float(value))
+            elif short == 'yfr':
+                self.setYFrom(float(value))
+            elif short == 'yto':
+                self.setYTo(float(value))
+            elif short == 'alf':
+                self.setAlphaFrom(float(value))
+            elif short == 'alt':
+                self.setAlphaTo(float(value))
+            elif short == 'scf':
+                self.setScaleTo(float(value))
+            elif short == 'sct':
+                self.setScaleFrom(float(value))
+            elif short == 'dof':
+                self.setDomainFrom(float(value))
+            elif short == 'dot':
+                self.setDomainTo(float(value))
             elif short == 'fwh':
                 self.setFWHM(float(value))
             elif short == 'mns':
@@ -70,10 +88,18 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
 
     def get_fit_string(self):
         return self.FITINITIALS + ':' + \
-               'aef=' + str(round(self.getAEFrom(), 5)) + ',' +\
-               'aet=' + str(round(self.getAETo(), 5)) + ',' +\
-               'fwh=' + str(round(self.getFWHM(), 5)) + ',' +\
-               'mns=' + str(round(self.getMinSpan(), 5)) + ',' +\
+               'aef=' + str(round(self.getAEFrom(), 5)) + '\t' +\
+               'aet=' + str(round(self.getAETo(), 5)) + '\t' +\
+               'yfr=' + str(round(self.getYFrom(), 5)) + '\t' +\
+               'yto=' + str(round(self.getYTo(), 5)) + '\t' +\
+               'alf=' + str(round(self.getAlphaFrom(), 5)) + '\t' +\
+               'alt=' + str(round(self.getAlphaTo(), 5)) + '\t' +\
+               'scf=' + str(round(self.getScaleFrom(), 5)) + '\t' +\
+               'sct=' + str(round(self.getScaleTo(), 5)) + '\t' + \
+               'dof=' + str(round(self.getDomainFrom(), 5)) + '\t' + \
+               'dot=' + str(round(self.getDomainTo(), 5)) + '\t' + \
+               'fwh=' + str(round(self.getFWHM(), 5)) + '\t' +\
+               'mns=' + str(round(self.getMinSpan(), 5)) + '\t' +\
                'wgt=' + str(self.isWeighted())
     
     def reset(self, enable):
@@ -81,11 +107,23 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         self.setEnabled(enable)
         
         self.getFitDataInfo().reset()
-        
+
+        self.setAEFrom(-np.inf)
+        self.setAETo(np.inf)
+        self.setYFrom(0.0)
+        self.setYTo(0.01)
+        self.setScaleFrom(-np.inf)
+        self.setScaleTo(np.inf)
+        self.setAlphaFrom(-np.inf)
+        self.setAlphaTo(np.inf)
+
+        self.setDomainFrom(-np.inf)
+        self.setDomainTo(np.inf)
+
         self.setFWHM(0.3)
         self.setMinSpan(3)
         self.setWeighted(True)
-        
+
         self.setPostFitFunctionsEnabled(False)
 
         #todo: reset parameter values and std-devs
@@ -100,6 +138,9 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         self.__dsbYFrom.editingFinished.connect(self.__YFrom_changed)
         self.__dsbYTo.editingFinished.connect(self.__YTo_changed)
 
+        self.__dsbDomainFrom.editingFinished.connect(self.__DomainFrom_changed)
+        self.__dsbDomainTo.editingFinished.connect(self.__DomainTo_changed)
+
         self.__dsbFWHM.editingFinished.connect(self.__FWHM_changed)
         self.__dsbMinSpan.editingFinished.connect(self.__MinSpan_changed)
         self.__cmdFit.clicked.connect(self.__cmdFit_clicked)
@@ -113,6 +154,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         self.progressUpdate.emit(relation, p)
     
     def __initLayout(self):
+
         self.setCheckable(False)
         self.setChecked(True)
         self.setTitle(self.getFitDataInfo().getName())
@@ -126,45 +168,53 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
 
         self.__lblYFrom = QLabel("Y-Offset:")
         self.__dsbYFrom = InftyDoubleSpinBox(min=0)
-        self.__dsbYFrom.setValue(0)
         self.__dsbYFrom.setSingleStep(0.1)
         self.__dsbYFrom.setFixedWidth(55)
         
+        to_lbl_width = 15
+
         self.__lblYTo = QLabel("to")
+        self.__lblYTo.setFixedWidth(to_lbl_width)
+
         self.__dsbYTo = InftyDoubleSpinBox()
         self.__dsbYTo.setSingleStep(0.1)
         self.__dsbYTo.setFixedWidth(55)
 
         self.__lblAEFrom = QLabel("AE:")
         self.__dsbAEFrom = InftyDoubleSpinBox(min=0)
-        self.__dsbAEFrom.setValue(0)
         self.__dsbAEFrom.setSingleStep(0.1)
         self.__dsbAEFrom.setFixedWidth(55)
 
         self.__lblAETo = QLabel("to")
+        self.__lblAETo.setFixedWidth(to_lbl_width)
+
         self.__dsbAETo = InftyDoubleSpinBox()
         self.__dsbAETo.setSingleStep(0.1)
         self.__dsbAETo.setFixedWidth(55)
 
         self.__lblScaleFrom = QLabel("Scale-Factor:")
         self.__dsbScaleFrom = InftyDoubleSpinBox()
-        self.__dsbScaleFrom.setValue(0)
         self.__dsbScaleFrom.setSingleStep(0.1)
         self.__dsbScaleFrom.setFixedWidth(55)
 
         self.__lblScaleTo = QLabel("to")
+        self.__lblScaleTo.setFixedWidth(to_lbl_width)
+
         self.__dsbScaleTo = InftyDoubleSpinBox()
         self.__dsbScaleTo.setValue(np.inf)
         self.__dsbScaleTo.setSingleStep(0.1)
         self.__dsbScaleTo.setFixedWidth(55)
 
         self.__lblAlphaFrom = QLabel("Alpha:")
-        self.__dsbAlphaFrom = InftyDoubleSpinBox(min=0)
-        self.__dsbAlphaFrom.setValue(0)
+        #self.__lblAlphaFrom.setFixedWidth(to_lbl_width)
+
+        self.__dsbAlphaFrom = InftyDoubleSpinBox(min=-np.inf)
         self.__dsbAlphaFrom.setSingleStep(0.1)
         self.__dsbAlphaFrom.setFixedWidth(55)
 
         self.__lblAlphaTo = QLabel("to")
+        self.__lblAlphaTo.setFixedWidth(to_lbl_width)
+
         self.__dsbAlphaTo = InftyDoubleSpinBox()
         self.__dsbAlphaTo.setSingleStep(0.1)
         self.__dsbAlphaTo.setFixedWidth(55)
@@ -198,20 +248,29 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
 
         self.__mainLayout.addWidget(self.__rangeBox, 0, 0, 1, 4)
 
-        self.__lblFWHM = QLabel("FWHM:")
-        self.__dsbFWHM = InftyDoubleSpinBox(min=0)
-        self.__dsbFWHM.setSingleStep(0.05)
-        self.__dsbFWHM.setFixedWidth(55)
-        
         self.__lblMinSpan = QLabel("Fit Span:")
         self.__dsbMinSpan = InftyDoubleSpinBox(min=0)
         self.__dsbMinSpan.setSingleStep(0.05)
         self.__dsbMinSpan.setFixedWidth(55)
+
+        self.__lblFWHM = QLabel("FWHM:")
+        self.__dsbFWHM = InftyDoubleSpinBox(min=0)
+        self.__dsbFWHM.setSingleStep(0.05)
+        self.__dsbFWHM.setFixedWidth(55)
+
+        self.__lblDomainFrom = QLabel("Domain from:")
+        self.__dsbDomainFrom = InftyDoubleSpinBox(min=0)
+        self.__dsbDomainFrom.setSingleStep(0.05)
+        self.__dsbDomainFrom.setFixedWidth(55)
+
+        self.__lblDomainTo = QLabel(" to ")
+        self.__dsbDomainTo = InftyDoubleSpinBox(min=0)
+        self.__dsbDomainTo.setSingleStep(0.05)
+        self.__dsbDomainTo.setFixedWidth(55)
         
         self.__cmdFit = QPushButton("Fit")
         self.__cmdFit.setFixedWidth(75)
         self.__chkWeightFit = QCheckBox("Weighted")
-
 
         self.__cmdZoomToFitArea = QPushButton("Zoom To Fit")
         self.__cmdZoomToFitArea.setFixedWidth(75)
@@ -229,6 +288,11 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         self.__mainLayout.addWidget(self.__lblFWHM, 1, 2)
         self.__mainLayout.addWidget(self.__dsbFWHM, 1, 3)
 
+        self.__mainLayout.addWidget(self.__lblDomainFrom, 2, 0)
+        self.__mainLayout.addWidget(self.__dsbDomainFrom, 2, 1)
+        self.__mainLayout.addWidget(self.__lblDomainTo, 2, 2)
+        self.__mainLayout.addWidget(self.__dsbDomainTo, 2, 3)
+
         self.__lblFitFunc = QLabel("Fit-Funct:")
         self.__edtFitFunc = QLineEdit("")
         self.__edtFitFunc.setReadOnly(True)
@@ -240,9 +304,6 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         
         #self.__lblFoundAE = QLabel(AEFOUNDAT.format(0))
         #self.__lblStdDev = QLabel(STDDEVAT.format(0))
-
-        self.__lblFitParameters = QLabel("")
-        self.__mainLayout.addWidget(self.__lblFitParameters, 2, 0, 1, 4)
 
         #self.__lblYOffset = QLabel(YLABEL)
         #self.__mainLayout.addWidget(self.__lblYOffset, 2, 0, 1, 4)
@@ -260,12 +321,16 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         self.__cmdRemoveFit = QPushButton("Remove")
         self.__cmdRemoveFit.setFixedWidth(75)
 
-        self.__mainLayout.addWidget(self.__chkDisableFit, 3, 0, 1, 2)
-        self.__mainLayout.addWidget(self.__cmdRemoveFit, 3, 2, 1, 2)
-        self.__mainLayout.addWidget(self.__chkWeightFit, 4, 0, 1, 2)
-        self.__mainLayout.addWidget(self.__cmdFit, 4, 2, 1, 2)
-        self.__mainLayout.addWidget(self.__cmdZoomToFitArea, 5, 0, 1, 2)
-        self.__mainLayout.addWidget(self.__cmdGoodnessOfMinSpan, 5, 2, 1, 2)
+        self.__lblFitParameters = QLabel("")
+        self.__mainLayout.addWidget(self.__lblFitParameters, 3, 0, 1, 4)
+
+        self.__mainLayout.addWidget(self.__chkDisableFit, 4, 0, 1, 2)
+        self.__mainLayout.addWidget(self.__cmdRemoveFit, 4, 2, 1, 2)
+
+        self.__mainLayout.addWidget(self.__chkWeightFit, 5, 0, 1, 2)
+        self.__mainLayout.addWidget(self.__cmdFit, 5, 2, 1, 2)
+        self.__mainLayout.addWidget(self.__cmdZoomToFitArea, 6, 0, 1, 2)
+        self.__mainLayout.addWidget(self.__cmdGoodnessOfMinSpan, 6, 2, 1, 2)
 
         #self.__mainLayout.addRow(, )
         #self.__mainLayout.addRow(, )
@@ -273,7 +338,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         #self.__mainLayout.addRow(self.__chkDisableFit, self.__cmdRemoveFit)
 
         self.setLayout(self.__mainLayout)
-        self.setFixedHeight(325)
+        self.setFixedHeight(350)
 
         self.setEnabled(True)
 
@@ -290,55 +355,87 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
     def setAEFrom(self, value):
         self.__dsbAEFrom.setValue(float(value))
         self.__AEFrom_changed()
-    
+
+    def __AEFrom_changed(self):
+        self.getFitDataInfo().setAEFrom(self.__dsbAEFrom.value())
+        self.AEFrom_changed.emit()
+
     def getAETo(self):
         return self.getFitDataInfo().getAETo()
-    
+
     def setAETo(self, value):
         self.__dsbAETo.setValue(float(value))
         self.__AETo_changed()
 
-    # def getAlphaBounds(self):
-    #     return self.getFitDataInfo().getAlphaBounds()
-    #
-    # def setAlphaBounds(self, value):
-    #     #self.__dsbAlphaFrom.setValue(float(value[0]))
-    #     #self.__dsbAlphaTo.setValue(float(value[1]))
-    #
-    #     self.__AlphaBounds_changed(value)
+    def __AETo_changed(self):
+        self.getFitDataInfo().setAETo(self.__dsbAETo.value())
+        self.AETo_changed.emit()
+
+    def getAlphaFrom(self):
+        return self.getFitDataInfo().getAlphaFrom()
+
+    def setAlphaFrom(self, value):
+        self.__dsbAlphaFrom.setValue(float(value))
+        self.__AlphaFrom_changed()
 
     def __AlphaFrom_changed(self):
         self.getFitDataInfo().setAlphaFrom(self.__dsbAlphaFrom.value())
         self.AlphaFrom_changed.emit()
 
+    def getAlphaTo(self):
+        return self.getFitDataInfo().getAlphaTo()
+
+    def setAlphaTo(self, value):
+        self.__dsbAlphaTo.setValue(float(value))
+        self.__AlphaTo_changed()
+
     def __AlphaTo_changed(self):
         self.getFitDataInfo().setAlphaTo(self.__dsbAlphaTo.value())
         self.AlphaTo_changed.emit()
+
+    def getScaleFrom(self):
+        return self.getFitDataInfo().getScaleFrom()
+
+    def setScaleFrom(self, value):
+        self.getFitDataInfo().setScaleFrom(float(value))
+        self.__ScaleFrom_changed()
 
     def __ScaleFrom_changed(self):
         self.getFitDataInfo().setScaleFrom(self.__dsbScaleFrom.value())
         self.ScaleFrom_changed.emit()
 
+    def getScaleTo(self):
+        return self.getFitDataInfo().getScaleTo()
+
+    def setScaleTo(self, value):
+        self.getFitDataInfo().setScaleTo(float(value))
+        self.__ScaleTo_changed()
+
     def __ScaleTo_changed(self):
         self.getFitDataInfo().setScaleTo(self.__dsbScaleTo.value())
         self.ScaleTo_changed.emit()
+
+    def getYFrom(self):
+        return self.getFitDataInfo().getYFrom()
+
+    def setYFrom(self, value):
+        self.getFitDataInfo().setYFrom(float(value))
+        self.__YFrom_changed()
 
     def __YFrom_changed(self):
         self.getFitDataInfo().setYFrom(self.__dsbYFrom.value())
         self.YFrom_changed.emit()
 
+    def getYTo(self):
+        return self.getFitDataInfo().getYTo()
+
+    def setYTo(self, value):
+        self.__dsbYTo.setValue(float(value))
+        self.__YTo_changed()
+
     def __YTo_changed(self):
         self.getFitDataInfo().setYTo(self.__dsbYTo.value())
         self.YTo_changed.emit()
-
-    def getAETo(self):
-        return self.getFitDataInfo().getAETo()
-
-    def setAETo(self, value):
-        self.__dsbAETo.setValue(float(value))
-        self.__AETo_changed()
-
-        self.__dsbAlphaTo.setValue(np.inf)
 
     def getFWHM(self):
         return self.__dsbFWHM.value()
@@ -354,6 +451,28 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
     def setMinSpan(self, value):
         self.__dsbMinSpan.setValue(float(value))
         self.__MinSpan_changed()
+
+    def getDomainFrom(self):
+        return self.getFitDataInfo().getDomainFrom()
+
+    def setDomainFrom(self, value):
+        self.__dsbDomainFrom.setValue(float(value))
+        self.__DomainFrom_changed()
+
+    def __DomainFrom_changed(self):
+        self.getFitDataInfo().setDomainFrom(self.__dsbDomainFrom.value())
+        self.DomainFrom_changed.emit()
+
+    def getDomainTo(self):
+        return self.getFitDataInfo().getDomainTo()
+
+    def setDomainTo(self, value):
+        self.__dsbDomainTo.setValue(float(value))
+        self.__DomainTo_changed()
+
+    def __DomainTo_changed(self):
+        self.getFitDataInfo().setDomainTo(self.__dsbDomainTo.value())
+        self.DomainTo_changed.emit()
 
     def setWeighted(self, value):
         self.__chkWeightFit.setChecked(value)
@@ -381,11 +500,20 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
             self.setAEFrom(data[0][0])
             self.setAETo(data[-1][0])
 
+            self.setDomainFrom(data[0][0])
+            self.setDomainTo(data[-1][0])
+
             self.__dsbAEFrom.setMinimum(data[0][0])
             self.__dsbAEFrom.setMaximum(data[-1][0])
 
             self.__dsbAETo.setMinimum(data[0][0])
             self.__dsbAETo.setMaximum(data[-1][0])
+
+            self.__dsbDomainFrom.setMinimum(data[0][0])
+            self.__dsbDomainFrom.setMaximum(data[-1][0])
+
+            self.__dsbDomainTo.setMinimum(data[0][0])
+            self.__dsbDomainTo.setMaximum(data[-1][0])
 
     def __cmdFit_clicked(self):
         self.fitToFunction()
@@ -403,14 +531,6 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
     def getName(self):
         return self.getFitDataInfo().getName()
             
-    def __AEFrom_changed(self):
-        self.getFitDataInfo().setAEFrom(self.__dsbAEFrom.value())
-        self.AEFrom_changed.emit()
-    
-    def __AETo_changed(self):
-        self.getFitDataInfo().setAETo(self.__dsbAETo.value())
-        self.AETo_changed.emit()
-    
     def __FWHM_changed(self):
         self.getFitDataInfo().setFWHM(self.getFWHM())
         self.FWHM_changed.emit()
@@ -436,6 +556,18 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         
         self.setAEFrom(new_AEFrom)
         self.setAETo(new_AETo)
+
+        new_DomainFrom = self.getDomainFrom() + increment
+        new_DomainTo = self.getDomainTo() + increment
+
+        self.__dsbDomainFrom.setMinimum(self.__dsbDomainFrom.minimum() + increment)
+        self.__dsbDomainFrom.setMaximum(self.__dsbDomainFrom.maximum() + increment)
+
+        self.__dsbDomainTo.setMinimum(self.__dsbDomainTo.minimum() + increment)
+        self.__dsbDomainTo.setMaximum(self.__dsbDomainTo.maximum() + increment)
+
+        self.setDomainFrom(new_DomainFrom)
+        self.setDomainTo(new_DomainTo)
     
     def fitToFunction(self):
         msg = self.getFitDataInfo().fitToFunction()
@@ -449,24 +581,25 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
             #how many digits to show of the error (Digits Of Error)
             doe = 2
 
-            val, err = fh.roundToErrorStrings(self.getFitDataInfo().getFoundAE(), self.getFitDataInfo().getFoundAE_dev(),
-                                              doe)
+            val, err = fh.roundToErrorStrings(self.getFitDataInfo().getYOffset(),
+                                              self.getFitDataInfo().getYOffset_dev(), doe)
 
-            fp_text = AELABEL + ':\t\t' + val + PM + err + AEUNIT + '\n'
+            fp_text = YLABEL + ':\t\t' + val + PM + err + '\n'
 
-            val, err = fh.roundToErrorStrings(self.getFitDataInfo().getAlpha(), self.getFitDataInfo().getAlpha_dev(), doe)
+            val, err = fh.roundToErrorStrings(self.getFitDataInfo().getFoundAE(),
+                                              self.getFitDataInfo().getFoundAE_dev(), doe)
 
-            fp_text += ALPHALABEL + ':\t\t' + val + PM + err + '\n'
+            fp_text += AELABEL + ':\t\t' + val + PM + err + AEUNIT + '\n'
 
             val, err = fh.roundToErrorStrings(self.getFitDataInfo().getScaleFactor(),
                                               self.getFitDataInfo().getScaleFactor_dev(), doe)
 
             fp_text += SCALELABEL + ':\t' + val + PM + err + '\n'
 
-            val, err = fh.roundToErrorStrings(self.getFitDataInfo().getYOffset(), self.getFitDataInfo().getYOffset_dev(),
-                                              doe)
+            val, err = fh.roundToErrorStrings(self.getFitDataInfo().getAlpha(),
+                                              self.getFitDataInfo().getAlpha_dev(), doe)
 
-            fp_text += YLABEL + ':\t\t' + val + PM + err
+            fp_text += ALPHALABEL + ':\t\t' + val + PM + err + '\n'
 
             self.__lblFitParameters.setText(fp_text)
 
@@ -486,7 +619,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
 
     def testGoodnessOfMinSpan(self):
         minspans, y_offsets, aes, scale_factors, alphas,\
-        y_offset_errrs, ae_errs, scale_factor_errs, alpha_errs,  = self.getFitDataInfo().testGoodnessOfMinSpan()
+        y_offset_errrs, ae_errs, scale_factor_errs, alpha_errs = self.getFitDataInfo().testGoodnessOfMinSpan()
 
         #print("minspans:")
         #print(minspans)

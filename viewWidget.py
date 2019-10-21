@@ -10,6 +10,7 @@ import numpy as np
 
 
 class viewWidget(QGroupBox):
+
     show_all = pyqtSignal()
     zoom_by_increment = pyqtSignal(str, int)
     scale_font_size_changed = pyqtSignal(float)
@@ -217,27 +218,43 @@ class viewWidget(QGroupBox):
     def on_annotation_changed(self):
         self.annotation_changed.emit(self.__edtAnnotation.toPlainText())
 
+    def apply_all(self):
+        self.on_annotation_changed()
+        self.apply_fig_size(self.is_fig_size_enabled())
+
+        self.label_font_size_changed.emit(self.get_label_font_size())
+        self.scale_font_size_changed.emit(self.__dsbScaleFontSize.value())
+        self.annotation_font_size_changed.emit(self.get_annotation_font_size())
+
+
     def load_from_view_string(self, view_string):
         if view_string is not None:
-            split_string = view_string.split(',')
+            split_string = view_string.split('\t')
 
             try:
                 for i in range(0, len(split_string)):
                     item = split_string[i].split('=')
 
                     if len(item) == 2:
-                        if (item[0] == 'atx'):
+                        if (item[0] == 'atx'):  # annotation text
                             self.set_annotation_text(str(item[1]).replace('\\n', '\n'))
-                        elif (item[0] == 'afs'):
+                        elif (item[0] == 'afs'):  # annotation font size
                             self.set_annotation_font_size(float(item[1]))
-                        elif (item[0] == 'fiw'):
+                        elif (item[0] == 'fiw'):  # fig size width
                             self.set_fig_size((float(item[1]), None))
-                        elif (item[0] == 'fih'):
+                        elif (item[0] == 'fih'):  # fig size height
                             self.set_fig_size((None, float(item[1])))
-                        elif (item[0] == 'lfs'):
+                        elif (item[0] == 'lfs'):  # label font size
                             self.set_label_font_size(float(item[1]))
-                        elif (item[0] == 'sfs'):
+                        elif (item[0] == 'sfs'):  # scale font size
                             self.set_scale_font_size(float(item[1]))
+                        elif (item[0] == 'fse'):  # fig size enabled
+                            if item[0] == '1' or item[0] == 'True':
+                                self.set_fig_size_enabled(True)
+                            else:
+                                self.set_fig_size_enabled(False)
+                            print('fse=', item[1])
+
             except:
                 return 'Meta data might be corrupted.'
 
@@ -250,12 +267,19 @@ class viewWidget(QGroupBox):
         sfs = str(self.get_scale_font_size())
         
         
-        return 'atx=' + atx + ',' +\
-                'afs=' + afs + ',' +\
-                'fiw=' + fiw + ',' +\
-                'fih=' + fih + ',' +\
-                'lfs=' + lfs + ',' +\
-                'sfs=' + sfs
+        return 'atx=' + atx + '\t' +\
+                'afs=' + afs + '\t' +\
+                'fiw=' + fiw + '\t' +\
+                'fih=' + fih + '\t' +\
+                'lfs=' + lfs + '\t' +\
+                'sfs=' + sfs + '\t' +\
+                'fse=' + str(self.is_fig_size_enabled())
+
+    def is_fig_size_enabled(self):
+        return self.__figSizeGroupBox.isChecked()
+
+    def set_fig_size_enabled(self, value):
+        self.__figSizeGroupBox.setChecked(value)
 
     def get_annotation_text(self):
         return self.__edtAnnotation.toPlainText()

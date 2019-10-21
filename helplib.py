@@ -67,7 +67,7 @@ def readfile(filename, tolerate_spaces=False, x_y_data_only=False):
     
     return data
 
-def saveFilewithMetaData(fileName, data, metadata):
+def saveFilewithMetaData(id_string, fileName, data, metadata):
     
     fit_strings = metadata[0]
     view_string = metadata[1]
@@ -79,6 +79,9 @@ def saveFilewithMetaData(fileName, data, metadata):
         f = openfile(fileName, "w+")
     except IOError:
         raise IOError
+
+    #write identifier for file
+    f.write('#' + id_string + '\n')
 
     #write metadata
     f.write('#view:' + view_string + '\n')
@@ -101,13 +104,14 @@ def saveFilewithMetaData(fileName, data, metadata):
     f.close()
     
 
-def readFileForFitsDataAndStdErrorAndMetaData(filename, tolerate_spaces=False, x_y_data_only=False):
+def readFileForFitsDataAndStdErrorAndMetaData(filename, id_string, tolerate_spaces=False, x_y_data_only=False):
     # create empty list
     a = []
     fit_p_strings = list()
     view_p_string = None
     data_p_string = None
     meta_p_string = None
+    id_found = False
     ignored_columns = list()  # test data?
     
     try:
@@ -156,6 +160,8 @@ def readFileForFitsDataAndStdErrorAndMetaData(filename, tolerate_spaces=False, x
                 data_p_string = line_data.lstrip("data:")
             elif line_data.startswith("meta:"):
                 meta_p_string = line_data.lstrip("meta:")
+            elif line_data.startswith(id_string):
+                id_found = True
     
     # convert list a to float array
     data = array(a, dtype=float)
@@ -166,7 +172,7 @@ def readFileForFitsDataAndStdErrorAndMetaData(filename, tolerate_spaces=False, x
     # close file
     f.close()
     
-    return data, calc_std_errors(data), (fit_p_strings, view_p_string, data_p_string, meta_p_string)
+    return data, calc_std_errors(data), (fit_p_strings, view_p_string, data_p_string, meta_p_string), id_found
 
 
 def readFileForDataAndStdError(filename, tolerate_spaces=False):
