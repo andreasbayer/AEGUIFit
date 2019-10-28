@@ -160,6 +160,7 @@ class App(QMainWindow):
         self.dcwData.data_shift.connect(self.ddMain.shiftData)
         #self.dcwData.data_shift.connect(self.ficFits.shiftData)
         self.dcwData.load_fits.connect(self.ficFits.load_fits)
+        self.dcwData.fit_on_startup.connect(self.ficFits.fit_on_startup)
         self.dcwData.load_view.connect(self.viwView.load_from_view_string)
         self.dcwData.load_meta.connect(self.mdiMeta.load_from_meta_string)
 
@@ -434,7 +435,10 @@ class App(QMainWindow):
 
             if write_afd:
                 for fit_data in all_fit_data:
-                    file.write('\t%f' % fit_data[i][1])
+                    if fit_data[i][1] is float:
+                        file.write('\t%f' % fit_data[i][1])
+                    else:
+                        file.write('\t ')
 
             file.write('\r\n')
 
@@ -487,25 +491,29 @@ class App(QMainWindow):
                 #   QMessageBox.information(self, "", "With M-Data", QMessageBox.Ok, QMessageBox.Ok)
                 self.writeFitDataToFile(name, includeMeausredData=True)
                 self.set_display_msg('Exporting data was successful.')
-            except:
-                QMessageBox.critical(self, "Exporting data failed!", "Please contact developers for further information.",
+            except Exception as e:
+                QMessageBox.critical(self, "Exporting data failed!",
+                                     str(e) + '\n\n' +
+                                     "Please contact developers for further information.",
                                      QMessageBox.Ok, QMessageBox.Ok)
-
 
     def exportAllData(self):
         saveDialog = fsd.flSaveFileDialog()
 
         # name, ext = fsd.flSaveFileDialog.getSaveFileName(self, "Save Fit Data", "", "*.txt")
-        name, ext = saveDialog.getSaveFileName(self, "Export All Data", "", "*.txt")
+        fileName, ext = saveDialog.getSaveFileName(self, "Export All Data", "", "*.txt")
 
-        try:
-            self.writeAllDataToFile(name)
+        if fileName is not '':
+            try:
+                self.writeAllDataToFile(fileName)
 
-            self.set_display_msg('Exporting All Data was successful.')
-        except Exception as e:
-            print(e)
-            QMessageBox.critical(self, "Exporting all data failed!", "Please contact developers for further information.",
-                                 QMessageBox.Ok, QMessageBox.Ok)
+                self.set_display_msg('Exporting All Data was successful.')
+            except Exception as e:
+                print(e)
+                QMessageBox.critical(self, "Exporting all data failed!",
+                                     str(e)+'\n\n' +
+                                     "Please contact developers for further information.",
+                                     QMessageBox.Ok, QMessageBox.Ok)
 
     def openFile(self):
         options = QFileDialog.Options()
@@ -532,7 +540,8 @@ class App(QMainWindow):
         saveDialog = fsd.flSaveFileDialog()
     
         # name, ext = fsd.flSaveFileDialog.getSaveFileName(self, "Save Fit Data", "", "*.txt")
-        fileName, ext = saveDialog.getSaveFileName(self, "Save File", "", "*.txt")
+        print("AE_" + self.fileName.rsplit('/')[-1])
+        fileName, ext = saveDialog.getSaveFileName(self, "Save File", "AE_" + self.fileName.rsplit('/')[-1], "*.txt")
 
         if fileName is not '':  # todo check file validity
             try:

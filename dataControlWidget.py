@@ -10,6 +10,7 @@ class dataControlWidget(QGroupBox):
     load_fits = pyqtSignal(list)
     load_view = pyqtSignal(str)
     load_meta = pyqtSignal(str)
+    fit_on_startup = pyqtSignal()
     
     SHOW_ERROR_BARS = "Show error bars"
     SHOW_ERROR_BARS_NOT_LOADED = "Show error bars (could not be calculated)"
@@ -57,13 +58,15 @@ class dataControlWidget(QGroupBox):
         self.showErrorBars_changed.emit(self.getShowErrorBars())
     
     def __energyShiftChanged(self):
+        self.cause_shift()
+
+    def cause_shift(self):
         energyShift = self.__dsbEnergyShift.value()
 
         increment = energyShift - self.__prevShift
         self.__prevShift = energyShift
 
         self.data_shift.emit(increment)
-
         self.data_changed.emit(self.getShowErrorBars())
 
     #  def setData(self, data):
@@ -135,18 +138,22 @@ class dataControlWidget(QGroupBox):
         
         self.__chkShowErrorBars.setEnabled(check)
         self.__chkShowErrorBars.setChecked(check)
-        
+
         self.data_changed.emit(check)
         self.load_fits.emit(fit_strings)
         self.load_view.emit(view_string)
         self.load_meta.emit(meta_string)
+
         self.load_from_data_string(data_string)
+        self.cause_shift()
+
+        self.fit_on_startup.emit()
 
         return id_found
 
     def load_from_data_string(self, data_string):
         if data_string is not None:
-            split_string = data_string.split('\t')
+            split_string = data_string.split('\v')
             
             for i in range(0, len(split_string)):
                 item = split_string[i].split('=')
@@ -161,7 +168,7 @@ class dataControlWidget(QGroupBox):
                             self.setShowErrorBars(False)
                     
     def get_data_string(self):
-        return 'egs=' + str(self.getEnergyShift()) + '\t' + 'seb=' + str(self.getShowErrorBars())
+        return 'egs=' + str(self.getEnergyShift()) + '\v' + 'seb=' + str(self.getShowErrorBars())
     
     def saveFile(self, fileName, id_string, fit_strings, view_string, data_string, meta_string):
         hl.saveFilewithMetaData(id_string, fileName, self.__all_data, (fit_strings, view_string, data_string, meta_string))

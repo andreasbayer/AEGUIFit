@@ -42,7 +42,7 @@ class metaInfoWidget(QGroupBox):
 
     def load_from_meta_string(self, view_string):
         if view_string is not None:
-            split_string = view_string.split('\t')
+            split_string = view_string.split('\v')
 
             try:
                 for i in range(0, len(split_string)):

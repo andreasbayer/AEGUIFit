@@ -81,19 +81,20 @@ class fitInfoWidgetContainer(QGroupBox):
                     new_fit = afw.AEFitInfoWidget(len(self.__fitInfoWidgets), self.shift_data)
                     self.__add_fiw(new_fit)
                     new_fit.initialize_from_parameters(item[1])
-                    new_fit.fitToFunction()
                 elif item[0] == pfw.polyFitInfoWidget.FITINITIALS:
                     new_fit = pfw.polyFitInfoWidget(len(self.__fitInfoWidgets), self.shift_data)
                     self.__add_fiw(new_fit)
                     new_fit.initialize_from_parameters(item[1])
-                    new_fit.fitToFunction()
                 elif item[0] == cfw.customFitInfoWidget.FITINITIALS:
                     new_fit = cfw.customFitInfoWidget(len(self.__fitInfoWidgets), self.shift_data)
                     self.__add_fiw(new_fit)
                     new_fit.initialize_from_parameters(item[1])
-                    new_fit.fitToFunction()
         except:
             return 'Meta data might be corrupted.'
+
+    def fit_on_startup(self):
+        for fiw_i in self.__fitInfoWidgets:
+            fiw_i.fitToFunction()
 
     def get_fit_strings(self):
         fit_strings = list()

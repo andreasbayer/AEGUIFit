@@ -210,7 +210,6 @@ class viewWidget(QGroupBox):
             self.fig_size_changed.emit((None, None))
 
     def __fig_size_enabled(self, enabled):
-
         #if checkbox is checked resizing is not enabled and vice versa
         self.resizing_changed.emit(not enabled)
         self.apply_fig_size(enabled)
@@ -229,7 +228,7 @@ class viewWidget(QGroupBox):
 
     def load_from_view_string(self, view_string):
         if view_string is not None:
-            split_string = view_string.split('\t')
+            split_string = view_string.split('\v')
 
             try:
                 for i in range(0, len(split_string)):
@@ -267,12 +266,12 @@ class viewWidget(QGroupBox):
         sfs = str(self.get_scale_font_size())
         
         
-        return 'atx=' + atx + '\t' +\
-                'afs=' + afs + '\t' +\
-                'fiw=' + fiw + '\t' +\
-                'fih=' + fih + '\t' +\
-                'lfs=' + lfs + '\t' +\
-                'sfs=' + sfs + '\t' +\
+        return 'atx=' + atx + '\v' +\
+                'afs=' + afs + '\v' +\
+                'fiw=' + fiw + '\v' +\
+                'fih=' + fih + '\v' +\
+                'lfs=' + lfs + '\v' +\
+                'sfs=' + sfs + '\v' +\
                 'fse=' + str(self.is_fig_size_enabled())
 
     def is_fig_size_enabled(self):

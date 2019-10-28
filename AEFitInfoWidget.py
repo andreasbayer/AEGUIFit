@@ -52,7 +52,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
             self.initialize_from_parameters(parameters)
     
     def initialize_from_parameters(self, parameters):
-        ps = parameters.split('\t')
+        ps = parameters.split('\v')
 
         for parameter in ps:
             (short, value) = parameter.split('=')
@@ -88,18 +88,18 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
 
     def get_fit_string(self):
         return self.FITINITIALS + ':' + \
-               'aef=' + str(round(self.getAEFrom(), 5)) + '\t' +\
-               'aet=' + str(round(self.getAETo(), 5)) + '\t' +\
-               'yfr=' + str(round(self.getYFrom(), 5)) + '\t' +\
-               'yto=' + str(round(self.getYTo(), 5)) + '\t' +\
-               'alf=' + str(round(self.getAlphaFrom(), 5)) + '\t' +\
-               'alt=' + str(round(self.getAlphaTo(), 5)) + '\t' +\
-               'scf=' + str(round(self.getScaleFrom(), 5)) + '\t' +\
-               'sct=' + str(round(self.getScaleTo(), 5)) + '\t' + \
-               'dof=' + str(round(self.getDomainFrom(), 5)) + '\t' + \
-               'dot=' + str(round(self.getDomainTo(), 5)) + '\t' + \
-               'fwh=' + str(round(self.getFWHM(), 5)) + '\t' +\
-               'mns=' + str(round(self.getMinSpan(), 5)) + '\t' +\
+               'aef=' + str(round(self.getAEFrom(adjusted_for_shift=True), 5)) + '\v' +\
+               'aet=' + str(round(self.getAETo(adjusted_for_shift=True), 5)) + '\v' +\
+               'yfr=' + str(round(self.getYFrom(), 5)) + '\v' +\
+               'yto=' + str(round(self.getYTo(), 5)) + '\v' +\
+               'alf=' + str(round(self.getAlphaFrom(adjusted_for_shift=True), 5)) + '\v' +\
+               'alt=' + str(round(self.getAlphaTo(adjusted_for_shift=True), 5)) + '\v' +\
+               'scf=' + str(round(self.getScaleFrom(adjusted_for_shift=True), 5)) + '\v' +\
+               'sct=' + str(round(self.getScaleTo(adjusted_for_shift=True), 5)) + '\v' + \
+               'dof=' + str(round(self.getDomainFrom(adjusted_for_shift=True), 5)) + '\v' + \
+               'dot=' + str(round(self.getDomainTo(adjusted_for_shift=True), 5)) + '\v' + \
+               'fwh=' + str(round(self.getFWHM(), 5)) + '\v' +\
+               'mns=' + str(round(self.getMinSpan(), 5)) + '\v' +\
                'wgt=' + str(self.isWeighted())
     
     def reset(self, enable):
@@ -349,9 +349,9 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
     def isFitted(self):
         return (self.getFitDataInfo() is not None) and self.getFitDataInfo().isFitted()
     
-    def getAEFrom(self):
-        return self.getFitDataInfo().getAEFrom()
-    
+    def getAEFrom(self, adjusted_for_shift=False):
+        return self.getFitDataInfo().getAEFrom(adjusted_for_shift)
+
     def setAEFrom(self, value):
         self.__dsbAEFrom.setValue(float(value))
         self.__AEFrom_changed()
@@ -360,8 +360,8 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         self.getFitDataInfo().setAEFrom(self.__dsbAEFrom.value())
         self.AEFrom_changed.emit()
 
-    def getAETo(self):
-        return self.getFitDataInfo().getAETo()
+    def getAETo(self, adjusted_for_shift=False):
+        return self.getFitDataInfo().getAETo(adjusted_for_shift)
 
     def setAETo(self, value):
         self.__dsbAETo.setValue(float(value))
@@ -371,8 +371,8 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         self.getFitDataInfo().setAETo(self.__dsbAETo.value())
         self.AETo_changed.emit()
 
-    def getAlphaFrom(self):
-        return self.getFitDataInfo().getAlphaFrom()
+    def getAlphaFrom(self, adjusted_for_shift=False):
+        return self.getFitDataInfo().getAlphaFrom(adjusted_for_shift)
 
     def setAlphaFrom(self, value):
         self.__dsbAlphaFrom.setValue(float(value))
@@ -382,8 +382,9 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         self.getFitDataInfo().setAlphaFrom(self.__dsbAlphaFrom.value())
         self.AlphaFrom_changed.emit()
 
-    def getAlphaTo(self):
-        return self.getFitDataInfo().getAlphaTo()
+    def getAlphaTo(self, adjusted_for_shift=False):
+
+        return self.getFitDataInfo().getAlphaTo(adjusted_for_shift)
 
     def setAlphaTo(self, value):
         self.__dsbAlphaTo.setValue(float(value))
@@ -393,8 +394,8 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         self.getFitDataInfo().setAlphaTo(self.__dsbAlphaTo.value())
         self.AlphaTo_changed.emit()
 
-    def getScaleFrom(self):
-        return self.getFitDataInfo().getScaleFrom()
+    def getScaleFrom(self, adjusted_for_shift=False):
+        return self.getFitDataInfo().getScaleFrom(adjusted_for_shift)
 
     def setScaleFrom(self, value):
         self.getFitDataInfo().setScaleFrom(float(value))
@@ -404,8 +405,8 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         self.getFitDataInfo().setScaleFrom(self.__dsbScaleFrom.value())
         self.ScaleFrom_changed.emit()
 
-    def getScaleTo(self):
-        return self.getFitDataInfo().getScaleTo()
+    def getScaleTo(self, adjusted_for_shift=False):
+        return self.getFitDataInfo().getScaleTo(adjusted_for_shift)
 
     def setScaleTo(self, value):
         self.getFitDataInfo().setScaleTo(float(value))
@@ -452,8 +453,8 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         self.__dsbMinSpan.setValue(float(value))
         self.__MinSpan_changed()
 
-    def getDomainFrom(self):
-        return self.getFitDataInfo().getDomainFrom()
+    def getDomainFrom(self, adjusted_for_shift=False):
+        return self.getFitDataInfo().getDomainFrom(adjusted_for_shift)
 
     def setDomainFrom(self, value):
         self.__dsbDomainFrom.setValue(float(value))
@@ -463,8 +464,8 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         self.getFitDataInfo().setDomainFrom(self.__dsbDomainFrom.value())
         self.DomainFrom_changed.emit()
 
-    def getDomainTo(self):
-        return self.getFitDataInfo().getDomainTo()
+    def getDomainTo(self, adjusted_for_shift=False):
+        return self.getFitDataInfo().getDomainTo(adjusted_for_shift)
 
     def setDomainTo(self, value):
         self.__dsbDomainTo.setValue(float(value))
@@ -650,6 +651,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         dia_gom.plot()
         #dia_gom.display_statistics()
         dia_gom.show()
+        dia_gom.setFocus()
         
         #try:
         #    plt.figure()

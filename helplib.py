@@ -50,11 +50,11 @@ def readfile(filename, tolerate_spaces=False, x_y_data_only=False):
             if num_tab_num.match(line):
                 # we may want to have only the first 2 columns added to the array in files with 3+ columns
                 if x_y_data_only:
-                    line_data = line.strip('\r\n').split('\t')
+                    line_data = line.strip('\r\n').split('\v')
                     a.append((line_data[0], line_data[1]))
                 else:
                     # strip newline and split by tabulator and append to array
-                    a.append(line.strip('\r\n').split('\t'))
+                    a.append(line.strip('\r\n').split('\v'))
     
     # convert list a to float array
     data = array(a, dtype=float)
@@ -147,7 +147,7 @@ def readFileForFitsDataAndStdErrorAndMetaData(filename, id_string, tolerate_spac
                     a.append(line_data)
         else:
             # metadata
-            line_data = line.lstrip("#").rstrip('\n').rstrip('\r')  #.split('\t')
+            line_data = line.lstrip("#").rstrip('\n').rstrip('\r')  #.split('\v')
             
             #for i in range(0, len(line_data)):
             if line_data.startswith("fits:"):

@@ -10,6 +10,8 @@ class dia_goodness_of_minspan(QtWidgets.QDialog):
         #QtWidgets.QDialog(dia_goodness_of_minspan, self)
         super(dia_goodness_of_minspan, self).__init__()
         
+        self.setWindowTitle("Goodness of Fit Span")
+
         self.setFixedHeight(800)
         self.setFixedWidth(650)
         
@@ -73,7 +75,7 @@ class dia_goodness_of_minspan(QtWidgets.QDialog):
         avg_alphas = np.average(self.alphas)
         std_alphas = np.sqrt(np.sum(np.square(self.alpha_errs)))/len(self.alpha_errs)
 
-        return u'Y Offset = {:.3f} \u00B1 {:.3f}   AE = {:.3f} \u00B1 {:.3f}\n Scale factor = {:.3f} \u00B1 {:.3f}   Alpha = {:.3f} \u00B1 {:.3f}'.format(
+        return u'Y Offset = {:.3f} \u00B1 {:.3f},   AE = {:.3f} \u00B1 {:.3f}\n Scale factor = {:.3f} \u00B1 {:.3f},   Alpha = {:.3f} \u00B1 {:.3f}'.format(
             avg_yos, std_yos, avg_aes, std_aes, avg_sfs, std_sfs, avg_alphas, std_alphas)
         
         
@@ -103,10 +105,10 @@ class dia_goodness_of_minspan(QtWidgets.QDialog):
         self.sf_ax.set_ylabel('Scale Factor')
         self.al_ax.set_ylabel('Alpha')
 
-        self.al_ax.set_xlabel('Min Span')
+        self.al_ax.set_xlabel('Fit Span')
 
         
-        self.yo_ax.set_title(self.calc_stats())
+        self.yo_ax.set_title('Average values over tested Fit Span:\n\n' + self.calc_stats())
         
         self.yo_ax.errorbar(self.minspans, self.y_offsets, yerr=yo_errs, fmt='.', markersize=3,
                             markeredgecolor=self.__dc, markerfacecolor=self.__dc, ecolor=self.__dc, elinewidth=self.__ew,

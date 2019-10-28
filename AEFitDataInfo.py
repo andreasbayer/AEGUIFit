@@ -46,15 +46,23 @@ class AEFitDataInfo(fitDataInfo):
     def setMinspan(self, minspan):
         self._minspan = minspan
 
-    def getAEFrom(self):
-        return self._AEFrom
+    def getAEFrom(self, adjusted_for_shift=False):
+
+        if adjusted_for_shift:
+            return self._AEFrom - self.get_shift()
+        else:
+            return self._AEFrom
     
     def setAEFrom(self, AEFrom):
         print(self._AEFrom, '=', AEFrom)
         self._AEFrom = AEFrom
     
-    def getAETo(self):
-        return self._AETo
+    def getAETo(self, adjusted_for_shift=False):
+
+        if adjusted_for_shift:
+            return self._AETo - self.get_shift()
+        else:
+            return self._AETo
     
     def setAETo(self, AETo):
         self._AETo = AETo
@@ -71,14 +79,22 @@ class AEFitDataInfo(fitDataInfo):
     def setYFrom(self, YFrom):
         self._YFrom = YFrom
 
-    def getScaleTo(self):
-        return self._ScaleTo
+    def getScaleTo(self, adjusted_for_shift=False):
+
+        if adjusted_for_shift:
+            return self._ScaleTo - self.get_shift()
+        else:
+            return self._ScaleTo
 
     def setScaleTo(self, ScaleTo):
         self._ScaleTo = ScaleTo
 
-    def getScaleFrom(self):
-        return self._ScaleFrom
+    def getScaleFrom(self, adjusted_for_shift=False):
+
+        if adjusted_for_shift:
+            return self._ScaleFrom - self.get_shift()
+        else:
+            return self._ScaleFrom
 
     def setScaleFrom(self, ScaleFrom):
         self._ScaleFrom = ScaleFrom
@@ -86,24 +102,40 @@ class AEFitDataInfo(fitDataInfo):
     def setAlphaFrom(self, AlphaFrom):
         self._AlphaFrom = AlphaFrom
 
-    def getAlphaFrom(self):
-        return self._AlphaFrom
+    def getAlphaFrom(self, adjusted_for_shift=False):
+
+        if adjusted_for_shift:
+            return self._AlphaFrom - self.get_shift()
+        else:
+            return self._AlphaFrom
 
     def setAlphaTo(self, AlphaTo):
         self._AlphaTo = AlphaTo
 
-    def getAlphaTo(self):
-        return self._AlphaTo
+    def getAlphaTo(self, adjusted_for_shift=False):
 
-    def getDomainFrom(self):
-        return self._DomainFrom
+        if adjusted_for_shift:
+            return self._AlphaTo - self.get_shift()
+        else:
+            return self._AlphaTo
+
+    def getDomainFrom(self, adjusted_for_shift=False):
+
+        if adjusted_for_shift:
+            return self._DomainFrom - self.get_shift()
+        else:
+            return self._DomainFrom
 
     def setDomainFrom(self, DomainFrom):
         print(self._DomainFrom, '=', DomainFrom)
         self._DomainFrom = DomainFrom
 
-    def getDomainTo(self):
-        return self._DomainTo
+    def getDomainTo(self, adjusted_for_shift=False):
+
+        if adjusted_for_shift:
+            return self._DomainTo - self.get_shift()
+        else:
+            return self._DomainTo
 
     def setDomainTo(self, DomainTo):
         self._DomainTo = DomainTo
@@ -290,13 +322,16 @@ class AEFitDataInfo(fitDataInfo):
         for set in self._data:
             set[0] += increment
 
+    def get_shift(self):
+        return self._shift
+
     def get_meta_string(self):
         metastring = ""
 
         if self.isFitted():
-            metastring = 'Y-offset = ' + str(self.getYOffset()) + '+-' + str(self.getYOffset_dev()) + ' '
-            metastring += 'AE = ' + str(self.getFoundAE()) + '+-' + str(self.getFoundAE_dev()) + ' '
-            metastring += 'Scale Factor = ' + str(self.getScaleFactor()) + '+-' + str(self.getScaleFactor_dev()) + ' '
+            metastring = 'Y-offset = ' + str(self.getYOffset()) + '+-' + str(self.getYOffset_dev()) + ', '
+            metastring += 'AE = ' + str(self.getFoundAE()) + '+-' + str(self.getFoundAE_dev()) + ', '
+            metastring += 'Scale Factor = ' + str(self.getScaleFactor()) + '+-' + str(self.getScaleFactor_dev()) + ', '
             metastring += 'Alpha = ' + str(self.getAlpha()) + '+-' + str(self.getAlpha_dev())
 
         return metastring
