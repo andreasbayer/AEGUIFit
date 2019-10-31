@@ -2,15 +2,16 @@ from PyQt5.QtWidgets import QLabel, QWidget, QPushButton, QHBoxLayout, QVBoxLayo
 from PyQt5.QtCore import pyqtSignal, Qt
 from sys import float_info as fli
 import dataDisplay as dd
+import numpy as np
 
 class metaInfoWidget(QGroupBox):
     #show_all = pyqtSignal()
     #zoom_by_increment = pyqtSignal(str, int)
-    #scale_font_size_changed = pyqtSignal(float)
-    #label_font_size_changed = pyqtSignal(float)
+    #scale_font_size_changed = pyqtSignal(np.float64)
+    #label_font_size_changed = pyqtSignal(np.float64)
     #fig_size_changed = pyqtSignal(tuple)
     #annotation_changed = pyqtSignal(str)
-    #annotation_font_size_changed = pyqtSignal(float)
+    #annotation_font_size_changed = pyqtSignal(np.float64)
     #resizing_changed = pyqtSignal(bool)
 
     def __init__(self):

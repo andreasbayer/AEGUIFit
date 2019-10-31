@@ -35,7 +35,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
     DomainTo_changed = pyqtSignal()
     DomainFrom_changed = pyqtSignal()
     #zoom_to_fit = pyqtSignal(int, int)
-    #progressUpdate = pyqtSignal(float, list)
+    #progressUpdate = pyqtSignal(np.float64, list)
     
     def __init__(self, index, shift_function, parameters=None):
         fiw.fitInfoWidget.__init__(self)
@@ -57,29 +57,29 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         for parameter in ps:
             (short, value) = parameter.split('=')
             if short == 'aef':
-                self.setAEFrom(float(value))
+                self.setAEFrom(np.float64(value))
             elif short == 'aet':
-                self.setAETo(float(value))
+                self.setAETo(np.float64(value))
             elif short == 'yfr':
-                self.setYFrom(float(value))
+                self.setYFrom(np.float64(value))
             elif short == 'yto':
-                self.setYTo(float(value))
+                self.setYTo(np.float64(value))
             elif short == 'alf':
-                self.setAlphaFrom(float(value))
+                self.setAlphaFrom(np.float64(value))
             elif short == 'alt':
-                self.setAlphaTo(float(value))
+                self.setAlphaTo(np.float64(value))
             elif short == 'scf':
-                self.setScaleTo(float(value))
+                self.setScaleTo(np.float64(value))
             elif short == 'sct':
-                self.setScaleFrom(float(value))
+                self.setScaleFrom(np.float64(value))
             elif short == 'dof':
-                self.setDomainFrom(float(value))
+                self.setDomainFrom(np.float64(value))
             elif short == 'dot':
-                self.setDomainTo(float(value))
+                self.setDomainTo(np.float64(value))
             elif short == 'fwh':
-                self.setFWHM(float(value))
+                self.setFWHM(np.float64(value))
             elif short == 'mns':
-                self.setMinSpan(float(value))
+                self.setMinSpan(np.float64(value))
             elif short == 'wgt':
                 if value == '1' or value == 'True':
                     self.setWeighted(True)
@@ -353,7 +353,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         return self.getFitDataInfo().getAEFrom(adjusted_for_shift)
 
     def setAEFrom(self, value):
-        self.__dsbAEFrom.setValue(float(value))
+        self.__dsbAEFrom.setValue(np.float64(value))
         self.__AEFrom_changed()
 
     def __AEFrom_changed(self):
@@ -364,7 +364,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         return self.getFitDataInfo().getAETo(adjusted_for_shift)
 
     def setAETo(self, value):
-        self.__dsbAETo.setValue(float(value))
+        self.__dsbAETo.setValue(np.float64(value))
         self.__AETo_changed()
 
     def __AETo_changed(self):
@@ -375,7 +375,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         return self.getFitDataInfo().getAlphaFrom(adjusted_for_shift)
 
     def setAlphaFrom(self, value):
-        self.__dsbAlphaFrom.setValue(float(value))
+        self.__dsbAlphaFrom.setValue(np.float64(value))
         self.__AlphaFrom_changed()
 
     def __AlphaFrom_changed(self):
@@ -387,7 +387,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         return self.getFitDataInfo().getAlphaTo(adjusted_for_shift)
 
     def setAlphaTo(self, value):
-        self.__dsbAlphaTo.setValue(float(value))
+        self.__dsbAlphaTo.setValue(np.float64(value))
         self.__AlphaTo_changed()
 
     def __AlphaTo_changed(self):
@@ -398,7 +398,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         return self.getFitDataInfo().getScaleFrom(adjusted_for_shift)
 
     def setScaleFrom(self, value):
-        self.getFitDataInfo().setScaleFrom(float(value))
+        self.getFitDataInfo().setScaleFrom(np.float64(value))
         self.__ScaleFrom_changed()
 
     def __ScaleFrom_changed(self):
@@ -409,7 +409,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         return self.getFitDataInfo().getScaleTo(adjusted_for_shift)
 
     def setScaleTo(self, value):
-        self.getFitDataInfo().setScaleTo(float(value))
+        self.getFitDataInfo().setScaleTo(np.float64(value))
         self.__ScaleTo_changed()
 
     def __ScaleTo_changed(self):
@@ -420,7 +420,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         return self.getFitDataInfo().getYFrom()
 
     def setYFrom(self, value):
-        self.getFitDataInfo().setYFrom(float(value))
+        self.getFitDataInfo().setYFrom(np.float64(value))
         self.__YFrom_changed()
 
     def __YFrom_changed(self):
@@ -431,7 +431,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         return self.getFitDataInfo().getYTo()
 
     def setYTo(self, value):
-        self.__dsbYTo.setValue(float(value))
+        self.__dsbYTo.setValue(np.float64(value))
         self.__YTo_changed()
 
     def __YTo_changed(self):
@@ -442,7 +442,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         return self.__dsbFWHM.value()
     
     def setFWHM(self, value):
-        self.__dsbFWHM.setValue(float(value))
+        self.__dsbFWHM.setValue(np.float64(value))
         self.getFitDataInfo().setFWHM(value)
         self.__FWHM_changed()
 
@@ -450,14 +450,14 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         return self.__dsbMinSpan.value()
     
     def setMinSpan(self, value):
-        self.__dsbMinSpan.setValue(float(value))
+        self.__dsbMinSpan.setValue(np.float64(value))
         self.__MinSpan_changed()
 
     def getDomainFrom(self, adjusted_for_shift=False):
         return self.getFitDataInfo().getDomainFrom(adjusted_for_shift)
 
     def setDomainFrom(self, value):
-        self.__dsbDomainFrom.setValue(float(value))
+        self.__dsbDomainFrom.setValue(np.float64(value))
         self.__DomainFrom_changed()
 
     def __DomainFrom_changed(self):
@@ -468,7 +468,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         return self.getFitDataInfo().getDomainTo(adjusted_for_shift)
 
     def setDomainTo(self, value):
-        self.__dsbDomainTo.setValue(float(value))
+        self.__dsbDomainTo.setValue(np.float64(value))
         self.__DomainTo_changed()
 
     def __DomainTo_changed(self):

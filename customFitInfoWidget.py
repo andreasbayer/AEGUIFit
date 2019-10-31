@@ -5,6 +5,7 @@ import fitHelper as fh
 import fitInfoWidget as fiw
 import sys
 from InftyDoubleSpinBox import InftyDoubleSpinBox
+import numpy as np
 
 class customFitInfoWidget(fiw.fitInfoWidget):
     FITINITIALS = "cus"
@@ -37,11 +38,11 @@ class customFitInfoWidget(fiw.fitInfoWidget):
         for parameter in ps:
             (short, value) = parameter.split('=')
             if short == 'rfr':
-                self.setDomainFrom(float(value))
+                self.setDomainFrom(np.float64(value))
             elif short == 'rto':
-                self.setDomainTo(float(value))
+                self.setDomainTo(np.float64(value))
             elif short == 'fst':
-                self.setFunctionStr(float(value))
+                self.setFunctionStr(np.float64(value))
 
     def get_fit_string(self):
         return self.FITINITIALS + ':' + \
@@ -71,14 +72,14 @@ class customFitInfoWidget(fiw.fitInfoWidget):
         return self.__dsbDomainFrom.value()
 
     def setDomainFrom(self, value):
-        self.__dsbDomainFrom.setValue(float(value))
+        self.__dsbDomainFrom.setValue(np.float64(value))
         self.__DomainFrom_changed()
 
     def getDomainTo(self):
         return self.__dsbDomainTo.value()
 
     def setDomainTo(self, value):
-        self.__dsbDomainTo.setValue(float(value))
+        self.__dsbDomainTo.setValue(np.float64(value))
         self.__DomainTo_changed()
 
     def getFunctionStr(self):

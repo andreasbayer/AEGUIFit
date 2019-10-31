@@ -2,13 +2,14 @@ from PyQt5.QtWidgets import QWidget, QGroupBox
 from PyQt5.QtCore import pyqtSignal
 import fitDataInfo as fdi
 import traceback
+import numpy as np
 
 
 class fitInfoWidget(QGroupBox):
     
     Post_Fit = pyqtSignal(fdi.fitDataInfo, str)
-    zoom_to_fit = pyqtSignal(float, float, int)
-    progressUpdate = pyqtSignal(float, list)
+    zoom_to_fit = pyqtSignal(np.float64, np.float64, int)
+    progressUpdate = pyqtSignal(np.float64, list)
     disable_fit = pyqtSignal(fdi.fitDataInfo, bool)
     remove_fit = pyqtSignal(fdi.fitDataInfo)
     

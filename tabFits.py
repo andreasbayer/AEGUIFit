@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QWidget, QTabWidget
 from PyQt5.QtCore import pyqtSignal
-
+import numpy as np
 
 class tabFits(QTabWidget):
     

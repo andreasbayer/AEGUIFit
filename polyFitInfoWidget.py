@@ -5,6 +5,7 @@ import polyFitDataInfo as pfd
 import fitHelper as fh
 import fitInfoWidget as fiw
 import sys
+import numpy as np
 
 class polyFitInfoWidget(fiw.fitInfoWidget):
     FITINITIALS = "pyf"
@@ -37,11 +38,11 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
         for parameter in ps:
             (short, value) = parameter.split('=')
             if short == 'ffr':
-                self.setFitFrom(float(value))
+                self.setFitFrom(np.float64(value))
             elif short == 'fto':
-                self.setFitTo(float(value))
+                self.setFitTo(np.float64(value))
             elif short == 'deg':
-                self.setDegree(float(value))
+                self.setDegree(np.float64(value))
             elif short == 'wgt':
                 print('wgt', value)
                 if value == '1' or value == 'True':
@@ -51,8 +52,8 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
 
     def get_fit_string(self):
         return self.FITINITIALS + ':' + \
-               'ffr=' + str(round(self.getFitFrom(), 5)) + '\v' +\
-               'fto=' + str(round(self.getFitTo(), 5)) + '\v' +\
+               'ffr=' + str(round(self.getFitFrom(adjusted_for_shift=True), 5)) + '\v' +\
+               'fto=' + str(round(self.getFitTo(adjusted_for_shift=True), 5)) + '\v' +\
                'deg=' + str(self.getDegree()) + '\v' +\
                'wgt=' + str(self.isWeighted())
 
@@ -82,22 +83,22 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
       return self.__dsbDegree.value()
 
     def setDegree(self, n):
-        self.__dsbDegree.setValue(float(n))
-        self.__Degree_changed()
+        self.__dsbDegree.setValue(np.float64(n))
+        self.__Degree_changed(np.float64(n))
 
     def setFitFrom(self, value):
-        self.__dsbFitFrom.setValue(float(value))
-        self.__FitFrom_changed()
+        self.__dsbFitFrom.setValue(np.float64(value))
+        self.getFitDataInfo().setFitFrom(np.float64(value))
 
-    def getFitFrom(self):
-      return self.__dsbFitFrom.value()
+    def getFitFrom(self, adjusted_for_shift=False):
+        return self.getFitDataInfo().getFitFrom(adjusted_for_shift)
 
     def setFitTo(self, value):
-        self.__dsbFitTo.setValue(float(value))
-        self.__FitTo_changed()
+        self.__dsbFitTo.setValue(np.float64(value))
+        self.getFitDataInfo().setFitTo(np.float64(value))
 
-    def getFitTo(self):
-      return self.__dsbFitTo.value()
+    def getFitTo(self, adjusted_for_shift=False):
+      return self.getFitDataInfo().getFitTo(adjusted_for_shift)
 
     def __connectSignals(self):
         self.__dsbFitFrom.editingFinished.connect(self.__FitFrom_changed)
@@ -219,15 +220,14 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
         return self.__polyFitDataInfo.get_fit_index()
 
     def __FitTo_changed(self):
-        self.__polyFitDataInfo.setFitTo(self.getFitTo())
+        self.__polyFitDataInfo.setFitTo(self.__dsbFitTo.value())
         #self.AEFrom_changed.emit()
 
     def __FitFrom_changed(self):
-        self.__polyFitDataInfo.setFitFrom(self.getFitFrom())
-        #self.AETo_changed.emit()
+        self.__polyFitDataInfo.setFitFrom(self.__dsbFitFrom.value())
 
-    def __Degree_changed(self):
-        self.__polyFitDataInfo.setDegree(self.getDegree())
+    def __Degree_changed(self, n):
+        self.__polyFitDataInfo.setDegree(n)
         self.Degree_changed.emit()
 
     def __chkWeightFit_stateChanged(self, state):
@@ -250,19 +250,7 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
         if msg == self.__polyFitDataInfo.SUCCESS:
             print("success")
 
-            parstring = ""
-            p = self.getFitDataInfo().getParameters()
-            residuals = self.getFitDataInfo().getResiduals()
-            for i in reversed(range(0, len(p))):
-                digits_of_error = 2
-
-                par_str, err_str = fh.roundToErrorStrings(p[i], residuals[i], digits_of_error)
-
-                parstring += 'a<sub>' + str(round(i)) + '</sub>: ' + par_str + ' &plusmn; ' + err_str
-                if i >= 0:
-                    parstring += '<br>'
-
-            self.__lblFitParValues.setText(parstring)
+            self.__lblFitParValues.setText(self.getFitDataInfo().get_fit_info_string())
 
             self.setPostFitFunctionsEnabled(True)
         else:

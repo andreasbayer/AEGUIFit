@@ -8,7 +8,7 @@ from PyQt5.QtCore import pyqtSignal, Qt
 import fitDataInfo as fdi
 import AEFitDataInfo as adi
 import polyFitDataInfo as pdi
-
+import numpy as np
 import traceback
 
 class DataDisplay(FigureCanvas):
@@ -104,7 +104,7 @@ class DataDisplay(FigureCanvas):
             if event.button() == Qt.MidButton:
                 if self.__clickmark is None:
                     if self.__inv is not None:
-                        values = (float(event.x()), float(event.y()))
+                        values = (np.float64(event.x()), np.float64(event.y()))
 
                         tr_point = self.__inv.transform(values)
 

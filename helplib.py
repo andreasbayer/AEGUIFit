@@ -56,8 +56,8 @@ def readfile(filename, tolerate_spaces=False, x_y_data_only=False):
                     # strip newline and split by tabulator and append to array
                     a.append(line.strip('\r\n').split('\v'))
     
-    # convert list a to float array
-    data = array(a, dtype=float)
+    # convert list a to float64 array
+    data = array(a, dtype=float64)
     
     if len(data) == 0:
         raise IOError('File did not contain any valid lines')
@@ -163,8 +163,8 @@ def readFileForFitsDataAndStdErrorAndMetaData(filename, id_string, tolerate_spac
             elif line_data.startswith(id_string):
                 id_found = True
     
-    # convert list a to float array
-    data = array(a, dtype=float)
+    # convert list a to float64 array
+    data = array(a, dtype=float64)
     
     if len(data) == 0:
         raise IOError('File did not contain any valid lines')
@@ -212,7 +212,7 @@ def calc_std_errors(data):
             # calculate the std error
             se.append(s / (n ** 0.5))
     
-        return array(se, dtype=float)
+        return array(se, dtype=float64)
 
     else:
         return None

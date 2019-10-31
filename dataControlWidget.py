@@ -2,11 +2,12 @@ from PyQt5.QtWidgets import QLabel, QWidget, QGridLayout, QCheckBox, QGroupBox
 from InftyDoubleSpinBox import InftyDoubleSpinBox
 from PyQt5.QtCore import pyqtSignal, Qt
 import helplib as hl
+import numpy as np
 
 class dataControlWidget(QGroupBox):
     showErrorBars_changed = pyqtSignal(bool)
     data_changed = pyqtSignal(bool)
-    data_shift = pyqtSignal(float)
+    data_shift = pyqtSignal(np.float64)
     load_fits = pyqtSignal(list)
     load_view = pyqtSignal(str)
     load_meta = pyqtSignal(str)
@@ -160,7 +161,7 @@ class dataControlWidget(QGroupBox):
                 
                 if len(item) == 2:
                     if (item[0] == 'egs'):
-                        self.setEnergyShift(float(item[1]))
+                        self.setEnergyShift(np.float64(item[1]))
                     elif (item[0] == 'seb'):
                         if item[1] == '1' or item[1] == 'True':
                             self.setShowErrorBars(True)

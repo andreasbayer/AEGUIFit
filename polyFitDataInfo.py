@@ -24,14 +24,20 @@ class polyFitDataInfo(fitDataInfo):
     def setDegree(self, n):
         self._n = n
 
-    def getFitTo(self):
-        return self._FitTo
+    def getFitTo(self, adjusted_for_shift=False):
+        if adjusted_for_shift:
+            return self._FitTo - self.get_shift()
+        else:
+            return self._FitTo
 
     def setFitTo(self, value):
         self._FitTo = value
 
-    def getFitFrom(self):
-        return self._FitFrom
+    def getFitFrom(self, adjusted_for_shift=False):
+        if adjusted_for_shift:
+            return self._FitFrom - self.get_shift()
+        else:
+            return self._FitFrom
 
     def setFitFrom(self, value):
         self._FitFrom = value
@@ -63,7 +69,7 @@ class polyFitDataInfo(fitDataInfo):
             cut_data = fh.cutarray2(data=data, lowerlim=self.getFitFrom(), upperlim=self.getFitTo())
 
         try:
-            self._p, arr1, deg, self._residuals, val = \
+            self._p, arr1, deg, self._residuals, val =\
                 np.polyfit(cut_data[:, 0], cut_data[:, 1], self.getDegree(), w=weights, full=True, cov=True)
 
             full_fitdata = np.array([data[:, 0], np.polyval(self._p, data[:, 0])]).transpose()
@@ -101,14 +107,39 @@ class polyFitDataInfo(fitDataInfo):
             self._passProgressUpdate(relation, info)
     
     def shift_fit(self, increment):
-        #fitDataInfo.shift_fit(increment)
-        if self.isFitted():
-            for set in self._fitData:
-                set[0] += increment
+        super().shift_fit(increment)
 
-            self._FitTo += increment
-            self._FitFrom += increment
+    def get_meta_string(self):
+        metastring = ""
+        p = self.getParameters()
+        residuals = self.getResiduals()
+    
+        for i in reversed(range(0, len(p))):
+            digits_of_error = 2
+        
+            par_str, err_str = fh.roundToErrorStrings(p[i], residuals[i], digits_of_error)
+        
+            metastring += 'a_' + str(round(i)) + ': ' + par_str + ' +- ' + err_str
+            if i >= 0:
+                metastring += ", "
+                
+        metastring += "domain: [" + str(self.getFitFrom()) + "eV ," + str(self.getFitTo()) + "eV]"
+    
+        
+        return metastring
 
-        for set in self._data:
-            set[0] += increment
-            
+    def get_fit_info_string(self):
+        metastring = ""
+        p = self.getParameters()
+        residuals = self.getResiduals()
+    
+        for i in reversed(range(0, len(p))):
+            digits_of_error = 2
+        
+            par_str, err_str = fh.roundToErrorStrings(p[i], residuals[i], digits_of_error)
+        
+            metastring += 'a<sub>' + str(round(i)) + '</sub>: ' + par_str + ' &plusmn; ' + err_str
+            if i >= 0:
+                metastring += "</br>"
+                
+            return metastring

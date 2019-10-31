@@ -1,5 +1,6 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QGridLayout, QMessageBox, QAction, QGroupBox, QFileDialog, QSizePolicy, QProgressBar, QLabel, QPushButton, QScrollArea, QFrame
+from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QGridLayout, QMessageBox, QAction, QGroupBox,\
+    QFileDialog, QSizePolicy, QProgressBar, QLabel, QPushButton, QScrollArea, QFrame
 import flSaveFileDialog as fsd
 
 import dataDisplay as dd
@@ -10,7 +11,7 @@ import fitInfoWidgetContainer as fic
 import displayToolbar as dt
 import tabFits as tft
 import metaInfoWidget as mdi
-from numpy import empty
+import numpy as np
 
 VERSION = "AEGUIFit 2.02"
 ID_STRING = "AEGUIFit"
@@ -419,7 +420,10 @@ class App(QMainWindow):
 
         if write_afd:
             for i in range(0, len(all_fit_data)):
-                file.write('\tFit ' + str(i + 1))
+                if i == 0:
+                    file.write('\tFit ' + str(i + 1))
+                else:
+                    file.write('\tFit ' + str(i + 1) + '(incl. prev.)')
 
         file.write('\r\n')
 
@@ -434,9 +438,11 @@ class App(QMainWindow):
                 file.write('%f' % combined_fit[i][1])
 
             if write_afd:
+                sum = 0
                 for fit_data in all_fit_data:
-                    if fit_data[i][1] is float:
-                        file.write('\t%f' % fit_data[i][1])
+                    if np.isfinite(fit_data[i][1]) and not np.isnan(fit_data[i][1]):
+                        sum += fit_data[i][1]
+                        file.write('\t%f' % sum)
                     else:
                         file.write('\t ')
 
@@ -538,11 +544,15 @@ class App(QMainWindow):
 
     def saveFileAs(self):
         saveDialog = fsd.flSaveFileDialog()
-    
+        
         # name, ext = fsd.flSaveFileDialog.getSaveFileName(self, "Save Fit Data", "", "*.txt")
-        print("AE_" + self.fileName.rsplit('/')[-1])
-        fileName, ext = saveDialog.getSaveFileName(self, "Save File", "AE_" + self.fileName.rsplit('/')[-1], "*.txt")
-
+        print(self.fileName)
+        fname_pos = self.fileName.rfind('/') + 1
+        
+        newfilename = self.fileName[0:fname_pos] + "AE_" + self.fileName[fname_pos:]
+        
+        fileName, ext = saveDialog.getSaveFileName(self, "Save File", newfilename, "*.txt")
+        
         if fileName is not '':  # todo check file validity
             try:
                 self.saveData(fileName)

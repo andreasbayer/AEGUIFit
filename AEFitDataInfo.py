@@ -28,7 +28,6 @@ class AEFitDataInfo(fitDataInfo):
         self._fitRelBounds = [0.0] * 2
         self._fittedFWHM = 0
         self._FWHM = 0
-        self._shift = 0
 
     #def is_initialized(self):
     #    return self._AETo != fli.max
@@ -308,22 +307,12 @@ class AEFitDataInfo(fitDataInfo):
             self._passProgressUpdate(relation, info.tolist())
     
     def shift_fit(self, increment):
+        super().shift_fit(increment)
         
-        self._shift += increment
-        #fitDataInfo.shift_fit(increment)
         if self.isFitted():
-            for set in self._fitData:
-                set[0] += increment
-
             self._p[1] += increment
             self._fitRelBounds[0] += increment
             self._fitRelBounds[1] += increment
-
-        for set in self._data:
-            set[0] += increment
-
-    def get_shift(self):
-        return self._shift
 
     def get_meta_string(self):
         metastring = ""

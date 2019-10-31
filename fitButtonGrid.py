@@ -4,6 +4,7 @@ import AEFitDataInfo as fd
 from InftyDoubleSpinBox import InftyDoubleSpinBox
 import helplib as hl
 import sys
+import numpy as np
 
 
 class fitButtonGrid(QWidget):

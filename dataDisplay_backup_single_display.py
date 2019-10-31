@@ -63,7 +63,7 @@ class DataDisplay_(FigureCanvas):
             
             if event.button() == Qt.LeftButton:
                 if self.__inv is not None:
-                    values = (float(event.x()), float(event.y()))
+                    values = (np.float64(event.x()), np.float64(event.y()))
                     
                     tr_point = self.__inv.transform(values)
         

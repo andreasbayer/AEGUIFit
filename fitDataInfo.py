@@ -1,3 +1,5 @@
+import numpy as np
+
 class fitDataInfo():
     SUCCESS = "Fit succeeded."
     FAILURE = "Fit failed."
@@ -14,6 +16,7 @@ class fitDataInfo():
         self._fit_index = index
         self._isDisabled = False
         self._weighted = True
+        self._shift = 0
 
     def is_initialized(self):
         return self._data is not None
@@ -90,7 +93,17 @@ class fitDataInfo():
         pass
     
     def shift_fit(self, increment):
-        pass
+        self._shift += increment
+        
+        if self.isFitted():
+            for set in self._fitData:
+                set[0] += increment
+        
+        for set in self._data:
+            set[0] += increment
 
     def get_meta_string(self):
         pass
+    
+    def get_shift(self):
+        return self._shift

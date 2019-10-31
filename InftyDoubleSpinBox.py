@@ -26,10 +26,13 @@ class InftyDoubleSpinBox(QDoubleSpinBox):
         #    return QDoubleSpinBox.wheelEvent(self, e)
 
 
+    def value(self):
+        return np.float64(super().value())
+
     def default(self):
         return self.__default
 
-    def setDefault(self, value: np.float):
+    def setDefault(self, value: np.float64):
         self.__default = value
 
     def __is_key_del(self, key):

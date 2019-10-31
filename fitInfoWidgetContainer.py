@@ -6,16 +6,17 @@ import polyFitInfoWidget as pfw
 import customFitInfoWidget as cfw
 import fitDataInfo as fid
 from numpy import ndarray, empty
+import numpy as np
 
 
 class fitInfoWidgetContainer(QGroupBox):
 
-    progressUpdate = pyqtSignal(float, list)
+    progressUpdate = pyqtSignal(np.float64, list)
 
     Post_Fit = pyqtSignal(str, fid.fitDataInfo, ndarray)
     Combined_Fit_Data_Updated = pyqtSignal(ndarray)
-    zoom_to_fit = pyqtSignal(float, float, int)
-    shift_data = pyqtSignal(float)
+    zoom_to_fit = pyqtSignal(np.float64, np.float64, int)
+    shift_data = pyqtSignal(np.float64)
     fit_added = pyqtSignal(fid.fitDataInfo)
     remove_fit = pyqtSignal(fid.fitDataInfo)
     disable_fit = pyqtSignal(fid.fitDataInfo)

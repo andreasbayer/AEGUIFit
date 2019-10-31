@@ -1,10 +1,7 @@
 from scipy import *
 from scipy.special import *
-
 from scipy import optimize
-
 from math import sqrt, log, log10, floor
-
 import numpy as np
 
 
@@ -97,7 +94,7 @@ def find_cut_numbers(data_length, data_length_ev, minspan):
         # the int() cast will floor the number, which will most likely lead to having more than min_data_points
         # data points left to fit.
         
-        cutpercent = pow(min_data_points / data_length, 1.0 / float64(n - 1))
+        cutpercent = pow(min_data_points / data_length, 1.0 / np.float64(n - 1))
         # (n-1)st root, because the data won't be cut for the first iteration, and therefore only n-1 times
         
         if cutpercent > 1.0:
@@ -219,7 +216,7 @@ def find_best_fit(data, std_errs, ip, fwhm, minspan, lower_bounds, upper_bounds,
         iteration += 1
         
         if update_function is not None:
-            update_function(float((iteration) / n), p)
+            update_function(np.float64((iteration) / n), p)
     
     return p, stddev, cutdata[0][0], cutdata[len(cutdata) - 1][0], r_fwhm, fit_function, message
 
@@ -334,10 +331,10 @@ def data_from_fit_and_parameters(data, fit_func, p, fwhm, domain_indexes=None, c
 
     # check, whether there is a reasonable amount of points to plot:
     if len(data[:, 0]) > minimumpoints:
-        # create empty float array in the size of data
-        a = empty_like(data, dtype=float)
+        # create empty np.float64 array in the size of data
+        a = empty_like(data, dtype=np.float64)
     else:
-        a = empty((minimumpoints, 2), dtype=float)
+        a = empty((minimumpoints, 2), dtype=np.float64)
     
     # created a problem, as x-points can slightly differ from the x-points in data, which is necessary for writing plot
     # to file and/or plotting the figures
@@ -397,7 +394,7 @@ def str_fit_func(p, fwhm):
     return base_func
 
 def fit_continuation(data, p, fwhm):
-    b = empty_like(data, dtype=float)
+    b = empty_like(data, dtype=np.float64)
     
     for repeat in range(0, 10):
         fwhm += 0.1
@@ -471,8 +468,8 @@ def cutarray2(data, lowerlim=None, upperlim=None, data2=None, returnIndexes=Fals
     if upperlim is None:
         upperlim = data[:, 0].max()
     
-    lowerlim = float64(lowerlim)
-    upperlim = float64(upperlim)
+    lowerlim = np.float64(lowerlim)
+    upperlim = np.float64(upperlim)
     
     newdata = []
     newdata2 = []
@@ -491,15 +488,15 @@ def cutarray2(data, lowerlim=None, upperlim=None, data2=None, returnIndexes=Fals
         elif i_from != -1 and i_to == -1:
             i_to = i
     
-    # data = array(newdata, dtype=float)
+    # data = array(newdata, dtype=np.float64)
     
     if data2 is None:
         if returnIndexes:
-            return array(newdata, dtype=float), (i_from, i_to)
+            return array(newdata, dtype=np.float64), (i_from, i_to)
         else:
-            return array(newdata, dtype=float)
+            return array(newdata, dtype=np.float64)
     else:
         if returnIndexes:
-            return array(newdata, dtype=float), array(newdata2, dtype=float), (i_from, i_to)
+            return array(newdata, dtype=np.float64), array(newdata2, dtype=np.float64), (i_from, i_to)
         else:
-            return array(newdata, dtype=float), array(newdata2, dtype=float)
+            return array(newdata, dtype=np.float64), array(newdata2, dtype=np.float64)
