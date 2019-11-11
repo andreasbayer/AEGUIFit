@@ -13,14 +13,22 @@ class polyFitDataInfo(fitDataInfo):
         self._FitFrom = 0
         self._p = []
         self._residuals = []
+        self._degree_of_continuation = self._n
+        #self.
 
     #def is_initialized(self):
     #    return (self._FitTo == sys.float_info.max)
     
     # get-set-block
+    def getDegreeOfContinuation(self):
+        return int(self._degree_of_continuation)
+    
+    def setDegreeOfContinuation(self, degree_of_continuation):
+        self._degree_of_continuation = degree_of_continuation
+
     def getDegree(self):
         return self._n
-    
+
     def setDegree(self, n):
         self._n = n
 
@@ -69,22 +77,27 @@ class polyFitDataInfo(fitDataInfo):
             cut_data = fh.cutarray2(data=data, lowerlim=self.getFitFrom(), upperlim=self.getFitTo())
 
         try:
-            self._p, arr1, deg, self._residuals, val =\
+            self._p, arr1, deg, self._residuals, val = \
                 np.polyfit(cut_data[:, 0], cut_data[:, 1], self.getDegree(), w=weights, full=True, cov=True)
 
-            full_fitdata = np.array([data[:, 0], np.polyval(self._p, data[:, 0])]).transpose()
-            fitdata = list()
+            #self._p_cont = fh.taylor(np.poly(self._p),  self.getFitTo(), self.getDegreeOfContinuation())
+            self._p_cont = fh.taylor(self._p, self.getFitTo(), self.getDegreeOfContinuation())
 
-            appendval = 0
+            full_fitdata = np.array([data[:, 0], np.polyval(self._p, data[:, 0])]).transpose()
+            full_ep_data = np.array([data[:, 0], np.polyval(self._p_cont, data[:, 0]-self.getFitTo())]).transpose()
+            fitdata = list()
 
             self.progressUpdate(0.5, '')
 
-            for point in full_fitdata:
-                if self.getFitFrom() <= point[0] <= self.getFitTo():
-                    fitdata.append(point)
-                    appendval = point[1]
-                else:
-                    fitdata.append([point[0], appendval])
+            for i in range(0, len(full_fitdata)):
+                energy = full_fitdata[i][0]
+
+                if energy < self.getFitFrom():  # data points before fit area
+                    fitdata.append([energy, 0.0])
+                elif energy > self.getFitTo():  # data points after fit area
+                    fitdata.append(full_ep_data[i])
+                else:  # data points in fit area
+                    fitdata.append(full_fitdata[i])
 
             fitdata = np.array(fitdata)
 
@@ -139,7 +152,8 @@ class polyFitDataInfo(fitDataInfo):
             par_str, err_str = fh.roundToErrorStrings(p[i], residuals[i], digits_of_error)
         
             metastring += 'a<sub>' + str(round(i)) + '</sub>: ' + par_str + ' &plusmn; ' + err_str
-            if i >= 0:
-                metastring += "</br>"
+            if i >= 1:
+                metastring += "<br>"
+            print(metastring)
                 
-            return metastring
+        return metastring

@@ -1,0 +1,56 @@
+SCAN started at: 2017-12-05 09:40:52 by Rebecca
+DAC Delay Time: 0
+----------------------------------------
+Measurement type: Elen_Scan with runs: 100
+Mass set to 20.2
+Resolution set to 30
+Scan parameters (Start, Stop, Step, GateTime): 20;22;0.01;0.5
+Temperature set manually
+Pressure set manually
+----------------------------------------
+Measurement type: Elen_Scan with runs: 500
+Mass set to 227.1
+Resolution set to 30
+Scan parameters (Start, Stop, Step, GateTime): 6.5;8.5;0.01;0.5
+Temperature set manually
+Pressure set manually
+----------------------------------------
+Measurement type: Elen_Scan with runs: 50
+Mass set to 20.2
+Resolution set to 30
+Scan parameters (Start, Stop, Step, GateTime): 20;22;0.01;0.5
+Temperature set manually
+Pressure set manually
+----------------------------------------
+Measurement type: Elen_Scan with runs: 50
+Mass set to 56.4
+Resolution set to 30
+Scan parameters (Start, Stop, Step, GateTime): 8;17;0.01;0.5
+Temperature set manually
+Pressure set manually
+----------------------------------------
+Measurement type: Elen_Scan with runs: 50
+Mass set to 42.3
+Resolution set to 30
+Scan parameters (Start, Stop, Step, GateTime): 8;18;0.01;0.5
+Temperature set manually
+Pressure set manually
+----------------------------------------
+Measurement type: Elen_Scan with runs: 50
+Mass set to 28.2
+Resolution set to 30
+Scan parameters (Start, Stop, Step, GateTime): 10;18;0.01;0.5
+Temperature set manually
+Pressure set manually
+----------------------------------------
+Measurement type: Elen_Scan with runs: 100
+Mass set to 20.2
+Resolution set to 30
+Scan parameters (Start, Stop, Step, GateTime): 20;22;0.01;0.5
+Temperature set manually
+Pressure set manually
+----------------------------------------
+Temperature A not logged
+Temperature B not logged
+XGS-1 not logged
+XGS-2 logged

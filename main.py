@@ -549,7 +549,7 @@ class App(QMainWindow):
         print(self.fileName)
         fname_pos = self.fileName.rfind('/') + 1
         
-        newfilename = self.fileName[0:fname_pos] + "AE_" + self.fileName[fname_pos:]
+        newfilename = self.fileName[0:fname_pos] + "aeguifit_" + self.fileName[fname_pos:]
         
         fileName, ext = saveDialog.getSaveFileName(self, "Save File", newfilename, "*.txt")
         

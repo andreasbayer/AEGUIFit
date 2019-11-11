@@ -1,8 +1,9 @@
 from scipy import *
 from scipy.special import *
-from scipy import optimize
+from scipy import optimize, interpolate
 from math import sqrt, log, log10, floor
 import numpy as np
+import sympy as sy
 
 
 def find_ev_position(data, ev, lb=0, ub=-1):
@@ -500,3 +501,39 @@ def cutarray2(data, lowerlim=None, upperlim=None, data2=None, returnIndexes=Fals
             return array(newdata, dtype=np.float64), array(newdata2, dtype=np.float64), (i_from, i_to)
         else:
             return array(newdata, dtype=np.float64), array(newdata2, dtype=np.float64)
+
+
+
+#self._p_cont = fh.find_polynomial_of_degree(self.p, deg, self.getDegreeOfContinuation())
+
+def find_continuation_polyn(parameters, degree_of_cont, point_of_cont, scale):
+
+    degree = len(parameters)-1
+
+
+
+    poly_fit = np.poly1d(parameters)
+
+    poly_cont = interpolate.approximate_taylor_polynomial(poly_fit, point_of_cont, degree_of_cont, scale)
+
+    return poly_cont
+
+
+
+# Factorial function
+def factorial(n):
+    if n <= 0:
+        return 1
+    else:
+        return n*factorial(n-1)
+
+# Taylor approximation at x0 of the function 'function'
+def taylor(function, x0, n):
+    x = sy.Symbol('x')
+
+    i = 0
+    p = 0
+    while i <= n:
+        p = p + (function.diff(x, i).subs(x, x0))/(factorial(i))*(x-x0)**i
+        i += 1
+    return p

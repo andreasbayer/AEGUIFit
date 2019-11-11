@@ -331,12 +331,18 @@ class DataDisplay(FigureCanvas):
 
             if y_lb is None or y_lb > 0:
                 y_lb = 0
+            elif np.isnan(y_lb) or np.isinf(y_lb):
+                print("y_lb is ", y_lb)
+                return
             
             y_ub = self._find_y_max_between(x_lb, x_ub, self.getCurrentData(), self.getStdErrors())
             #y_ub = self._find_y_max_between(x_lb, x_ub, self.getCurrentData(), None)
 
             if y_ub is None:
                 y_ub = 1
+            elif np.isnan(y_ub) or np.isinf(y_ub):
+                print("y_ub is ", y_ub)
+                return
 
             x_dev = (x_ub-x_lb) * x_margin/2
             y_dev = (y_ub - y_lb) * y_margin / 2
@@ -374,8 +380,10 @@ class DataDisplay(FigureCanvas):
                 error = 0
             
             if xmin <= x <= xmax:
-                if y_max is None or y + error > y_max:
+                if np.isnan(y) is not True and (y_max is None or y + error > y_max):
                     y_max = y + error
+            elif x > xmax:
+                break
 
         return y_max
 
@@ -391,8 +399,10 @@ class DataDisplay(FigureCanvas):
                 error = errors[i]
             
             if xmin <= x <= xmax:
-                if y_min is None or y - error < y_min:
+                if np.isnan(y) is not True and (y_min is None or y - error < y_min):
                     y_min = y - error
+            elif x > xmax:
+                break
     
         return y_min
 

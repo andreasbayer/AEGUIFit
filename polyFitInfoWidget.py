@@ -13,6 +13,7 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
     FitFrom_changed = pyqtSignal()
     FitTo_changed = pyqtSignal()
     Degree_changed = pyqtSignal()
+    Degree_of_cont_changed = pyqtSignal()
 
     def __init__(self, index, shift_function, parameters=None):
         fiw.fitInfoWidget.__init__(self)
@@ -22,12 +23,10 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
         shift_function.connect(self.shiftData)
 
         self.__initLayout()
-
+        self.__connectSignals()
         self.reset(True)
 
         self.__initialized = True
-
-        self.__connectSignals()
 
         if parameters is not None:
             self.initialize_from_parameters(parameters)
@@ -43,6 +42,8 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
                 self.setFitTo(np.float64(value))
             elif short == 'deg':
                 self.setDegree(np.float64(value))
+            elif short == 'doc':
+                self.setDegreeOfCont(np.float64(value))
             elif short == 'wgt':
                 print('wgt', value)
                 if value == '1' or value == 'True':
@@ -55,6 +56,7 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
                'ffr=' + str(round(self.getFitFrom(adjusted_for_shift=True), 5)) + '\v' +\
                'fto=' + str(round(self.getFitTo(adjusted_for_shift=True), 5)) + '\v' +\
                'deg=' + str(self.getDegree()) + '\v' +\
+               'doc=' + str(self.getDegreeOfCont()) + '\v' +\
                'wgt=' + str(self.isWeighted())
 
     def isWeighted(self):
@@ -69,7 +71,8 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
 
       self.__polyFitDataInfo.reset()
 
-      self.setDegree(2)
+      self.setDegree(1)
+      self.setDegreeOfCont(1)
       self.setFitFrom(0)
       self.setFitTo(sys.float_info.max)
 
@@ -84,7 +87,14 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
 
     def setDegree(self, n):
         self.__dsbDegree.setValue(np.float64(n))
-        self.__Degree_changed(np.float64(n))
+        self.__Degree_changed()
+
+    def getDegreeOfCont(self):
+        return self.__dsbDegreeOfCont.value()
+
+    def setDegreeOfCont(self, n):
+        self.__dsbDegreeOfCont.setValue(np.float64(n))
+        self.__Degree_of_cont_changed()
 
     def setFitFrom(self, value):
         self.__dsbFitFrom.setValue(np.float64(value))
@@ -104,6 +114,7 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
         self.__dsbFitFrom.editingFinished.connect(self.__FitFrom_changed)
         self.__dsbFitTo.editingFinished.connect(self.__FitTo_changed)
         self.__dsbDegree.editingFinished.connect(self.__Degree_changed)
+        self.__dsbDegreeOfCont.editingFinished.connect(self.__Degree_of_cont_changed)
         self.__cmdFit.clicked.connect(self.__cmdFit_clicked)
         self.__cmdZoomToFitArea.clicked.connect(self.__cmdZoomToFitArea_clicked)
         self.__chkDisableFit.stateChanged.connect(self.__chkDisableFit_stateChanged)
@@ -133,12 +144,19 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
         self.__mainLayout.addRow(self.__lblFitFrom, self.__dsbFitFrom)
         self.__mainLayout.addRow(self.__lblFitTo, self.__dsbFitTo)
 
-        self.__lblDegree = QLabel("n:")
+        self.__lblDegree = QLabel("Degree:")
         self.__dsbDegree = InftyDoubleSpinBox(min=0, max=100)
         self.__dsbDegree.setSingleStep(1)
         self.__dsbDegree.setDecimals(0)
 
         self.__mainLayout.addRow(self.__lblDegree, self.__dsbDegree)
+
+        self.__lblDegreeOfCont = QLabel("Degree of continuation:")
+        self.__dsbDegreeOfCont = InftyDoubleSpinBox(min=0, max=100)
+        self.__dsbDegreeOfCont.setSingleStep(1)
+        self.__dsbDegreeOfCont.setDecimals(0)
+
+        self.__mainLayout.addRow(self.__lblDegreeOfCont, self.__dsbDegreeOfCont)
 
         self.__lblFitParameters = QLabel("Fit parameters:")
         self.__lblFitParValues = QLabel("")
@@ -226,9 +244,21 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
     def __FitFrom_changed(self):
         self.__polyFitDataInfo.setFitFrom(self.__dsbFitFrom.value())
 
-    def __Degree_changed(self, n):
+    def __Degree_changed(self):
+
+        n = self.__dsbDegree.value()
+
         self.__polyFitDataInfo.setDegree(n)
         self.Degree_changed.emit()
+
+        self.__dsbDegreeOfCont.setMaximum(n)
+
+    def __Degree_of_cont_changed(self):
+
+        n_cont = self.__dsbDegreeOfCont.value()
+
+        self.__polyFitDataInfo.setDegreeOfContinuation(n_cont)
+        self.Degree_of_cont_changed.emit()
 
     def __chkWeightFit_stateChanged(self, state):
         self.__polyFitDataInfo.set_weighted(state == Qt.Checked)
