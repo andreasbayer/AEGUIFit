@@ -6,7 +6,8 @@ import numpy as np
 
 class dataControlWidget(QGroupBox):
     showErrorBars_changed = pyqtSignal(bool)
-    data_changed = pyqtSignal(bool)
+    ignoreFirstPoint_changed = pyqtSignal(bool)
+    data_changed = pyqtSignal(bool, bool)
     data_shift = pyqtSignal(np.float64)
     load_fits = pyqtSignal(list)
     load_view = pyqtSignal(str)
@@ -28,6 +29,9 @@ class dataControlWidget(QGroupBox):
         
         self.__chkShowErrorBars = QCheckBox(self.SHOW_ERROR_BARS_NOT_LOADED)
         self.__chkShowErrorBars.stateChanged.connect(self.__chkShowErrorBars_changed)
+
+        self.__chkIgnoreFirstPoint = QCheckBox('Ignore first data point.')
+        self.__chkIgnoreFirstPoint.stateChanged.connect(self.__chkIgnoreFirstPoint_changed)
         
         self.__mainLayout = QGridLayout()
         self.setLayout(self.__mainLayout)
@@ -37,6 +41,8 @@ class dataControlWidget(QGroupBox):
         self.__mainLayout.addWidget(self.__dsbEnergyShift, 0, 1)
 
         self.__mainLayout.addWidget(self.__chkShowErrorBars, 1, 0, 1, 2)
+
+        self.__mainLayout.addWidget(self.__chkIgnoreFirstPoint, 2, 0, 1, 2)
         
         self.reset(False)
     
@@ -48,7 +54,11 @@ class dataControlWidget(QGroupBox):
         self.__chkShowErrorBars.setCheckable(True)
         self.__chkShowErrorBars.setChecked(False)
         self.__chkShowErrorBars.setEnabled(False)
-        
+
+        self.__chkIgnoreFirstPoint.setCheckable(True)
+        self.__chkIgnoreFirstPoint.setChecked(False)
+        self.__chkIgnoreFirstPoint.setEnabled(False)
+
         self.setEnergyShift(0.0)
         self.__prevShift = 0.0
         
@@ -57,6 +67,10 @@ class dataControlWidget(QGroupBox):
     def __chkShowErrorBars_changed(self, state):
         self.__chkShowErrorBars.setCheckState(state)
         self.showErrorBars_changed.emit(self.getShowErrorBars())
+
+    def __chkIgnoreFirstPoint_changed(self, state):
+        self.__chkIgnoreFirstPoint.setCheckState(state)
+        self.ignoreFirstPoint_changed.emit(self.getIgnoreFirstPoint())
     
     def __energyShiftChanged(self):
         self.cause_shift()
@@ -68,13 +82,19 @@ class dataControlWidget(QGroupBox):
         self.__prevShift = energyShift
 
         self.data_shift.emit(increment)
-        self.data_changed.emit(self.getShowErrorBars())
+        self.data_changed.emit(self.getShowErrorBars(), self.getIgnoreFirstPoint())
 
     #  def setData(self, data):
     #    self.__data = data
 
     def getData(self):
-        return self.__data
+
+        first_point = 0
+
+        if self.getIgnoreFirstPoint():
+            first_point = 1
+
+        return self.__data[first_point:,]
 
     def getEnergyShift(self):
         return (self.__dsbEnergyShift.value())
@@ -89,37 +109,48 @@ class dataControlWidget(QGroupBox):
 
     def __shiftData(self, increment):
         try:
-            if self.getData() is not None:
-                for set in self.getData():
+            if self.__data is not None:
+                for set in self.__data:
                     set[0] += increment
         except Exception as e:
             print(e)
 
 
     def getStdErrors(self):
-        return self.__stdErrors
+        first_point = 0
+
+        if self.getIgnoreFirstPoint():
+            first_point = 1
+
+        return self.__stdErrors[first_point:]
 
     def getMax_Energy(self):
-        if self.__data is not None:
-            return self.__data[-1][0]
+        if self.getData() is not None:
+            return self.getData()[-1][0]
         else:
             return None
 
     def getMin_Energy(self):
-        if self.__data is not None:
-            return self.__data[0][0]
+        if self.getData() is not None:
+            return self.getData()[0][0]
         else:
             return None
     
     def getShowErrorBars(self):
         return self.__chkShowErrorBars.isChecked()
+
+    def setShowErrorBars(self, value):
+        self.__chkShowErrorBars.setChecked(value)
+
+    def getIgnoreFirstPoint(self):
+        return self.__chkIgnoreFirstPoint.isChecked()
+
+    def setIgnoreFirstPoint(self, value):
+        self.__chkIgnoreFirstPoint.setChecked(value)
     
     def hasStdErrors(self):
         return self.__stdErrors is not None
-    
-    def setShowErrorBars(self, value):
-        self.__chkShowErrorBars.setChecked(value)
-    
+
     def loadFile(self, fileName, id_string):
         self.__all_data, self.__stdErrors, (fit_strings, view_string, data_string, meta_string), id_found =\
             hl.readFileForFitsDataAndStdErrorAndMetaData(fileName, id_string)
@@ -130,17 +161,17 @@ class dataControlWidget(QGroupBox):
         if len(self.__data) <= 1:
             raise Exception("Not enough data in file!")
         
-        check = self.hasStdErrors()
-        
-        if check:
+        if self.hasStdErrors():
             self.__chkShowErrorBars.setText(self.SHOW_ERROR_BARS)
         else:
             self.__chkShowErrorBars.setText(self.SHOW_ERROR_BARS_NOT_LOADED)
         
-        self.__chkShowErrorBars.setEnabled(check)
-        self.__chkShowErrorBars.setChecked(check)
+        self.__chkShowErrorBars.setEnabled(self.hasStdErrors())
+        self.__chkShowErrorBars.setChecked(self.hasStdErrors())
 
-        self.data_changed.emit(check)
+        self.__chkIgnoreFirstPoint.setEnabled(True)
+
+        self.data_changed.emit(self.hasStdErrors(), self.getIgnoreFirstPoint())
         self.load_fits.emit(fit_strings)
         self.load_view.emit(view_string)
         self.load_meta.emit(meta_string)
@@ -162,14 +193,20 @@ class dataControlWidget(QGroupBox):
                 if len(item) == 2:
                     if (item[0] == 'egs'):
                         self.setEnergyShift(np.float64(item[1]))
-                    elif (item[0] == 'seb'):
+                    elif item[0] == 'seb':
                         if item[1] == '1' or item[1] == 'True':
                             self.setShowErrorBars(True)
                         elif item[1] == '0' or item[1] == 'False':
                             self.setShowErrorBars(False)
-                    
+                    elif item[0] == 'ifd':
+                        if item[1] == '1' or item[1] == 'True':
+                            self.setIgnoreFirstPoint(True)
+                        elif item[1] == '0' or item[1] == 'False':
+                            self.setIgnoreFirstPoint(False)
+
     def get_data_string(self):
-        return 'egs=' + str(self.getEnergyShift()) + '\v' + 'seb=' + str(self.getShowErrorBars())
+        return 'egs=' + str(self.getEnergyShift()) + '\vseb=' + str(self.getShowErrorBars()) +\
+               '\vifd=' + str(self.getIgnoreFirstPoint())
     
     def saveFile(self, fileName, id_string, fit_strings, view_string, data_string, meta_string):
         hl.saveFilewithMetaData(id_string, fileName, self.__all_data, (fit_strings, view_string, data_string, meta_string))

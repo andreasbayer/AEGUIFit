@@ -502,38 +502,25 @@ def cutarray2(data, lowerlim=None, upperlim=None, data2=None, returnIndexes=Fals
         else:
             return array(newdata, dtype=np.float64), array(newdata2, dtype=np.float64)
 
-
-
 #self._p_cont = fh.find_polynomial_of_degree(self.p, deg, self.getDegreeOfContinuation())
 
-def find_continuation_polyn(parameters, degree_of_cont, point_of_cont, scale):
-
-    degree = len(parameters)-1
-
-
+def find_continuation_taylor_poly(parameters, degree_of_cont, point_of_cont):
 
     poly_fit = np.poly1d(parameters)
 
-    poly_cont = interpolate.approximate_taylor_polynomial(poly_fit, point_of_cont, degree_of_cont, scale)
+    taylor_cont = f'lambda x: '
 
-    return poly_cont
+    for i in range(0, degree_of_cont+1):
+        taylor_cont = taylor_cont +\
+                      f'({poly_fit.deriv(i)(point_of_cont)}) / ({math.factorial(i)}) * ( x - ({point_of_cont}))**({i})'
 
+        if i < degree_of_cont:
+            taylor_cont = taylor_cont + f' + '
 
+    try:
+        tf = eval(taylor_cont)
+    except Exception as e:
+        tf = None
+        print(e)
 
-# Factorial function
-def factorial(n):
-    if n <= 0:
-        return 1
-    else:
-        return n*factorial(n-1)
-
-# Taylor approximation at x0 of the function 'function'
-def taylor(function, x0, n):
-    x = sy.Symbol('x')
-
-    i = 0
-    p = 0
-    while i <= n:
-        p = p + (function.diff(x, i).subs(x, x0))/(factorial(i))*(x-x0)**i
-        i += 1
-    return p
+    return tf

@@ -157,6 +157,7 @@ class App(QMainWindow):
                                    QSizePolicy.Expanding)
 
         self.dcwData.showErrorBars_changed.connect(self.showErrorBars_changed)
+        self.dcwData.ignoreFirstPoint_changed.connect(self.ignoreFirstPoint_changed)
         self.dcwData.data_changed.connect(self.dcwData_changed)
         self.dcwData.data_shift.connect(self.ddMain.shiftData)
         #self.dcwData.data_shift.connect(self.ficFits.shiftData)
@@ -272,7 +273,7 @@ class App(QMainWindow):
         print('savedata', meta_string)
         self.dcwData.saveFile(fileName, ID_STRING, fit_strings, view_string, data_string, meta_string)
 
-    def dcwData_changed(self, showErrorBars):
+    def dcwData_changed(self, showErrorBars, ignoreFirstPoint):
         data = self.dcwData.getData()
         self.ddMain.setData(data)
         self.ddMain.setStdErrors(self.dcwData.getStdErrors())
@@ -605,6 +606,21 @@ class App(QMainWindow):
             self.set_display_msg('')
         except:
             self.set_display_msg('Switching error bars failed.')
+
+    def ignoreFirstPoint_changed(self, ingoreFirstPoint):
+        try:
+            data = self.dcwData.getData()
+            self.ddMain.setData(data)
+            self.ddMain.setStdErrors(self.dcwData.getStdErrors())
+            self.ddMain.refresh()
+
+            self.ficFits.setData(data)
+            self.ficFits.setStdErr(self.dcwData.getStdErrors())
+
+
+            self.set_display_msg('')
+        except:
+            self.set_display_msg('Ignoring first point failed.')
 
 
     def disable_fit(self, p_FitDataInfo):

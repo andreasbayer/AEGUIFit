@@ -12,6 +12,7 @@ class polyFitDataInfo(fitDataInfo):
         self._FitTo = sys.float_info.max
         self._FitFrom = 0
         self._p = []
+        self._poly_cont = []
         self._residuals = []
         self._degree_of_continuation = self._n
         #self.
@@ -81,10 +82,10 @@ class polyFitDataInfo(fitDataInfo):
                 np.polyfit(cut_data[:, 0], cut_data[:, 1], self.getDegree(), w=weights, full=True, cov=True)
 
             #self._p_cont = fh.taylor(np.poly(self._p),  self.getFitTo(), self.getDegreeOfContinuation())
-            self._p_cont = fh.taylor(self._p, self.getFitTo(), self.getDegreeOfContinuation())
+            self._poly_cont = fh.find_continuation_taylor_poly(self._p, self.getDegreeOfContinuation(), self.getFitTo())
 
             full_fitdata = np.array([data[:, 0], np.polyval(self._p, data[:, 0])]).transpose()
-            full_ep_data = np.array([data[:, 0], np.polyval(self._p_cont, data[:, 0]-self.getFitTo())]).transpose()
+            full_ep_data = np.array([data[:, 0], self._poly_cont(data[:, 0])]).transpose()
             fitdata = list()
 
             self.progressUpdate(0.5, '')

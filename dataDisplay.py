@@ -130,7 +130,7 @@ class DataDisplay(FigureCanvas):
     def DisableRefresh(self, disable):
         self.__refreshDisabled = disable
 
-    def refresh(self, data=None, stdErrors=None, showErrorBars=None, forgetZoomFrame=False):
+    def refresh(self, data=None, stdErrors=None, showErrorBars=None, forgetZoomFrame=False, ignoreFirstPoint=False):
 
         xlim = None
         ylim = None
