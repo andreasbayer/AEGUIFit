@@ -92,10 +92,10 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
                'aet=' + str(round(self.getAETo(adjusted_for_shift=True), 5)) + '\v' +\
                'yfr=' + str(round(self.getYFrom(), 5)) + '\v' +\
                'yto=' + str(round(self.getYTo(), 5)) + '\v' +\
-               'alf=' + str(round(self.getAlphaFrom(adjusted_for_shift=True), 5)) + '\v' +\
-               'alt=' + str(round(self.getAlphaTo(adjusted_for_shift=True), 5)) + '\v' +\
-               'scf=' + str(round(self.getScaleFrom(adjusted_for_shift=True), 5)) + '\v' +\
-               'sct=' + str(round(self.getScaleTo(adjusted_for_shift=True), 5)) + '\v' + \
+               'alf=' + str(round(self.getAlphaFrom(), 5)) + '\v' +\
+               'alt=' + str(round(self.getAlphaTo(), 5)) + '\v' +\
+               'scf=' + str(round(self.getScaleFrom(), 5)) + '\v' +\
+               'sct=' + str(round(self.getScaleTo(), 5)) + '\v' + \
                'dof=' + str(round(self.getDomainFrom(adjusted_for_shift=True), 5)) + '\v' + \
                'dot=' + str(round(self.getDomainTo(adjusted_for_shift=True), 5)) + '\v' + \
                'fwh=' + str(round(self.getFWHM(), 5)) + '\v' +\
@@ -371,8 +371,8 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         self.getFitDataInfo().setAETo(self.__dsbAETo.value())
         self.AETo_changed.emit()
 
-    def getAlphaFrom(self, adjusted_for_shift=False):
-        return self.getFitDataInfo().getAlphaFrom(adjusted_for_shift)
+    def getAlphaFrom(self,):
+        return self.getFitDataInfo().getAlphaFrom()
 
     def setAlphaFrom(self, value):
         self.__dsbAlphaFrom.setValue(np.float64(value))
@@ -382,9 +382,8 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         self.getFitDataInfo().setAlphaFrom(self.__dsbAlphaFrom.value())
         self.AlphaFrom_changed.emit()
 
-    def getAlphaTo(self, adjusted_for_shift=False):
-
-        return self.getFitDataInfo().getAlphaTo(adjusted_for_shift)
+    def getAlphaTo(self):
+        return self.getFitDataInfo().getAlphaTo()
 
     def setAlphaTo(self, value):
         self.__dsbAlphaTo.setValue(np.float64(value))
@@ -394,8 +393,8 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         self.getFitDataInfo().setAlphaTo(self.__dsbAlphaTo.value())
         self.AlphaTo_changed.emit()
 
-    def getScaleFrom(self, adjusted_for_shift=False):
-        return self.getFitDataInfo().getScaleFrom(adjusted_for_shift)
+    def getScaleFrom(self):
+        return self.getFitDataInfo().getScaleFrom()
 
     def setScaleFrom(self, value):
         self.getFitDataInfo().setScaleFrom(np.float64(value))
@@ -405,8 +404,8 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         self.getFitDataInfo().setScaleFrom(self.__dsbScaleFrom.value())
         self.ScaleFrom_changed.emit()
 
-    def getScaleTo(self, adjusted_for_shift=False):
-        return self.getFitDataInfo().getScaleTo(adjusted_for_shift)
+    def getScaleTo(self):
+        return self.getFitDataInfo().getScaleTo()
 
     def setScaleTo(self, value):
         self.getFitDataInfo().setScaleTo(np.float64(value))
