@@ -117,7 +117,6 @@ class dataControlWidget(QGroupBox):
         except Exception as e:
             print(e)
 
-
     def getStdErrors(self):
         first_point = 0
 
