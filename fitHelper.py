@@ -72,6 +72,8 @@ def find_cut_numbers(data_length, data_length_ev, minspan):
     n = 1
     cutpercent = 0
     
+    print("data length:", data_length)
+
     steps = float64(data_length - 1)
     
     if minspan > 0:
@@ -85,23 +87,27 @@ def find_cut_numbers(data_length, data_length_ev, minspan):
         
         if min_data_points < min_data_points_energy:
             min_data_points = min_data_points_energy
-        
+
         a = 9  # number of datapoints to be cut, at last cut, experimental value
-        
-        n = int64((log(min_data_points) - log(data_length)) / (log(min_data_points) - log(a + min_data_points)))
+        n = 1
+        cutpercent = 1
+
+        if min_data_points + a <= steps:
+            n = int64((log(min_data_points) - log(data_length)) / (log(min_data_points) - log(a + min_data_points)))
         
         # n is equal to the number of iterations that it will take to get the data points down to its minimum, when it is
         # cut by cutpercent*100 % every iteration.
         # the int() cast will floor the number, which will most likely lead to having more than min_data_points
         # data points left to fit.
         
-        cutpercent = pow(min_data_points / data_length, 1.0 / np.float64(n - 1))
-        # (n-1)st root, because the data won't be cut for the first iteration, and therefore only n-1 times
-        
+        if n > 1:
+            cutpercent = pow(min_data_points / data_length, 1.0 / np.float64(n - 1))
+            # (n-1)st root, because the data won't be cut for the first iteration, and therefore only n-1 times
+
         if cutpercent > 1.0:
             cutpercent = 1.0
             n = 1
-    
+
     return n, cutpercent
 
 def min_above_x(np_array, x):
@@ -418,7 +424,6 @@ def fit_continuation(data, p, fwhm):
         
         if nans == 0:
             break
-    
     return data
 
 def magnitude(value):

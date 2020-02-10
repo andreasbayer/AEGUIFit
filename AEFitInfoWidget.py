@@ -142,7 +142,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         self.__dsbDomainTo.editingFinished.connect(self.__DomainTo_changed)
 
         self.__dsbFWHM.editingFinished.connect(self.__FWHM_changed)
-        self.__dsbMinSpan.editingFinished.connect(self.__MinSpan_changed)
+        self.__dsbMinSpan.valueChanged.connect(self.__MinSpan_changed)
         self.__cmdFit.clicked.connect(self.__cmdFit_clicked)
         self.__cmdZoomToFitArea.clicked.connect(self.__cmdZoomToFitArea_clicked)
         self.__chkDisableFit.stateChanged.connect(self.__chkDisableFit_stateChanged)
@@ -420,7 +420,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
 
     def setYFrom(self, value):
         self.getFitDataInfo().setYFrom(np.float64(value))
-        self.__YFrom_changed()
+        #self.__YFrom_changed()
 
     def __YFrom_changed(self):
         self.getFitDataInfo().setYFrom(self.__dsbYFrom.value())
@@ -450,7 +450,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
     
     def setMinSpan(self, value):
         self.__dsbMinSpan.setValue(np.float64(value))
-        self.__MinSpan_changed()
+        self.__MinSpan_changed(value)
 
     def getDomainFrom(self, adjusted_for_shift=False):
         return self.getFitDataInfo().getDomainFrom(adjusted_for_shift)
@@ -461,6 +461,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
 
     def __DomainFrom_changed(self):
         self.getFitDataInfo().setDomainFrom(self.__dsbDomainFrom.value())
+        self.__dsbMinSpan.setMaximum(self.getDomainTo() - self.getDomainFrom())
         self.DomainFrom_changed.emit()
 
     def getDomainTo(self, adjusted_for_shift=False):
@@ -472,6 +473,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
 
     def __DomainTo_changed(self):
         self.getFitDataInfo().setDomainTo(self.__dsbDomainTo.value())
+        self.__dsbMinSpan.setMaximum(self.getDomainTo() - self.getDomainFrom())
         self.DomainTo_changed.emit()
 
     def setWeighted(self, value):
@@ -515,6 +517,8 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
             self.__dsbDomainTo.setMinimum(data[0][0])
             self.__dsbDomainTo.setMaximum(data[-1][0])
 
+            self.__dsbMinSpan.setMaximum(self.getDomainTo()-self.getDomainFrom())
+
     def __cmdFit_clicked(self):
         self.fitToFunction()
 
@@ -535,7 +539,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         self.getFitDataInfo().setFWHM(self.getFWHM())
         self.FWHM_changed.emit()
     
-    def __MinSpan_changed(self):
+    def __MinSpan_changed(self, value):
         self.getFitDataInfo().setMinspan(self.getMinSpan())
         self.minspan_changed.emit()
     

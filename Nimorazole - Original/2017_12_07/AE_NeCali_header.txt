@@ -1,0 +1,14 @@
+SCAN started at: 2017-12-07 09:37:11 by Rebecca
+DAC Delay Time: 0
+----------------------------------------
+Measurement type: Elen_Scan with runs: 50
+Mass set to 20.2
+Resolution set to 30
+Scan parameters (Start, Stop, Step, GateTime): 20;22;0.01;0.5
+Temperature set manually
+Pressure set manually
+----------------------------------------
+Temperature A not logged
+Temperature B not logged
+XGS-1 not logged
+XGS-2 logged

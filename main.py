@@ -607,7 +607,7 @@ class App(QMainWindow):
         except:
             self.set_display_msg('Switching error bars failed.')
 
-    def ignoreFirstPoint_changed(self, ingoreFirstPoint):
+    def ignoreFirstPoint_changed(self, ignoreFirstPoint):
         try:
             data = self.dcwData.getData()
             self.ddMain.setData(data)
@@ -615,8 +615,9 @@ class App(QMainWindow):
             self.ddMain.refresh()
 
             self.ficFits.setData(data)
-            self.ficFits.setStdErr(self.dcwData.getStdErrors())
+            self.ficFits.setStdErr(self.dcwData.getStdErrors(), ignoreFirstPoint)
 
+            self.ficFits.IgnoreFirstPoint(ignoreFirstPoint)
 
             self.set_display_msg('')
         except:

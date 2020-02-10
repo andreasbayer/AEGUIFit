@@ -263,11 +263,21 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
     def __chkWeightFit_stateChanged(self, state):
         self.__polyFitDataInfo.set_weighted(state == Qt.Checked)
 
+    def ignoreFirstPoint(self, IgnoreFirstPoint):
+        pass
+
+
     def resetFit(self):
         self.__polyFitDataInfo.reset()
 
     def shiftData(self, increment):
         self.__polyFitDataInfo.shift_fit(increment)
+
+        self.__dsbFitFrom.setMinimum(self.__dsbFitFrom.minimum() + increment)
+        self.__dsbFitFrom.setMaximum(self.__dsbFitFrom.maximum() + increment)
+
+        self.__dsbFitTo.setMinimum(self.__dsbFitTo.minimum() + increment)
+        self.__dsbFitTo.setMaximum(self.__dsbFitTo.maximum() + increment)
 
         self.setFitFrom(self.getFitFrom() + increment)
         self.setFitTo(self.getFitTo() + increment)

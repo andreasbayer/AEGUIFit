@@ -179,6 +179,7 @@ class DataDisplay(FigureCanvas):
 
                 self.update_clickmark()
                 self.update_annotations()
+                self.update_xaxis()
 
                 self.draw()
 
@@ -226,6 +227,9 @@ class DataDisplay(FigureCanvas):
                                    horizontalalignment='left',
                                    verticalalignment='top',
                                    fontsize=self.__annotation_font['size'])
+
+    def update_xaxis(self):
+        self.__ax.axhline(y=0, color='black', linestyle=':', linewidth='1')
 
     def current_fdi(self):
         print(self.__fitIndex)
