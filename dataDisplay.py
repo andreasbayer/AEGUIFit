@@ -281,7 +281,7 @@ class DataDisplay(FigureCanvas):
     def __plot_data(self, data, stdErrors):
         self.__ax.errorbar(data[:, 0],
                            data[:, 1],
-                           yerr=stdErrors, fmt='.', markersize=3,
+                           yerr=stdErrors/2, fmt='.', markersize=3,
                            markeredgecolor=self.__dc, markerfacecolor=self.__dc, ecolor=self.__dc, elinewidth=self.__ew,
                            barsabove=True, capsize=2)
         

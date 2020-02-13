@@ -204,14 +204,15 @@ def calc_std_errors(data):
             
             # calculate the sum of the difference squares
             for i in range(2, n + 2):
-                s += (line[1] - line[i]) ** (2)
+                s += (line[1] - line[i]) ** 2
             
             # calculate std deviation.
             s = (s / n) ** 0.5
             
-            # calculate the std error
-            se.append(s / (n ** 0.5))
-    
+            # calculate the std error (software works with +/- error)
+            se.append(s / 2)
+
+
         return array(se, dtype=float64)
 
     else:

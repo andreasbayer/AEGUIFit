@@ -338,7 +338,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         #self.__mainLayout.addRow(self.__chkDisableFit, self.__cmdRemoveFit)
 
         self.setLayout(self.__mainLayout)
-        self.setFixedHeight(350)
+        self.setFixedHeight(400)
 
         self.setEnabled(True)
 
@@ -605,6 +605,10 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
 
             fp_text += ALPHALABEL + ':\t\t' + val + PM + err + '\n'
 
+
+            fp_text += self.calc_fit_metrics()
+
+
             self.__lblFitParameters.setText(fp_text)
 
             #todo: set fitparameter values and errors
@@ -616,6 +620,65 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
             self.setPostFitFunctionsEnabled(False)
         
         return msg, self.getFitDataInfo()
+
+    def calc_fit_metrics(self):
+        bp_fwhm = 0
+        p_fwhm = 0
+
+        bp_fs = 0
+        p_fs = 0
+
+        m_fwhm = 0
+        m_fs = 0
+
+        data = self.getData()
+        errors = self.getFitDataInfo().get_std_err()
+        fit_data = self.getFitDataInfo().getFitData()
+        ae = self.getFitDataInfo().getFoundAE()
+        fwhm = self.getFitDataInfo().getFittedFWHM()
+        fsp = [self.getFitDataInfo().getFitRelFrom(), self.getFitDataInfo().getFitRelTo()]
+
+        for i in range(0, len(data)):
+            point = data[i]
+            fit_point = fit_data[i]
+            error = errors[i]
+
+            if error == 0:
+                error = 0.001
+
+            print(i, len(point), point[0])
+
+            if ae-fwhm/2 <= point[0] <= ae+fwhm/2:
+
+                p_fwhm += 1
+
+                if abs(point[1]-fit_point[1]) > error:
+                    bp_fwhm += 1
+
+                if abs(point[1]-fit_point[1]) != 0:
+                    m_fwhm += np.square((point[1]-fit_point[1])/error)
+
+            if fsp[0] <= point[0] <= fsp[1]:
+
+                p_fs += 1
+
+                if abs(point[1] - fit_point[1]) > error:
+                    bp_fs += 1
+
+                if abs(point[1]-fit_point[1]) != 0:
+                    m_fs += np.square((point[1]-fit_point[1])/error)
+
+            if point[0] > ae+fwhm/2 and point[0] > fsp[1]:
+                break
+
+        m_fwhm = np.sqrt(m_fwhm/p_fwhm)
+        m_fs = np.sqrt(m_fs/p_fs)
+
+        text = "bad points FWHM: " + str(bp_fwhm) + "/" + str(p_fwhm) + "; Dev:" + str(round(m_fwhm, 3)) + "\n"
+        text += "bad points Fit Span: " + str(bp_fs) + "/" + str(p_fs) + "; Dev:" + str(round(m_fs, 3)) + "\n"
+
+        return text
+
     
     def setPostFitFunctionsEnabled(self, enabled):
         self.__cmdZoomToFitArea.setEnabled(enabled)

@@ -320,8 +320,6 @@ def difference_data_from_fit_data(data, fit_data, p, fwhm, nonnegative):
         else:
             newpoint = [data[i][0], None]
 
-
-        
         if nonnegative and newpoint[1] < 0:
             newpoint[1] = 0  # -newpoint[1]
         

@@ -71,7 +71,7 @@ class polyFitDataInfo(fitDataInfo):
         self.progressUpdate(0, '')
 
         if self.is_weighted():
-            weights = 1/fh.fix_std_errs(self.get_std_err())
+            weights = 1/fh.fix_std_errs(self.get_std_err()*2)
             cut_data, weights = fh.cutarray2(data=data, lowerlim=self.getFitFrom(), upperlim=self.getFitTo(),
                                              data2=weights)
         else:

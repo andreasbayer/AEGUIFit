@@ -209,7 +209,7 @@ class AEFitDataInfo(fitDataInfo):
         weights = None
 
         if self.is_weighted():
-            weights = self._stdErr
+            weights = self._stdErr*2
 
         try:
             data, weights, cut_indexes = fh.cutarray2(self.get_data(), self.getDomainFrom(), self.getDomainTo(),
@@ -266,7 +266,7 @@ class AEFitDataInfo(fitDataInfo):
         weights = None
 
         if self.is_weighted():
-            weights = self._stdErr
+            weights = self._stdErr*2
 
         data, weights = fh.cutarray2(self.get_data(), self.getDomainFrom(), self.getDomainTo(), weights)
         
