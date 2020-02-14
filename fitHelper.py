@@ -120,8 +120,9 @@ def min_above_x(np_array, x):
     return min
 
 def fix_std_errs(std_errs):
-    # a problem in the reduced chi squared fit are the variances = 0, which do happen at smaller energies.
-    #min_err = 10**-2
+    # statistical errors = 0, which are being used as fit weights, the error will be replaced to 1*10^n, where n is the
+    # magnitude of the smallest error in the measurement
+
     fit_std_errs = np.array([])
 
     if std_errs is not None:
@@ -223,7 +224,7 @@ def find_best_fit(data, std_errs, ip, fwhm, minspan, lower_bounds, upper_bounds,
         iteration += 1
         
         if update_function is not None:
-            update_function(np.float64((iteration) / n), p)
+            update_function(np.float64(iteration / n), p)
     
     return p, stddev, cutdata[0][0], cutdata[len(cutdata) - 1][0], r_fwhm, fit_function, message
 

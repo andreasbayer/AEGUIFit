@@ -147,7 +147,7 @@ class DataDisplay(FigureCanvas):
                 xlim = self.__ax.get_xlim()
                 ylim = self.__ax.get_ylim()
 
-                (xmar, ymar) = self.__ax.margins()
+                #(xmar, ymar) = self.__ax.margins()
 
             if self.isLoaded():
                 if self.__showErrorBars == False:
@@ -279,9 +279,13 @@ class DataDisplay(FigureCanvas):
         return self.__combined_fit_data
 
     def __plot_data(self, data, stdErrors):
+
+        if stdErrors is not None:
+            stdErrors = stdErrors/2
+
         self.__ax.errorbar(data[:, 0],
                            data[:, 1],
-                           yerr=stdErrors/2, fmt='.', markersize=3,
+                           yerr=stdErrors, fmt='.', markersize=3,
                            markeredgecolor=self.__dc, markerfacecolor=self.__dc, ecolor=self.__dc, elinewidth=self.__ew,
                            barsabove=True, capsize=2)
         

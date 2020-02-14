@@ -632,7 +632,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         m_fs = 0
 
         data = self.getData()
-        errors = self.getFitDataInfo().get_std_err()
+        errors = fh.fix_std_errs(self.getFitDataInfo().get_std_err())/2
         fit_data = self.getFitDataInfo().getFitData()
         ae = self.getFitDataInfo().getFoundAE()
         fwhm = self.getFitDataInfo().getFittedFWHM()
@@ -643,13 +643,9 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
             fit_point = fit_data[i]
             error = errors[i]
 
-            if error == 0:
-                error = 0.001
-
             print(i, len(point), point[0])
 
             if ae-fwhm/2 <= point[0] <= ae+fwhm/2:
-
                 p_fwhm += 1
 
                 if abs(point[1]-fit_point[1]) > error:
@@ -659,7 +655,6 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
                     m_fwhm += np.square((point[1]-fit_point[1])/error)
 
             if fsp[0] <= point[0] <= fsp[1]:
-
                 p_fs += 1
 
                 if abs(point[1] - fit_point[1]) > error:
