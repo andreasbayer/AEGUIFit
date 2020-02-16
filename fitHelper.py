@@ -71,6 +71,8 @@ def find_cut_numbers(data_length, data_length_ev, minspan):
     n = 1
     cutpercent = 0
     
+    print("data length:", data_length)
+
     steps = float64(data_length - 1)
     
     if minspan > 0:
@@ -84,23 +86,27 @@ def find_cut_numbers(data_length, data_length_ev, minspan):
         
         if min_data_points < min_data_points_energy:
             min_data_points = min_data_points_energy
-        
+
         a = 9  # number of datapoints to be cut, at last cut, experimental value
-        
-        n = int64((log(min_data_points) - log(data_length)) / (log(min_data_points) - log(a + min_data_points)))
+        n = 1
+        cutpercent = 1
+
+        if min_data_points + a <= steps:
+            n = int64((log(min_data_points) - log(data_length)) / (log(min_data_points) - log(a + min_data_points)))
         
         # n is equal to the number of iterations that it will take to get the data points down to its minimum, when it is
         # cut by cutpercent*100 % every iteration.
         # the int() cast will floor the number, which will most likely lead to having more than min_data_points
         # data points left to fit.
         
-        cutpercent = pow(min_data_points / data_length, 1.0 / np.float64(n - 1))
-        # (n-1)st root, because the data won't be cut for the first iteration, and therefore only n-1 times
-        
+        if n > 1:
+            cutpercent = pow(min_data_points / data_length, 1.0 / np.float64(n - 1))
+            # (n-1)st root, because the data won't be cut for the first iteration, and therefore only n-1 times
+
         if cutpercent > 1.0:
             cutpercent = 1.0
             n = 1
-    
+
     return n, cutpercent
 
 def min_above_x(np_array, x):
@@ -113,8 +119,9 @@ def min_above_x(np_array, x):
     return min
 
 def fix_std_errs(std_errs):
-    # a problem in the reduced chi squared fit are the variances = 0, which do happen at smaller energies.
-    #min_err = 10**-2
+    # statistical errors = 0, which are being used as fit weights, the error will be replaced to 1*10^n, where n is the
+    # magnitude of the smallest error in the measurement
+
     fit_std_errs = np.array([])
 
     if std_errs is not None:
@@ -216,7 +223,7 @@ def find_best_fit(data, std_errs, ip, fwhm, minspan, lower_bounds, upper_bounds,
         iteration += 1
         
         if update_function is not None:
-            update_function(np.float64((iteration) / n), p)
+            update_function(np.float64(iteration / n), p)
     
     return p, stddev, cutdata[0][0], cutdata[len(cutdata) - 1][0], r_fwhm, fit_function, message
 
@@ -313,8 +320,6 @@ def difference_data_from_fit_data(data, fit_data, p, fwhm, nonnegative):
         else:
             newpoint = [data[i][0], None]
 
-
-        
         if nonnegative and newpoint[1] < 0:
             newpoint[1] = 0  # -newpoint[1]
         
@@ -417,7 +422,6 @@ def fit_continuation(data, p, fwhm):
         
         if nans == 0:
             break
-    
     return data
 
 def magnitude(value):

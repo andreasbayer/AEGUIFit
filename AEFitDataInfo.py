@@ -78,22 +78,14 @@ class AEFitDataInfo(fitDataInfo):
     def setYFrom(self, YFrom):
         self._YFrom = YFrom
 
-    def getScaleTo(self, adjusted_for_shift=False):
-
-        if adjusted_for_shift:
-            return self._ScaleTo - self.get_shift()
-        else:
-            return self._ScaleTo
+    def getScaleTo(self):
+        return self._ScaleTo
 
     def setScaleTo(self, ScaleTo):
         self._ScaleTo = ScaleTo
 
-    def getScaleFrom(self, adjusted_for_shift=False):
-
-        if adjusted_for_shift:
-            return self._ScaleFrom - self.get_shift()
-        else:
-            return self._ScaleFrom
+    def getScaleFrom(self):
+        return self._ScaleFrom
 
     def setScaleFrom(self, ScaleFrom):
         self._ScaleFrom = ScaleFrom
@@ -101,22 +93,14 @@ class AEFitDataInfo(fitDataInfo):
     def setAlphaFrom(self, AlphaFrom):
         self._AlphaFrom = AlphaFrom
 
-    def getAlphaFrom(self, adjusted_for_shift=False):
-
-        if adjusted_for_shift:
-            return self._AlphaFrom - self.get_shift()
-        else:
-            return self._AlphaFrom
+    def getAlphaFrom(self):
+        return self._AlphaFrom
 
     def setAlphaTo(self, AlphaTo):
         self._AlphaTo = AlphaTo
 
-    def getAlphaTo(self, adjusted_for_shift=False):
-
-        if adjusted_for_shift:
-            return self._AlphaTo - self.get_shift()
-        else:
-            return self._AlphaTo
+    def getAlphaTo(self):
+        return self._AlphaTo
 
     def getDomainFrom(self, adjusted_for_shift=False):
 
@@ -251,12 +235,21 @@ class AEFitDataInfo(fitDataInfo):
         
         return self._msg
 
+
+    def getDomainSpan(self):
+        return self.getDomainTo() - self.getDomainFrom()
+
     def testGoodnessOfMinSpan(self):
         spacing = 0.1
         pm_range = 1
         
         # todo consider data range too
         test_minspan = self._minspan - pm_range
+
+        if test_minspan < 0:
+            test_minspan = 0
+        elif test_minspan >= self.getDomainSpan():
+            test_minspan = self.getDomainSpan()
         
         y_offsets = np.array([])
         aes = np.array([])
@@ -273,11 +266,11 @@ class AEFitDataInfo(fitDataInfo):
         weights = None
 
         if self.is_weighted():
-            weights = self._stdErr
+            weights = self._stdErr*2
 
         data, weights = fh.cutarray2(self.get_data(), self.getDomainFrom(), self.getDomainTo(), weights)
         
-        while test_minspan <= self._minspan + pm_range:
+        while test_minspan <= self._minspan + pm_range and test_minspan <= self.getDomainSpan():
             
             p, stdDev, fitRelBounds_x, fitRelBounds_y, fittedFWHM, fitfunc, msg = \
                 fh.find_best_fit(data, weights, self._p, self._FWHM, test_minspan,

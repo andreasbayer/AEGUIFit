@@ -183,7 +183,6 @@ def readFileForDataAndStdError(filename, tolerate_spaces=False):
     
     return data, stdErrors
 
-
 def writearray(array, filename):
     # this function takes an numpy array and a filename
     # then writes the array to the filename (seriously, what else?)
@@ -204,14 +203,13 @@ def calc_std_errors(data):
             
             # calculate the sum of the difference squares
             for i in range(2, n + 2):
-                s += (line[1] - line[i]) ** (2)
+                s += (line[1] - line[i]) ** 2
             
             # calculate std deviation.
             s = (s / n) ** 0.5
             
-            # calculate the std error
-            se.append(s / (n ** 0.5))
-    
+            se.append(s)
+
         return array(se, dtype=float64)
 
     else:

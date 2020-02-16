@@ -43,6 +43,7 @@ class dataControlWidget(QGroupBox):
         self.__mainLayout.addWidget(self.__chkShowErrorBars, 1, 0, 1, 2)
 
         self.__mainLayout.addWidget(self.__chkIgnoreFirstPoint, 2, 0, 1, 2)
+        self.__chkIgnoreFirstPoint.setVisible(False)
         
         self.reset(False)
     
@@ -79,6 +80,7 @@ class dataControlWidget(QGroupBox):
         energyShift = self.__dsbEnergyShift.value()
 
         increment = energyShift - self.__prevShift
+
         self.__prevShift = energyShift
 
         self.data_shift.emit(increment)
@@ -114,7 +116,6 @@ class dataControlWidget(QGroupBox):
                     set[0] += increment
         except Exception as e:
             print(e)
-
 
     def getStdErrors(self):
         first_point = 0

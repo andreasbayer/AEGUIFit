@@ -39,7 +39,7 @@ class fitInfoWidgetContainer(QGroupBox):
         self.__cbxFits = QComboBox()
         self.__cbxFits.addItem("Wannier Fit")
         self.__cbxFits.addItem("Polynomial Fit")
-        self.__cbxFits.addItem("Custom Function")
+        #self.__cbxFits.addItem("Custom Function")
         self.__cbxFits.setVisible(True)
 
         self.setTitle('Fit Settings')
@@ -91,7 +91,7 @@ class fitInfoWidgetContainer(QGroupBox):
                     self.__add_fiw(new_fit)
                     new_fit.initialize_from_parameters(item[1])
         except:
-            return 'Meta data might be corrupted.'
+            return 'Error: Meta data seems to be corrupted.'
 
     def fit_on_startup(self):
         for fiw_i in self.__fitInfoWidgets:
@@ -223,9 +223,15 @@ class fitInfoWidgetContainer(QGroupBox):
                         if fit_data[i][1] is not None:
                             diff_data[i][1] = diff_data[i][1] - fit_data[i][1]
 
+
+
                     #print('Fitdata was just updated at', fiw_i.get_fit_index())
-                 
-    
+
+    def IgnoreFirstPoint(self, ignoreFirstPoint):
+        for fiw in self.__fitInfoWidgets:
+            fiw.IgnoreFirstPoint()
+            self.__mainLayout.removeWidget(fiw)
+
     def reset(self, enable):
         self.__cmdAddFit.setEnabled(enable)
         self.__cbxFits.setEnabled(enable)

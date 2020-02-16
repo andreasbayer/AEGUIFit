@@ -92,10 +92,10 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
                'aet=' + str(round(self.getAETo(adjusted_for_shift=True), 5)) + '\v' +\
                'yfr=' + str(round(self.getYFrom(), 5)) + '\v' +\
                'yto=' + str(round(self.getYTo(), 5)) + '\v' +\
-               'alf=' + str(round(self.getAlphaFrom(adjusted_for_shift=True), 5)) + '\v' +\
-               'alt=' + str(round(self.getAlphaTo(adjusted_for_shift=True), 5)) + '\v' +\
-               'scf=' + str(round(self.getScaleFrom(adjusted_for_shift=True), 5)) + '\v' +\
-               'sct=' + str(round(self.getScaleTo(adjusted_for_shift=True), 5)) + '\v' + \
+               'alf=' + str(round(self.getAlphaFrom(), 5)) + '\v' +\
+               'alt=' + str(round(self.getAlphaTo(), 5)) + '\v' +\
+               'scf=' + str(round(self.getScaleFrom(), 5)) + '\v' +\
+               'sct=' + str(round(self.getScaleTo(), 5)) + '\v' + \
                'dof=' + str(round(self.getDomainFrom(adjusted_for_shift=True), 5)) + '\v' + \
                'dot=' + str(round(self.getDomainTo(adjusted_for_shift=True), 5)) + '\v' + \
                'fwh=' + str(round(self.getFWHM(), 5)) + '\v' +\
@@ -142,7 +142,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         self.__dsbDomainTo.editingFinished.connect(self.__DomainTo_changed)
 
         self.__dsbFWHM.editingFinished.connect(self.__FWHM_changed)
-        self.__dsbMinSpan.editingFinished.connect(self.__MinSpan_changed)
+        self.__dsbMinSpan.valueChanged.connect(self.__MinSpan_changed)
         self.__cmdFit.clicked.connect(self.__cmdFit_clicked)
         self.__cmdZoomToFitArea.clicked.connect(self.__cmdZoomToFitArea_clicked)
         self.__chkDisableFit.stateChanged.connect(self.__chkDisableFit_stateChanged)
@@ -338,7 +338,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         #self.__mainLayout.addRow(self.__chkDisableFit, self.__cmdRemoveFit)
 
         self.setLayout(self.__mainLayout)
-        self.setFixedHeight(350)
+        self.setFixedHeight(400)
 
         self.setEnabled(True)
 
@@ -371,8 +371,8 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         self.getFitDataInfo().setAETo(self.__dsbAETo.value())
         self.AETo_changed.emit()
 
-    def getAlphaFrom(self, adjusted_for_shift=False):
-        return self.getFitDataInfo().getAlphaFrom(adjusted_for_shift)
+    def getAlphaFrom(self,):
+        return self.getFitDataInfo().getAlphaFrom()
 
     def setAlphaFrom(self, value):
         self.__dsbAlphaFrom.setValue(np.float64(value))
@@ -382,9 +382,8 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         self.getFitDataInfo().setAlphaFrom(self.__dsbAlphaFrom.value())
         self.AlphaFrom_changed.emit()
 
-    def getAlphaTo(self, adjusted_for_shift=False):
-
-        return self.getFitDataInfo().getAlphaTo(adjusted_for_shift)
+    def getAlphaTo(self):
+        return self.getFitDataInfo().getAlphaTo()
 
     def setAlphaTo(self, value):
         self.__dsbAlphaTo.setValue(np.float64(value))
@@ -394,8 +393,8 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         self.getFitDataInfo().setAlphaTo(self.__dsbAlphaTo.value())
         self.AlphaTo_changed.emit()
 
-    def getScaleFrom(self, adjusted_for_shift=False):
-        return self.getFitDataInfo().getScaleFrom(adjusted_for_shift)
+    def getScaleFrom(self):
+        return self.getFitDataInfo().getScaleFrom()
 
     def setScaleFrom(self, value):
         self.getFitDataInfo().setScaleFrom(np.float64(value))
@@ -405,8 +404,8 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         self.getFitDataInfo().setScaleFrom(self.__dsbScaleFrom.value())
         self.ScaleFrom_changed.emit()
 
-    def getScaleTo(self, adjusted_for_shift=False):
-        return self.getFitDataInfo().getScaleTo(adjusted_for_shift)
+    def getScaleTo(self):
+        return self.getFitDataInfo().getScaleTo()
 
     def setScaleTo(self, value):
         self.getFitDataInfo().setScaleTo(np.float64(value))
@@ -421,7 +420,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
 
     def setYFrom(self, value):
         self.getFitDataInfo().setYFrom(np.float64(value))
-        self.__YFrom_changed()
+        #self.__YFrom_changed()
 
     def __YFrom_changed(self):
         self.getFitDataInfo().setYFrom(self.__dsbYFrom.value())
@@ -451,7 +450,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
     
     def setMinSpan(self, value):
         self.__dsbMinSpan.setValue(np.float64(value))
-        self.__MinSpan_changed()
+        self.__MinSpan_changed(value)
 
     def getDomainFrom(self, adjusted_for_shift=False):
         return self.getFitDataInfo().getDomainFrom(adjusted_for_shift)
@@ -462,6 +461,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
 
     def __DomainFrom_changed(self):
         self.getFitDataInfo().setDomainFrom(self.__dsbDomainFrom.value())
+        self.__dsbMinSpan.setMaximum(self.getDomainTo() - self.getDomainFrom())
         self.DomainFrom_changed.emit()
 
     def getDomainTo(self, adjusted_for_shift=False):
@@ -473,6 +473,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
 
     def __DomainTo_changed(self):
         self.getFitDataInfo().setDomainTo(self.__dsbDomainTo.value())
+        self.__dsbMinSpan.setMaximum(self.getDomainTo() - self.getDomainFrom())
         self.DomainTo_changed.emit()
 
     def setWeighted(self, value):
@@ -516,6 +517,8 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
             self.__dsbDomainTo.setMinimum(data[0][0])
             self.__dsbDomainTo.setMaximum(data[-1][0])
 
+            self.__dsbMinSpan.setMaximum(self.getDomainTo()-self.getDomainFrom())
+
     def __cmdFit_clicked(self):
         self.fitToFunction()
 
@@ -536,7 +539,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         self.getFitDataInfo().setFWHM(self.getFWHM())
         self.FWHM_changed.emit()
     
-    def __MinSpan_changed(self):
+    def __MinSpan_changed(self, value):
         self.getFitDataInfo().setMinspan(self.getMinSpan())
         self.minspan_changed.emit()
     
@@ -602,6 +605,10 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
 
             fp_text += ALPHALABEL + ':\t\t' + val + PM + err + '\n'
 
+
+            fp_text += self.calc_fit_metrics()
+
+
             self.__lblFitParameters.setText(fp_text)
 
             #todo: set fitparameter values and errors
@@ -613,6 +620,60 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
             self.setPostFitFunctionsEnabled(False)
         
         return msg, self.getFitDataInfo()
+
+    def calc_fit_metrics(self):
+        bp_fwhm = 0
+        p_fwhm = 0
+
+        bp_fs = 0
+        p_fs = 0
+
+        m_fwhm = 0
+        m_fs = 0
+
+        data = self.getData()
+        errors = fh.fix_std_errs(self.getFitDataInfo().get_std_err())/2
+        fit_data = self.getFitDataInfo().getFitData()
+        ae = self.getFitDataInfo().getFoundAE()
+        fwhm = self.getFitDataInfo().getFittedFWHM()
+        fsp = [self.getFitDataInfo().getFitRelFrom(), self.getFitDataInfo().getFitRelTo()]
+
+        for i in range(0, len(data)):
+            point = data[i]
+            fit_point = fit_data[i]
+            error = errors[i]
+
+            print(i, len(point), point[0])
+
+            if ae-fwhm/2 <= point[0] <= ae+fwhm/2:
+                p_fwhm += 1
+
+                if abs(point[1]-fit_point[1]) > error:
+                    bp_fwhm += 1
+
+                if abs(point[1]-fit_point[1]) != 0:
+                    m_fwhm += np.square((point[1]-fit_point[1])/error)
+
+            if fsp[0] <= point[0] <= fsp[1]:
+                p_fs += 1
+
+                if abs(point[1] - fit_point[1]) > error:
+                    bp_fs += 1
+
+                if abs(point[1]-fit_point[1]) != 0:
+                    m_fs += np.square((point[1]-fit_point[1])/error)
+
+            if point[0] > ae+fwhm/2 and point[0] > fsp[1]:
+                break
+
+        m_fwhm = np.sqrt(m_fwhm/p_fwhm)
+        m_fs = np.sqrt(m_fs/p_fs)
+
+        text = "bad points FWHM: " + str(bp_fwhm) + "/" + str(p_fwhm) + "; Dev:" + str(round(m_fwhm, 3)) + "\n"
+        text += "bad points Fit Span: " + str(bp_fs) + "/" + str(p_fs) + "; Dev:" + str(round(m_fs, 3)) + "\n"
+
+        return text
+
     
     def setPostFitFunctionsEnabled(self, enabled):
         self.__cmdZoomToFitArea.setEnabled(enabled)

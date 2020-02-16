@@ -88,6 +88,9 @@ class fitInfoWidget(QGroupBox):
     
     def getName(self):
         pass
+
+    def ignoreFirstPoint(self, IgnoreFirstPoint):
+        pass
     
     # Signals
     def __cmdFit_clicked(self):

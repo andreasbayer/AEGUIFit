@@ -147,7 +147,7 @@ class DataDisplay(FigureCanvas):
                 xlim = self.__ax.get_xlim()
                 ylim = self.__ax.get_ylim()
 
-                (xmar, ymar) = self.__ax.margins()
+                #(xmar, ymar) = self.__ax.margins()
 
             if self.isLoaded():
                 if self.__showErrorBars == False:
@@ -179,6 +179,7 @@ class DataDisplay(FigureCanvas):
 
                 self.update_clickmark()
                 self.update_annotations()
+                self.update_xaxis()
 
                 self.draw()
 
@@ -226,6 +227,9 @@ class DataDisplay(FigureCanvas):
                                    horizontalalignment='left',
                                    verticalalignment='top',
                                    fontsize=self.__annotation_font['size'])
+
+    def update_xaxis(self):
+        self.__ax.axhline(y=0, color='black', linestyle=':', linewidth='1')
 
     def current_fdi(self):
         print(self.__fitIndex)
@@ -275,6 +279,10 @@ class DataDisplay(FigureCanvas):
         return self.__combined_fit_data
 
     def __plot_data(self, data, stdErrors):
+
+        if stdErrors is not None:
+            stdErrors = stdErrors/2
+
         self.__ax.errorbar(data[:, 0],
                            data[:, 1],
                            yerr=stdErrors, fmt='.', markersize=3,
