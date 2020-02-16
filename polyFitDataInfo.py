@@ -144,8 +144,8 @@ class polyFitDataInfo(fitDataInfo):
 
     def get_fit_info_string(self):
         metastring = ""
-        p = self.getParameters()
-        residuals = self.getResiduals()
+        p = np.flip(self.getParameters())
+        residuals = np.flip(self.getResiduals())
     
         for i in reversed(range(0, len(p))):
             digits_of_error = 2

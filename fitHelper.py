@@ -3,7 +3,6 @@ from scipy.special import *
 from scipy import optimize, interpolate
 from math import sqrt, log, log10, floor
 import numpy as np
-import sympy as sy
 
 
 def find_ev_position(data, ev, lb=0, ub=-1):
