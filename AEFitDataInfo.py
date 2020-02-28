@@ -46,7 +46,6 @@ class AEFitDataInfo(fitDataInfo):
         self._minspan = minspan
 
     def getAEFrom(self, adjusted_for_shift=False):
-
         if adjusted_for_shift:
             return self._AEFrom - self.get_shift()
         else:

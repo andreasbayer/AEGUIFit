@@ -78,12 +78,16 @@ class fitInfoWidget(QGroupBox):
         pass
     
     def setData(self, data, std_err):
-        self._on_set_data(data, std_err)
+        self._pre_set_data(data, std_err)
         self.__data = data
         self.getFitDataInfo().setData(data)
         self.__std_err = std_err
+        self._post_set_data(data, std_err)
 
-    def _on_set_data(self, data, std_err):
+    def _pre_set_data(self, data, std_err):
+        pass
+
+    def _post_set_data(self, data, std_err):
         pass
     
     def getName(self):

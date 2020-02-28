@@ -411,7 +411,7 @@ class App(QMainWindow):
         write_afd = len(all_fit_data) > 0
         write_combined_fit = len(combined_fit) > 0
 
-        file.write('Energy\tCounts')
+        file.write('Energy\tIon yield')
 
         if write_errors:
             file.write('\tErrors')

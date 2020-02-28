@@ -166,7 +166,7 @@ class customFitInfoWidget(fiw.fitInfoWidget):
     def __cmdRemoveFit_clicked(self):
         self.remove_fit.emit(self.getFitDataInfo())
 
-    def _on_set_data(self, data, stderr):
+    def _pre_set_data(self, data, stderr):
         if self.__customFitDataInfo.is_initialized() is False:
             self.setDomainFrom(data[0][0])
             self.setDomainTo(data[-1][0])

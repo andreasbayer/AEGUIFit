@@ -289,8 +289,8 @@ class DataDisplay(FigureCanvas):
                            markeredgecolor=self.__dc, markerfacecolor=self.__dc, ecolor=self.__dc, elinewidth=self.__ew,
                            barsabove=True, capsize=2)
         
-        self.__ax.set_ylabel('Counts (1/s)', fontdict=self.__label_font)
-        self.__ax.set_xlabel('Energy (eV)', fontdict=self.__label_font)
+        self.__ax.set_ylabel('Ion yield (1/s)', fontdict=self.__label_font)
+        self.__ax.set_xlabel('Electron energy (eV)', fontdict=self.__label_font)
 
         for tick in self.__ax.xaxis.get_major_ticks():
             tick.label.set_size(self.__scale_font['size'])

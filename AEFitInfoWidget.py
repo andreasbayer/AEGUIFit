@@ -495,16 +495,35 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
     def __cmdRemoveFit_clicked(self):
         self.remove_fit.emit(self.getFitDataInfo())
     
-    def _on_set_data(self, data, std_err):
+    def _pre_set_data(self, data, std_err):
         if self.getFitDataInfo().is_initialized() is False:
             self.getFitDataInfo().setStdErr(std_err)
 
+            # create space
+            self.__dsbAEFrom.setMinimum(-np.inf)
+            self.__dsbAEFrom.setMaximum(np.inf)
+
+            self.__dsbAETo.setMinimum(-np.inf)
+            self.__dsbAETo.setMaximum(np.inf)
+
+            self.__dsbDomainFrom.setMinimum(-np.inf)
+            self.__dsbDomainFrom.setMaximum(np.inf)
+
+            self.__dsbDomainTo.setMinimum(-np.inf)
+            self.__dsbDomainTo.setMaximum(np.inf)
+
+            self.__dsbMinSpan.setMaximum(np.inf)
+
+
+            # set values
             self.setAEFrom(data[0][0])
             self.setAETo(data[-1][0])
 
             self.setDomainFrom(data[0][0])
             self.setDomainTo(data[-1][0])
 
+
+            # set borders
             self.__dsbAEFrom.setMinimum(data[0][0])
             self.__dsbAEFrom.setMaximum(data[-1][0])
 
@@ -518,6 +537,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
             self.__dsbDomainTo.setMaximum(data[-1][0])
 
             self.__dsbMinSpan.setMaximum(self.getDomainTo()-self.getDomainFrom())
+
 
     def __cmdFit_clicked(self):
         self.fitToFunction()
@@ -547,10 +567,21 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         self.getFitDataInfo().reset()
     
     def shiftData(self, increment):
-        self.getFitDataInfo().shift_fit(increment)
-        
+
+
+        # store values
         new_AEFrom = self.getAEFrom() + increment
         new_AETo = self.getAETo() + increment
+
+        new_DomainFrom = self.getDomainFrom() + increment
+        new_DomainTo = self.getDomainTo() + increment
+
+        minspan = self.getMinSpan()
+
+        # shift information
+        self.getFitDataInfo().shift_fit(increment)
+
+        # adjust min/max values in widgets
 
         self.__dsbAEFrom.setMinimum(self.__dsbAEFrom.minimum() + increment)
         self.__dsbAEFrom.setMaximum(self.__dsbAEFrom.maximum() + increment)
@@ -558,20 +589,21 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
         self.__dsbAETo.setMinimum(self.__dsbAETo.minimum() + increment)
         self.__dsbAETo.setMaximum(self.__dsbAETo.maximum() + increment)
         
-        self.setAEFrom(new_AEFrom)
-        self.setAETo(new_AETo)
-
-        new_DomainFrom = self.getDomainFrom() + increment
-        new_DomainTo = self.getDomainTo() + increment
-
         self.__dsbDomainFrom.setMinimum(self.__dsbDomainFrom.minimum() + increment)
         self.__dsbDomainFrom.setMaximum(self.__dsbDomainFrom.maximum() + increment)
 
         self.__dsbDomainTo.setMinimum(self.__dsbDomainTo.minimum() + increment)
         self.__dsbDomainTo.setMaximum(self.__dsbDomainTo.maximum() + increment)
 
+        #set widget values
+
+        self.setAEFrom(new_AEFrom)
+        self.setAETo(new_AETo)
+
         self.setDomainFrom(new_DomainFrom)
         self.setDomainTo(new_DomainTo)
+
+        self.setMinSpan(minspan)
     
     def fitToFunction(self):
         msg = self.getFitDataInfo().fitToFunction()
@@ -605,9 +637,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
 
             fp_text += ALPHALABEL + ':\t\t' + val + PM + err + '\n'
 
-
             fp_text += self.calc_fit_metrics()
-
 
             self.__lblFitParameters.setText(fp_text)
 

@@ -212,7 +212,7 @@ class polyFitInfoWidget(fiw.fitInfoWidget):
 
             self.zoom_to_fit.emit(lb, ub, self.getFitDataInfo().get_fit_index())
 
-    def _on_set_data(self, data, stderr):
+    def _pre_set_data(self, data, stderr):
         if self.__polyFitDataInfo.is_initialized() is False:
             self.__polyFitDataInfo.setStdErr(stderr)
 
