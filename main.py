@@ -13,10 +13,11 @@ import tabFits as tft
 import metaInfoWidget as mdi
 import numpy as np
 
-VERSION = "AEGUIFit 2.02"
+NAME = "AEGUIFit"
+VERSION = "2.02"
 ID_STRING = "AEGUIFit"
 
-TITLE = VERSION + " - "
+TITLE = NAME + " - "
 
 
 class App(QMainWindow):
@@ -364,7 +365,13 @@ class App(QMainWindow):
         self.lblDisplayStat.setText(msg)
 
     def saveFig(self):
-        name, ext = QFileDialog.getSaveFileName(self, "Save Figure", "", "*.pdf;; *.png;; *.svg;; *.eps")
+
+        fname_pos = self.fileName.rfind('/') + 1
+        ext_pos = self.fileName.rfind('.')
+
+        newfilename = self.fileName[0:fname_pos] + self.fileName[fname_pos:ext_pos]
+
+        name, ext = QFileDialog.getSaveFileName(self, "Save Figure", newfilename, "*.pdf;; *.png;; *.svg;; *.eps")
 
         if name != '':
             try:

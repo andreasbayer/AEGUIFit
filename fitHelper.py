@@ -122,18 +122,18 @@ def fix_std_errs(std_errs):
     # statistical errors = 0, which are being used as fit weights, the error will be replaced to 1*10^n, where n is the
     # magnitude of the smallest error in the measurement
 
-    fit_std_errs = np.array([])
+    fit_std_errs = None
 
     if std_errs is not None:
+        fit_std_errs = np.array([])
+
         min_err = 10 ** np.floor(np.log10(min_above_x(std_errs, 0)))
         for std_err in std_errs:
             if std_err == 0:
                 fit_std_errs = np.append(fit_std_errs, min_err)
             else:
                 fit_std_errs = np.append(fit_std_errs, std_err)
-    else:
-        fit_std_errs = None
-    
+
     return fit_std_errs
 
 def find_best_fit(data, std_errs, ip, fwhm, minspan, lower_bounds, upper_bounds, update_function=None):
@@ -155,7 +155,6 @@ def find_best_fit(data, std_errs, ip, fwhm, minspan, lower_bounds, upper_bounds,
     cutweights = fit_weights
 
     message = 'fit did not converge at any iteration.'
-    
     
     starting_fwhm = fwhm * 3
     ending_fwhm = fwhm
@@ -496,9 +495,9 @@ def cutarray2(data, lowerlim=None, upperlim=None, data2=None, returnIndexes=Fals
     
     if data2 is None:
         if returnIndexes:
-            return array(newdata, dtype=np.float64), (i_from, i_to)
+            return array(newdata, dtype=np.float64), None, (i_from, i_to)
         else:
-            return array(newdata, dtype=np.float64)
+            return array(newdata, dtype=np.float64), None
     else:
         if returnIndexes:
             return array(newdata, dtype=np.float64), array(newdata2, dtype=np.float64), (i_from, i_to)

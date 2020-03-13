@@ -118,12 +118,15 @@ class dataControlWidget(QGroupBox):
             print(e)
 
     def getStdErrors(self):
-        first_point = 0
+        if self.__stdErrors is not None:
+            first_point = 0
 
-        if self.getIgnoreFirstPoint():
-            first_point = 1
+            if self.getIgnoreFirstPoint():
+                first_point = 1
 
-        return self.__stdErrors[first_point:]
+            return self.__stdErrors[first_point:]
+        else:
+            return None
 
     def getMax_Energy(self):
         if self.getData() is not None:
