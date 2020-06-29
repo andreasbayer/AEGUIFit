@@ -44,11 +44,17 @@ class DataDisplay(FigureCanvas):
         self.reset()
 
     def reset(self):
+
+        self.fit_area_col = 'white' # '#EFEFEF'
+        self.area_col = '#ABABAB'
+        self.ae_mark_col = 'black'
+
         self.__dc = 'black'
         self.__fc = 'orange'
         self.__ls = '-'
-        self.__ew = 1.2
-        self.__lw = 1.2
+        self.__ew = 2  # 1.2
+        self.__lw = 2  # 1.2
+        self.marker_size = 4
         #1.2
         self.setData(None)
         self.__fdiFits = list()
@@ -58,7 +64,7 @@ class DataDisplay(FigureCanvas):
         self.__clickmark = None
         self.__showErrorBars = False
         self.__annotations = None
-        
+
         self.__label_font = {'size': self.std_label_font_size}
         self.__scale_font = {'size': self.std_scale_font_size}
         self.__annotation_font = {'size': self.std_ann_font_size}
@@ -131,7 +137,6 @@ class DataDisplay(FigureCanvas):
         self.__refreshDisabled = disable
 
     def refresh(self, data=None, stdErrors=None, showErrorBars=None, forgetZoomFrame=False, ignoreFirstPoint=False):
-
         xlim = None
         ylim = None
 
@@ -285,12 +290,12 @@ class DataDisplay(FigureCanvas):
 
         self.__ax.errorbar(data[:, 0],
                            data[:, 1],
-                           yerr=stdErrors, fmt='.', markersize=3,
+                           yerr=stdErrors, fmt='.', markersize=self.marker_size,
                            markeredgecolor=self.__dc, markerfacecolor=self.__dc, ecolor=self.__dc, elinewidth=self.__ew,
                            barsabove=True, capsize=2)
         
-        self.__ax.set_ylabel('Counts (1/s)', fontdict=self.__label_font)
-        self.__ax.set_xlabel('Energy (eV)', fontdict=self.__label_font)
+        self.__ax.set_ylabel('Ion yield (1/s)', fontdict=self.__label_font)
+        self.__ax.set_xlabel('Electron energy (eV)', fontdict=self.__label_font)
 
         for tick in self.__ax.xaxis.get_major_ticks():
             tick.label.set_size(self.__scale_font['size'])
@@ -509,10 +514,6 @@ class DataDisplay(FigureCanvas):
         lowerFitBound = -1
         upperFitBound = -1
 
-        aec = 'black'
-        fitareac = '#EFEFEF'
-        aeareac = '#ABABAB'
-
         if type(fdiCurrent) is adi.AEFitDataInfo:
 
             lowerFitBound = fdiCurrent.getFitRelFrom()
@@ -520,7 +521,7 @@ class DataDisplay(FigureCanvas):
             fwhm = fdiCurrent.getFWHM()
             p = fdiCurrent.getParameters()
 
-            self.__ax.axvline(x=p[1], color=aec, linestyle='-', linewidth='1')
+            self.__ax.axvline(x=p[1], color=self.ae_mark_col, linestyle='-', linewidth='1')
 
             x_min = self.__ax.viewLim.intervalx[0]
             x_max = self.__ax.viewLim.intervalx[1]
@@ -535,7 +536,7 @@ class DataDisplay(FigureCanvas):
                 ub_fwhm = x_max
 
             if ub_fwhm - lb_fwhm > 0:
-                self.__ax.axvspan(lb_fwhm, ub_fwhm, facecolor=aeareac, alpha=0.5)
+                self.__ax.axvspan(lb_fwhm, ub_fwhm, facecolor=self.area_col, alpha=0.5)
 
         elif type(fdiCurrent) is pdi.polyFitDataInfo:
 
@@ -546,7 +547,7 @@ class DataDisplay(FigureCanvas):
 
         # mark relevant fit area
         if lowerFitBound != -1 and upperFitBound != -1:
-            self.__ax.axvspan(lowerFitBound, upperFitBound, facecolor=fitareac, alpha=0.5)
+            self.__ax.axvspan(lowerFitBound, upperFitBound, facecolor=self.fit_area_col, alpha=0.5)
 
 
     def getFigure(self):

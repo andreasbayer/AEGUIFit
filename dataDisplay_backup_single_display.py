@@ -109,8 +109,8 @@ class DataDisplay_(FigureCanvas):
                                markeredgecolor=self.__dc, markerfacecolor=self.__dc, ecolor=self.__dc, elinewidth=self.__ew,
                                barsabove=True, capsize=2)
             
-            self.__ax.set(ylabel='Counts (1/s)')
-            self.__ax.set(xlabel='Energy (eV)')
+            self.__ax.set(ylabel='Ion yield (1/s)')
+            self.__ax.set(xlabel='Electron energy (eV)')
             
             for fdiFit in self.__fdiFits:
                 try:
