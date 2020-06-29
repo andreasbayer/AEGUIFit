@@ -401,7 +401,7 @@ class App(QMainWindow):
         file = open(filename, "w+")
 
         data = self.ddMain.getAllData()
-        errors = self.ddMain.getStdErrors()
+        errors = self.ddMain.getStdErrors()/2  # origin takes plus/minus std-dev/2
         all_fit_data = self.ddMain.getAllFitData(incl_disabled=False)
         combined_fit = self.ddMain.getCombinedFitData()
 
