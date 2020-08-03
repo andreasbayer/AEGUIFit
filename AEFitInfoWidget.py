@@ -673,6 +673,7 @@ class AEFitInfoWidget(fiw.fitInfoWidget):
             for i in range(0, len(data)):
                 point = data[i]
                 fit_point = fit_data[i]
+                error = errors[i]
 
                 print(i, len(point), point[0])
 
